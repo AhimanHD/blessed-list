@@ -16,6 +16,10 @@
             --sidebar-width: 280px;
             --radius-md: 6px;
             --radius-lg: 12px;
+            
+            /* Ruby theme palette */
+            --ruby-glitter: #e0115f;
+            --ruby-glow: #ff4d88;
         }
 
         * {
@@ -138,10 +142,16 @@
         .stat-box.rating-value p { color: #d97706; }
         .fps-tag { display: block; margin-top: 2px; font-size: 0.65rem; font-weight: 700; color: var(--text-muted); letter-spacing: 0.3px; }
 
-        /* --- Leaderboard & Diamond Shimmer Table Rules --- */
-        @keyframes glitter-shine {
-            0% { background-position: -200% center; }
-            100% { background-position: 200% center; }
+        /* --- Animations for Shimmer and Rubies --- */
+        @keyframes glitter-shine-rtl {
+            0% { background-position: 200% center; }
+            100% { background-position: -200% center; }
+        }
+
+        @keyframes ruby-glint {
+            0% { text-shadow: 0 0 4px var(--ruby-glitter), 0 0 1px var(--ruby-glow); }
+            50% { text-shadow: 0 0 12px var(--ruby-glow), 0 0 6px #ff0055, 0 0 2px #fff; }
+            100% { text-shadow: 0 0 4px var(--ruby-glitter), 0 0 1px var(--ruby-glow); }
         }
 
         @keyframes flame-glow {
@@ -152,7 +162,6 @@
         .leaderboard-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
         .leaderboard-table th { text-align: left; padding: 12px; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; border-bottom: 2px solid #f3f4f6; }
         
-        /* Base styles for standard rows */
         .leaderboard-row { 
             cursor: pointer; 
             transition: transform 0.15s ease, box-shadow 0.15s ease; 
@@ -160,39 +169,39 @@
         .leaderboard-row:hover { transform: scale(1.005); }
         .leaderboard-row td { padding: 14px 12px; font-size: 0.9rem; border-bottom: 1px solid #f3f4f6; color: var(--text-main); vertical-align: middle; }
 
-        /* Tier Modifier classes applied to rows and level layout items */
+        /* Right-To-Left Moving Shine Class applied to Top Tier ranks */
         .tier-shining {
             background-size: 300% 100% !important;
-            animation: glitter-shine 2.5s linear infinite;
+            animation: glitter-shine-rtl 2.5s linear infinite !important;
         }
         .tier-shining td { background: transparent !important; } 
 
         .tier-platinum {
-            background: linear-gradient(110deg, #dcdfe6 20%, #f4f5f7 40%, #ffffff 50%, #f4f5f7 60%, #b0b9c6 80%) !important;
+            background: linear-gradient(250deg, #dcdfe6 20%, #f4f5f7 40%, #ffffff 50%, #f4f5f7 60%, #b0b9c6 80%) !important;
             box-shadow: inset 0 1px 2px rgba(255,255,255,0.6), 0 4px 12px rgba(176, 185, 198, 0.4);
         }
         .tier-platinum td, .level-item.tier-platinum, .level-item.tier-platinum .level-rank { color: #111827 !important; font-weight: bold; }
 
         .tier-gold {
-            background: linear-gradient(110deg, #d4af37 20%, #fff1b0 40%, #ffffff 50%, #fff1b0 60%, #aa7c11 80%) !important;
+            background: linear-gradient(250deg, #d4af37 20%, #fff1b0 40%, #ffffff 50%, #fff1b0 60%, #aa7c11 80%) !important;
             box-shadow: inset 0 1px 2px rgba(255,255,255,0.6), 0 4px 12px rgba(212, 175, 55, 0.4);
         }
         .tier-gold td, .level-item.tier-gold, .level-item.tier-gold .level-rank { color: #2c1d00 !important; font-weight: bold; }
 
         .tier-silver {
-            background: linear-gradient(110deg, #a0a0a0 20%, #e0e0e0 40%, #ffffff 50%, #e0e0e0 60%, #707070 80%) !important;
+            background: linear-gradient(250deg, #a0a0a0 20%, #e0e0e0 40%, #ffffff 50%, #e0e0e0 60%, #707070 80%) !important;
             box-shadow: inset 0 1px 2px rgba(255,255,255,0.6), 0 4px 10px rgba(160, 160, 160, 0.3);
         }
         .tier-silver td, .level-item.tier-silver, .level-item.tier-silver .level-rank { color: #222222 !important; font-weight: bold; }
 
         .tier-bronze {
-            background: linear-gradient(110deg, #b0652f 20%, #fcd6b8 40%, #ffffff 50%, #fcd6b8 60%, #703811 80%) !important;
+            background: linear-gradient(250deg, #b0652f 20%, #fcd6b8 40%, #ffffff 50%, #fcd6b8 60%, #703811 80%) !important;
             box-shadow: inset 0 1px 2px rgba(255,255,255,0.4), 0 4px 10px rgba(176, 101, 47, 0.3);
         }
         .tier-bronze td, .level-item.tier-bronze, .level-item.tier-bronze .level-rank { color: #ffffff !important; font-weight: bold; }
 
         .leaderboard-row.fiery-row {
-            animation: glitter-shine 2.5s linear infinite, flame-glow 0.8s infinite alternate ease-in-out !important;
+            animation: glitter-shine-rtl 2.5s linear infinite, flame-glow 0.8s infinite alternate ease-in-out !important;
         }
 
         .top-right-medal {
@@ -202,6 +211,21 @@
         
         .completion-badge-row { display: flex; justify-content: space-between; background: #f9fafb; padding: 10px 14px; border-radius: var(--radius-md); margin-bottom: 8px; border: 1px solid #f3f4f6; font-size: 0.88rem; }
 
+        /* --- Ruby Glitter Rules for Submission Text --- */
+        .ruby-requirement-title {
+            color: #b71c1c !important;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            animation: ruby-glint 2s infinite ease-in-out;
+        }
+
+        .right-sidebar ul li {
+            color: #c2185b !important;
+            font-weight: 600;
+            animation: ruby-glint 3s infinite ease-in-out;
+        }
+
         /* --- Admin Dashboard Layouts --- */
         .admin-dashboard { background: transparent; padding: 0; box-shadow: none; display: none; max-width: 900px; }
         .admin-title {
@@ -210,6 +234,18 @@
             box-shadow: 0 8px 20px -6px rgba(20, 83, 45, 0.5);
         }
         .admin-title .admin-eyebrow { display: block; font-size: 0.68rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; opacity: 0.65; margin-bottom: 2px; }
+
+        /* Panel Staff Presentation Card Style */
+        .admin-staff-card {
+            background: rgba(255,255,255,0.9);
+            border-left: 5px solid var(--nav-green);
+            padding: 12px 18px;
+            border-radius: var(--radius-md);
+            margin-bottom: 20px;
+            font-size: 0.85rem;
+            color: var(--text-main);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
 
         .admin-stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
         .admin-stat-pill {
@@ -352,6 +388,12 @@
                     <div><span class="admin-eyebrow">Control Panel</span>3015 SCL Admin Suite</div>
                 </div>
 
+                <div class="admin-staff-card">
+                    <p style="margin-bottom: 3px;"><strong>System Managers:</strong> Manager 1, Manager 2</p>
+                    <p style="margin-bottom: 3px;"><strong>Assigned Editors:</strong> Editor 1, Editor 2</p>
+                    <p style="margin-bottom: 0;"><strong>Active Staff Members:</strong> Member 1, Member 2, Member 3</p>
+                </div>
+
                 <div class="admin-stats-row">
                     <div class="admin-stat-pill"><h4>Pending Review</h4><p id="statPending">0</p></div>
                     <div class="admin-stat-pill"><h4>Live Levels</h4><p id="statLive">0</p></div>
@@ -407,7 +449,7 @@
                 </div>
             </div>
             
-            <h3>Submission Requirements</h3>
+            <h3 class="ruby-requirement-title">Submission Requirements</h3>
             <ul>
                 <li>• Your level must be under 30 seconds.</li>
                 <li>• Level must be harder than the level of the lowest spot on the list.</li>
@@ -594,7 +636,6 @@
             database.ref('leaderboard_profiles').set(leaderboardData).catch(err => alert("Error writing data: " + err.message));
         }
 
-        // Live searchable sidebar renderer + automatic rank tiers assigned to left components
         function renderSidebar(filterText = '') {
             listContainer.innerHTML = '';
             const cleanFilterText = filterText.toLowerCase().trim();
@@ -641,12 +682,10 @@
                 listContainer.appendChild(item);
             });
 
-            // Maintain visually active assignment status across dynamic updates
             const activeItem = document.getElementById(`rank-${currentSelectedRank}`);
             if (activeItem) activeItem.classList.add('active');
         }
 
-        // Search Input Listener configuration
         searchInput.addEventListener('input', function() {
             renderSidebar(this.value);
         });
@@ -929,7 +968,7 @@
         window.deleteLiveLevel = function(idx) {
             const level = levelsData[idx];
             
-            const gateOne = confirm(`[GATEWAY 1] Are you completely certain you want to remove "${level.name}" from the live database layout?`);
+            const gateOne = confirm(`[GATEWAY 1] Are you completely certain you want to remove "${level.name}" from the live database database?`);
             if (gateOne) {
                 const gateTwo = confirm(`[GATEWAY 2 - WARNING] This structural wipe is absolute and cannot be undone. Execute removal sequence for "${level.name}" now?`);
                 if (gateTwo) {
