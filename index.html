@@ -144,6 +144,11 @@
             100% { background-position: 200% center; }
         }
 
+        @keyframes flame-glow {
+            0% { box-shadow: 0 0 12px #ff4500, inset 0 1px 2px rgba(255,255,255,0.6); }
+            100% { box-shadow: 0 0 24px #ff8c00, inset 0 1px 2px rgba(255,255,255,0.6); }
+        }
+
         .leaderboard-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
         .leaderboard-table th { text-align: left; padding: 12px; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; border-bottom: 2px solid #f3f4f6; }
         
@@ -157,34 +162,38 @@
 
         /* Tier Modifier classes applied to rows and level layout items */
         .tier-shining {
-            background-size: 400% 400% !important;
-            animation: glitter-shine 3.5s linear infinite;
+            background-size: 300% 100% !important;
+            animation: glitter-shine 2.5s linear infinite;
         }
         .tier-shining td { background: transparent !important; } 
 
         .tier-platinum {
-            background: linear-gradient(135deg, #e5e9f0 0%, #ffffff 25%, #a3b1c6 50%, #ffffff 75%, #e5e9f0 100%);
-            box-shadow: 0 4px 12px rgba(229, 233, 240, 0.4);
+            background: linear-gradient(110deg, #dcdfe6 20%, #f4f5f7 40%, #ffffff 50%, #f4f5f7 60%, #b0b9c6 80%) !important;
+            box-shadow: inset 0 1px 2px rgba(255,255,255,0.6), 0 4px 12px rgba(176, 185, 198, 0.4);
         }
         .tier-platinum td, .level-item.tier-platinum, .level-item.tier-platinum .level-rank { color: #111827 !important; font-weight: bold; }
 
         .tier-gold {
-            background: linear-gradient(135deg, #ffd700 0%, #fff5cc 25%, #b8860b 50%, #fff5cc 75%, #ffd700 100%);
-            box-shadow: 0 4px 12px rgba(255, 215, 0, 0.35);
+            background: linear-gradient(110deg, #d4af37 20%, #fff1b0 40%, #ffffff 50%, #fff1b0 60%, #aa7c11 80%) !important;
+            box-shadow: inset 0 1px 2px rgba(255,255,255,0.6), 0 4px 12px rgba(212, 175, 55, 0.4);
         }
         .tier-gold td, .level-item.tier-gold, .level-item.tier-gold .level-rank { color: #2c1d00 !important; font-weight: bold; }
 
         .tier-silver {
-            background: linear-gradient(135deg, #cccccc 0%, #f2f2f2 25%, #7a7a7a 50%, #f2f2f2 75%, #cccccc 100%);
-            box-shadow: 0 4px 10px rgba(204, 204, 204, 0.3);
+            background: linear-gradient(110deg, #a0a0a0 20%, #e0e0e0 40%, #ffffff 50%, #e0e0e0 60%, #707070 80%) !important;
+            box-shadow: inset 0 1px 2px rgba(255,255,255,0.6), 0 4px 10px rgba(160, 160, 160, 0.3);
         }
         .tier-silver td, .level-item.tier-silver, .level-item.tier-silver .level-rank { color: #222222 !important; font-weight: bold; }
 
         .tier-bronze {
-            background: linear-gradient(135deg, #cd7f32 0%, #ffebdb 25%, #8b4513 50%, #ffebdb 75%, #cd7f32 100%);
-            box-shadow: 0 4px 10px rgba(205, 127, 50, 0.3);
+            background: linear-gradient(110deg, #b0652f 20%, #fcd6b8 40%, #ffffff 50%, #fcd6b8 60%, #703811 80%) !important;
+            box-shadow: inset 0 1px 2px rgba(255,255,255,0.4), 0 4px 10px rgba(176, 101, 47, 0.3);
         }
         .tier-bronze td, .level-item.tier-bronze, .level-item.tier-bronze .level-rank { color: #ffffff !important; font-weight: bold; }
+
+        .leaderboard-row.fiery-row {
+            animation: glitter-shine 2.5s linear infinite, flame-glow 0.8s infinite alternate ease-in-out !important;
+        }
 
         .top-right-medal {
             font-size: 1.15rem; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));
@@ -328,9 +337,9 @@
                     <table class="leaderboard-table">
                         <thead>
                             <tr>
-                                <th style="width: 75px; padding-left: 15px;">Rank</th>
+                                <th style="width: 110px; padding-left: 15px;">Rank</th>
                                 <th>Player</th>
-                                <th style="text-align: right; width: 140px; padding-right: 35px;">Total Points</th>
+                                <th style="text-align: right; width: 170px; padding-right: 35px;">Total Points</th>
                             </tr>
                         </thead>
                         <tbody id="leaderboardMainBody"></tbody>
@@ -605,21 +614,26 @@
                 item.id = `rank-${level.rank}`;
                 
                 let dynamicClasses = '';
+                let sidebarMedal = '';
                 if (level.rank === 1) {
                     dynamicClasses = 'tier-shining tier-platinum';
+                    sidebarMedal = '<span class="top-right-medal" style="margin-left: auto;">💎</span>';
                 } else if (level.rank === 2) {
                     dynamicClasses = 'tier-shining tier-gold';
+                    sidebarMedal = '<span class="top-right-medal" style="margin-left: auto;">🥇</span>';
                 } else if (level.rank === 3) {
                     dynamicClasses = 'tier-shining tier-silver';
+                    sidebarMedal = '<span class="top-right-medal" style="margin-left: auto;">🥈</span>';
                 } else if (level.rank === 4) {
                     dynamicClasses = 'tier-shining tier-bronze';
+                    sidebarMedal = '<span class="top-right-medal" style="margin-left: auto;">🥉</span>';
                 }
 
                 if (dynamicClasses) {
                     item.className += ' ' + dynamicClasses;
                 }
 
-                item.innerHTML = `<div class="level-rank">#${level.rank}</div><div>${level.name}</div>`;
+                item.innerHTML = `<div class="level-rank">#${level.rank}</div><div>${level.name}</div>${sidebarMedal}`;
                 item.addEventListener('click', () => {
                     switchTab('list');
                     selectLevel(level.rank);
@@ -654,6 +668,11 @@
                     <p><span>PUBLISHER</span> ${data.publisher}</p>
                 </div>
                 <div class="video-container"><iframe src="https://www.youtube.com/embed/${data.youtubeId}" allowfullscreen></iframe></div>
+                <div style="text-align:center; margin-top:-15px; margin-bottom:20px;">
+                    <a href="https://youtube.com/watch?v=${data.youtubeId}" target="_blank" style="display:inline-block; font-size:0.85rem; color:#dc2626; font-weight:700; text-decoration:underline;">
+                        📺 Video blocked or not loading? Watch directly on YouTube ↗
+                    </a>
+                </div>
                 <div class="stats-grid">
                     <div class="stat-box points-value"><h4>Points</h4><p>${data.points}</p></div>
                     <div class="stat-box rating-value"><h4>Official Rating</h4><p>${data.difficulty || 'Extreme Demon'}</p></div>
@@ -681,16 +700,27 @@
                 
                 let dynamicClasses = '';
                 let badgeMarkup = '';
+                let fireLeft = '';
+                let fireRight = '';
 
                 if (rank === 1) {
-                    dynamicClasses = 'tier-shining tier-platinum';
-                    badgeMarkup = '<span class="top-right-medal">👑</span>';
+                    dynamicClasses = 'tier-shining tier-platinum fiery-row';
+                    badgeMarkup = '<span class="top-right-medal">💎</span>';
+                    fireLeft = '🔥 ';
+                    fireRight = ' 🔥';
                 } else if (rank === 2) {
-                    dynamicClasses = 'tier-shining tier-gold';
+                    dynamicClasses = 'tier-shining tier-gold fiery-row';
+                    badgeMarkup = '<span class="top-right-medal">🥇</span>';
+                    fireLeft = '🔥 ';
+                    fireRight = ' 🔥';
                 } else if (rank === 3) {
-                    dynamicClasses = 'tier-shining tier-silver';
+                    dynamicClasses = 'tier-shining tier-silver fiery-row';
+                    badgeMarkup = '<span class="top-right-medal">🥈</span>';
+                    fireLeft = '🔥 ';
+                    fireRight = ' 🔥';
                 } else if (rank === 4) {
                     dynamicClasses = 'tier-shining tier-bronze';
+                    badgeMarkup = '<span class="top-right-medal">🥉</span>';
                 } else if (rank >= 5 && rank <= 100) {
                     badgeMarkup = '<span class="top-right-medal">🏅</span>';
                 }
@@ -700,9 +730,9 @@
                 }
 
                 row.innerHTML = `
-                    <td style="font-weight:bold; padding-left: 15px; width: 75px;">#${rank}</td>
+                    <td style="font-weight:bold; padding-left: 15px; width: 110px;">${fireLeft}#${rank}</td>
                     <td style="font-weight:600;">${player.name} ${badgeMarkup}</td>
-                    <td style="text-align:right; font-weight:bold; padding-right: 35px; width: 140px;">${player.points}</td>
+                    <td style="text-align:right; font-weight:bold; padding-right: 35px; width: 170px;">${player.points}${fireRight}</td>
                 `;
                 row.addEventListener('click', () => launchPlayerProfile(player));
                 tableBody.appendChild(row);
