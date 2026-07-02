@@ -123,15 +123,37 @@
         }
         .level-rank { width: 45px; color: var(--text-muted); font-weight: 700; }
 
+        /* Watch indicator design rules */
+        .watch-indicator-pill {
+            background: #111827;
+            color: #00f0ff;
+            border: 1px solid #00f0ff;
+            font-size: 0.68rem;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+            margin-left: auto;
+            letter-spacing: 0.3px;
+            white-space: nowrap;
+            box-shadow: 0 0 6px rgba(0, 240, 255, 0.3);
+        }
+
         .main-content { flex: 1; padding: 40px; overflow-y: auto; background: #fafafa; display: flex; flex-direction: column; align-items: center; z-index: 1; }
         .level-details-card, .leaderboard-view-card, .admin-dashboard { width: 100%; max-width: 900px; background: white; padding: 30px; border-radius: var(--radius-lg); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
         
         .level-title { font-size: 2.5rem; font-weight: 800; margin-bottom: 15px; color: #111827; letter-spacing: -0.5px; }
-        .meta-info { margin-bottom: 25px; font-size: 0.9rem; background: #f9fafb; padding: 15px; border-radius: var(--radius-md); border: 1px solid #f3f4f6; }
+        .meta-info { margin-bottom: 25px; font-size: 0.9rem; background: #f9fafb; padding: 15px; border-radius: var(--radius-md); border: 1px solid #f3f4f6; position: relative; }
         .meta-info p { margin-bottom: 6px; display: flex; }
         .meta-info span { font-weight: 700; width: 110px; color: var(--text-muted); font-size: 0.75rem; letter-spacing: 0.5px; }
         
-        .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; background: #000; border-radius: var(--radius-md); margin-bottom: 25px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.15); width: 100%; }
+        /* Video Target Indicator Bar */
+        .video-target-indicator {
+            background: #111827; color: #fff; border-bottom: 3px solid var(--neon-blue);
+            padding: 10px 16px; font-size: 0.82rem; font-weight: bold; border-radius: 0 0 var(--radius-md) var(--radius-md);
+            margin-top: -29px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center;
+        }
+
+        .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; background: #000; border-top-left-radius: var(--radius-md); border-top-right-radius: var(--radius-md); margin-bottom: 25px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.15); width: 100%; }
         .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
 
         .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; text-align: center; margin-bottom: 25px; }
@@ -141,6 +163,18 @@
         .stat-box.points-value p { color: #059669; }
         .stat-box.rating-value p { color: #d97706; }
         .fps-tag { display: block; margin-top: 2px; font-size: 0.65rem; font-weight: 700; color: var(--text-muted); letter-spacing: 0.3px; }
+
+        /* --- Comments Element Engine --- */
+        .comments-section-wrapper { border-top: 2px solid #f3f4f6; margin-top: 35px; padding-top: 25px; }
+        .comments-title { font-size: 1.3rem; font-weight: 800; margin-bottom: 18px; color: #111827; }
+        .comment-node { background: #f9fafb; border: 1px solid #e5e7eb; padding: 14px 16px; border-radius: var(--radius-md); margin-bottom: 12px; position: relative; }
+        .comment-node-meta { font-size: 0.78rem; font-weight: bold; color: var(--text-muted); margin-bottom: 4px; display: flex; justify-content: space-between; }
+        .comment-node-body { font-size: 0.92rem; color: var(--text-main); line-height: 1.45; }
+        .comment-admin-delete { position: absolute; right: 12px; top: 12px; background: var(--normal-red); color: white; border: none; font-size: 0.7rem; padding: 2px 6px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        .comment-admin-delete:hover { opacity: 0.85; }
+        
+        .comment-compose-box { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
+        .comment-compose-row { display: grid; grid-template-columns: 200px 1fr; gap: 10px; }
 
         /* --- Animations for Shimmer and Rubies --- */
         @keyframes glitter-shine-rtl {
@@ -168,6 +202,12 @@
         }
         .leaderboard-row:hover { transform: scale(1.005); }
         .leaderboard-row td { padding: 14px 12px; font-size: 0.9rem; border-bottom: 1px solid #f3f4f6; color: var(--text-main); vertical-align: middle; }
+
+        /* Top Players Panel Cards styling */
+        .top-players-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 30px; }
+        .top-player-card { border-radius: var(--radius-lg); padding: 16px; text-align: center; position: relative; border: 1px solid rgba(0,0,0,0.05); }
+        .top-player-card h3 { font-size: 1.25rem; font-weight: 800; margin: 8px 0 4px 0; display: flex; align-items: center; justify-content: center; gap: 4px; }
+        .top-player-card .p-pts { font-size: 0.95rem; font-weight: bold; margin-bottom: 10px; }
 
         /* Right-To-Left Moving Shine Class applied to Top Tier ranks */
         .tier-shining {
@@ -226,7 +266,7 @@
             animation: ruby-glint 3s infinite ease-in-out;
         }
 
-        /* --- Admin Dashboard Layouts --- */
+        /* --- Admin Control Panel Layouts --- */
         .admin-dashboard { background: transparent; padding: 0; box-shadow: none; display: none; max-width: 900px; }
         .admin-title {
             font-size: 1.7rem; font-weight: 800; margin-bottom: 18px; color: #ffffff; display: flex; justify-content: space-between; align-items: center;
@@ -270,7 +310,7 @@
 
         .method-chip {
             background: rgba(0, 240, 255, 0.1); color: #0369a1; border: 1px solid rgba(0, 240, 255, 0.3);
-            padding: 3px 10px; border-radius: 999px; font-size: 0.7rem; font-weight: 700; white-space: nowrap;
+            padding: 3px 10px; border-radius: 999px; font-size: 0.75rem; font-weight: 700; white-space: nowrap;
         }
 
         .queue-review-grid {
@@ -334,6 +374,7 @@
             .form-grid { grid-template-columns: 1fr; }
             .form-group.full-width { grid-column: span 1; }
             .queue-review-grid { grid-template-columns: 1fr; }
+            .top-players-container { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -347,7 +388,7 @@
         <div class="nav-center">
             <a id="tabList" class="active" onclick="switchTab('list')">List</a>
             <a id="tabLeaderboard" onclick="switchTab('leaderboard')">Leaderboard</a>
-            <a id="tabAdmin" style="display:none;" onclick="switchTab('admin')">Admin Area</a>
+            <a id="tabAdmin" style="display:none;" onclick="switchTab('admin')">Admin Control Panel</a>
         </div>
         <div class="nav-right">
             <button class="submit-btn" id="openModalBtn">Submit Level</button>
@@ -368,6 +409,7 @@
 
             <div class="leaderboard-view-card" id="leaderboardView" style="display: none;">
                 <h1 class="level-title">Top Players</h1>
+                <div class="top-players-container" id="topPlayersPanel"></div>
                 <p style="color: var(--text-muted); margin-bottom: 20px; font-size: 0.9rem;">Click on any player profile card to view completely verified level completions and proof records.</p>
                 <div style="overflow-x: auto;">
                     <table class="leaderboard-table">
@@ -385,19 +427,59 @@
 
             <div class="admin-dashboard" id="adminDashboardView">
                 <div class="admin-title">
-                    <div><span class="admin-eyebrow">Control Panel</span>3015 SCL Admin Suite</div>
+                    <div><span class="admin-eyebrow">Control Panel</span>3015 SCL Admin Control Panel</div>
                 </div>
 
-                <div class="admin-staff-card">
-                    <p style="margin-bottom: 3px;"><strong>System Managers:</strong> Manager 1, Manager 2</p>
-                    <p style="margin-bottom: 3px;"><strong>Assigned Editors:</strong> Editor 1, Editor 2</p>
-                    <p style="margin-bottom: 0;"><strong>Active Staff Members:</strong> Member 1, Member 2, Member 3</p>
+                <div class="admin-staff-card" id="adminStaffDisplayCard">
+                    <p style="margin-bottom: 3px;"><strong>System Managers:</strong> <span id="displayManagers">Manager 1, Manager 2</span></p>
+                    <p style="margin-bottom: 3px;"><strong>Assigned Editors:</strong> <span id="displayEditors">Editor 1, Editor 2</span></p>
+                    <p style="margin-bottom: 0;"><strong>Active Staff Members:</strong> <span id="displayMembers">Member 1, Member 2, Member 3</span></p>
                 </div>
 
                 <div class="admin-stats-row">
                     <div class="admin-stat-pill"><h4>Pending Review</h4><p id="statPending">0</p></div>
                     <div class="admin-stat-pill"><h4>Live Levels</h4><p id="statLive">0</p></div>
                     <div class="admin-stat-pill"><h4>Ranked Players</h4><p id="statPlayers">0</p></div>
+                </div>
+
+                <div class="admin-section-card">
+                    <h3 style="margin-bottom: 12px; font-size: 1.1rem;">👥 Edit Staff Members & Roles</h3>
+                    <form id="adminStaffConfigForm">
+                        <div class="form-grid">
+                            <div class="form-group full-width">
+                                <label>System Managers (Comma separated)</label>
+                                <input type="text" id="inputManagers" value="Manager 1, Manager 2" required>
+                            </div>
+                            <div class="form-group full-width">
+                                <label>Assigned Editors (Comma separated)</label>
+                                <input type="text" id="inputEditors" value="Editor 1, Editor 2" required>
+                            </div>
+                            <div class="form-group full-width">
+                                <label>Active Staff Members (Comma separated)</label>
+                                <input type="text" id="inputMembers" value="Member 1, Member 2, Member 3" required>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-approve" style="margin-top: 15px; width: 100%;">Save Staff Members Setup</button>
+                    </form>
+                </div>
+
+                <div class="admin-section-card">
+                    <h3 style="margin-bottom: 12px; font-size: 1.1rem;">🚫 Ban & Restrictions Management</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Target Player Username</label>
+                            <input type="text" id="banTargetUsername" placeholder="Enter username exact string match">
+                        </div>
+                        <div class="form-group" style="justify-content: flex-end;">
+                            <div style="display:flex; gap: 10px;">
+                                <button type="button" class="btn-reject" onclick="executeBanAction(true)" style="width:50%;">Ban Player</button>
+                                <button type="button" class="btn-approve" onclick="executeBanAction(false)" style="width:50%; background:#4b5563;">Unban Player</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin-top:12px; font-size:0.8rem; color:var(--text-muted);">
+                        <strong>Currently Banned:</strong> <span id="bannedPlayersList">None</span>
+                    </div>
                 </div>
 
                 <div class="queue-card">
@@ -443,9 +525,9 @@
             <div style="margin-bottom: 22px;">
                 <p style="color:var(--text-muted); margin-bottom: 6px; font-size: 0.75rem; font-style: italic;">Managed by <span class="signature-badge">Ahim4n</span></p>
                 <div style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.45; padding-left: 2px;">
-                    <p style="margin-bottom: 2px;"><strong>Managers:</strong> <span style="color: #111827;">Manager 1, Manager 2</span></p>
-                    <p style="margin-bottom: 2px;"><strong>Editors:</strong> <span style="color: #111827;">Editor 1, Editor 2</span></p>
-                    <p style="margin-bottom: 0;"><strong>Members:</strong> <span style="color: #111827;">Member 1, Member 2, Member 3</span></p>
+                    <p style="margin-bottom: 2px;"><strong>Managers:</strong> <span id="sideManagers" style="color: #111827;">Manager 1, Manager 2</span></p>
+                    <p style="margin-bottom: 2px;"><strong>Editors:</strong> <span id="sideEditors" style="color: #111827;">Editor 1, Editor 2</span></p>
+                    <p style="margin-bottom: 0;"><strong>Members:</strong> <span id="sideMembers" style="color: #111827;">Member 1, Member 2, Member 3</span></p>
                 </div>
             </div>
             
@@ -555,6 +637,12 @@
         let levelsData = [];
         let pendingData = [];
         let leaderboardData = [];
+        let bannedPlayers = [];
+        let staffConfiguration = {
+            managers: "Manager 1, Manager 2",
+            editors: "Editor 1, Editor 2",
+            members: "Member 1, Member 2, Member 3"
+        };
         let currentRole = "member";
         let currentSelectedRank = 1;
 
@@ -572,10 +660,6 @@
                 document.getElementById('tabAdmin').style.display = "inline-block";
                 document.getElementById('loginNavBtn').innerText = "Logout (Admin)";
                 document.getElementById('loginNavBtn').onclick = logoutSession;
-                
-                renderAdminQueue();
-                renderAdminLiveLevels();
-                renderAdminEditScores();
             } else {
                 currentRole = "member";
                 document.body.classList.remove('admin-active');
@@ -585,6 +669,7 @@
                 if(adminView.style.display !== "none") switchTab('list');
             }
             updateAdminStats();
+            if(levelsData.length > 0) selectLevel(currentSelectedRank);
         });
 
         database.ref('approved_levels').on('value', (snapshot) => {
@@ -592,9 +677,17 @@
             levelsData = data ? Object.values(data) : [];
             levelsData.forEach((level, index) => { level.rank = index + 1; });
             
+            // Auto deep-link match URL check on load
+            const urlParams = new URLSearchParams(window.location.search);
+            const rankParam = parseInt(urlParams.get('rank'));
+            if (rankParam && levelsData.find(l => l.rank === rankParam)) {
+                currentSelectedRank = rankParam;
+            }
+
             renderSidebar(searchInput.value);
             updateAdminStats();
-            if (levelsData.length > 0 && !document.querySelector('.level-item.active')) selectLevel(currentSelectedRank || 1);
+            
+            if (levelsData.length > 0) selectLevel(currentSelectedRank || 1);
             if (currentRole === "admin") renderAdminLiveLevels();
         });
 
@@ -613,41 +706,72 @@
             if(currentRole === "admin") renderAdminEditScores();
         });
 
+        database.ref('staff_configuration').on('value', (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                staffConfiguration = data;
+                updateStaffDOM();
+            }
+        });
+
+        database.ref('banned_players').on('value', (snapshot) => {
+            const data = snapshot.val();
+            bannedPlayers = data ? Object.values(data) : [];
+            document.getElementById('bannedPlayersList').innerText = bannedPlayers.length > 0 ? bannedPlayers.join(', ') : "None";
+            if(leaderboardView.style.display !== "none") renderLeaderboard();
+        });
+
+        function updateStaffDOM() {
+            document.getElementById('displayManagers').innerText = staffConfiguration.managers;
+            document.getElementById('displayEditors').innerText = staffConfiguration.editors;
+            document.getElementById('displayMembers').innerText = staffConfiguration.members;
+            document.getElementById('sideManagers').innerText = staffConfiguration.managers;
+            document.getElementById('sideEditors').innerText = staffConfiguration.editors;
+            document.getElementById('sideMembers').innerText = staffConfiguration.members;
+        }
+
+        document.getElementById('adminStaffConfigForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            staffConfiguration.managers = document.getElementById('inputManagers').value.trim();
+            staffConfiguration.editors = document.getElementById('inputEditors').value.trim();
+            staffConfiguration.members = document.getElementById('inputMembers').value.trim();
+            database.ref('staff_configuration').set(staffConfiguration).then(() => alert("Staff structure synced."));
+        });
+
+        window.executeBanAction = function(isBan) {
+            const input = document.getElementById('banTargetUsername');
+            const target = input.value.trim();
+            if (!target) { alert("Please type a valid name."); return; }
+            if (isBan && !bannedPlayers.includes(target)) bannedPlayers.push(target);
+            else if (!isBan) bannedPlayers = bannedPlayers.filter(p => p.toLowerCase() !== target.toLowerCase());
+            database.ref('banned_players').set(bannedPlayers);
+            alert("Action executed.");
+            input.value = "";
+        };
+
         function updateAdminStats() {
-            const pendingEl = document.getElementById('statPending');
-            const liveEl = document.getElementById('statLive');
-            const playersEl = document.getElementById('statPlayers');
-            if (!pendingEl || !liveEl || !playersEl) return;
-            pendingEl.innerText = pendingData.length;
-            liveEl.innerText = levelsData.length;
-            playersEl.innerText = leaderboardData.length;
+            if (!document.getElementById('statPending')) return;
+            document.getElementById('statPending').innerText = pendingData.length;
+            document.getElementById('statLive').innerText = levelsData.length;
+            document.getElementById('statPlayers').innerText = leaderboardData.filter(p => !bannedPlayers.includes(p.name)).length;
         }
 
         function extractYouTubeId(url) {
-            url = url.trim();
             const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-            const match = url.match(regExp);
+            const match = url.trim().match(regExp);
             return (match && match[2].length === 11) ? match[2] : url;
         }
 
         function saveStateToStorage() {
-            database.ref('approved_levels').set(levelsData).catch(err => alert("Error writing data: " + err.message));
-            database.ref('pending_levels').set(pendingData).catch(err => alert("Error writing data: " + err.message));
-            database.ref('leaderboard_profiles').set(leaderboardData).catch(err => alert("Error writing data: " + err.message));
+            database.ref('approved_levels').set(levelsData);
+            database.ref('pending_levels').set(pendingData);
+            database.ref('leaderboard_profiles').set(leaderboardData);
         }
 
         function renderSidebar(filterText = '') {
             listContainer.innerHTML = '';
             const cleanFilterText = filterText.toLowerCase().trim();
-
-            const filteredLevels = levelsData.filter(level => 
-                level.name.toLowerCase().includes(cleanFilterText)
-            );
-
-            if (filteredLevels.length === 0) {
-                listContainer.innerHTML = '<p style="padding:20px; color:var(--text-muted); font-size:0.85rem; text-align:center;">No levels found.</p>';
-                return;
-            }
+            const filteredLevels = levelsData.filter(level => level.name.toLowerCase().includes(cleanFilterText));
 
             filteredLevels.forEach((level) => {
                 const item = document.createElement('div');
@@ -656,122 +780,163 @@
                 
                 let dynamicClasses = '';
                 let sidebarMedal = '';
-                if (level.rank === 1) {
-                    dynamicClasses = 'tier-shining tier-platinum';
-                    sidebarMedal = '<span class="top-right-medal" style="margin-left: auto;">💎</span>';
-                } else if (level.rank === 2) {
-                    dynamicClasses = 'tier-shining tier-gold';
-                    sidebarMedal = '<span class="top-right-medal" style="margin-left: auto;">🥇</span>';
-                } else if (level.rank === 3) {
-                    dynamicClasses = 'tier-shining tier-silver';
-                    sidebarMedal = '<span class="top-right-medal" style="margin-left: auto;">🥈</span>';
-                } else if (level.rank === 4) {
-                    dynamicClasses = 'tier-shining tier-bronze';
-                    sidebarMedal = '<span class="top-right-medal" style="margin-left: auto;">🥉</span>';
+                if (level.rank === 1) { dynamicClasses = 'tier-shining tier-platinum'; sidebarMedal = '<span class="top-right-medal" style="margin-left: 6px;">💎</span>'; }
+                else if (level.rank === 2) { dynamicClasses = 'tier-shining tier-gold'; sidebarMedal = '<span class="top-right-medal" style="margin-left: 6px;">🥇</span>'; }
+                else if (level.rank === 3) { dynamicClasses = 'tier-shining tier-silver'; sidebarMedal = '<span class="top-right-medal" style="margin-left: 6px;">🥈</span>'; }
+
+                if (dynamicClasses) item.className += ' ' + dynamicClasses;
+                
+                // Add conditional "👀 Watching" pill indicator badge if it matches current item rank selection
+                let watchingPill = '';
+                if (level.rank === currentSelectedRank) {
+                    watchingPill = '<span class="watch-indicator-pill">👀 Watching</span>';
+                    item.classList.add('active');
                 }
 
-                if (dynamicClasses) {
-                    item.className += ' ' + dynamicClasses;
-                }
-
-                item.innerHTML = `<div class="level-rank">#${level.rank}</div><div>${level.name}</div>${sidebarMedal}`;
-                item.addEventListener('click', () => {
-                    switchTab('list');
-                    selectLevel(level.rank);
-                });
+                item.innerHTML = `<div class="level-rank">#${level.rank}</div><div>${level.name}${sidebarMedal}</div>${watchingPill}`;
+                item.addEventListener('click', () => { switchTab('list'); selectLevel(level.rank); });
                 listContainer.appendChild(item);
             });
-
-            const activeItem = document.getElementById(`rank-${currentSelectedRank}`);
-            if (activeItem) activeItem.classList.add('active');
         }
 
-        searchInput.addEventListener('input', function() {
-            renderSidebar(this.value);
-        });
+        searchInput.addEventListener('input', function() { renderSidebar(this.value); });
+
+        window.shareLevelLink = function(rank) {
+            const shareUrl = `${window.location.origin}${window.location.pathname}?rank=${rank}`;
+            navigator.clipboard.writeText(shareUrl).then(() => {
+                alert(`Direct link copied to clipboard:\n${shareUrl}`);
+            }).catch(() => alert("Copy failed."));
+        };
 
         function selectLevel(rank) {
             currentSelectedRank = rank;
-            document.querySelectorAll('.level-item').forEach(el => el.classList.remove('active'));
-            const activeItem = document.getElementById(`rank-${rank}`);
-            if (activeItem) activeItem.classList.add('active');
+            
+            // Re-render sidebar listings immediately to cleanly move the visual watch indicators along
+            renderSidebar(searchInput.value);
 
             const data = levelsData.find(l => l.rank === rank);
             if (!data) return;
 
             detailsContainer.innerHTML = `
-                <h1 class="level-title">${data.name}</h1>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; flex-wrap:wrap; gap:10px;">
+                    <h1 class="level-title" style="margin-bottom:0;">${data.name}</h1>
+                    <button class="submit-btn" style="background:var(--nav-green); color:white;" onclick="shareLevelLink(${data.rank})">🔗 Share Link</button>
+                </div>
                 <div class="meta-info">
                     <p><span>CREATORS</span> ${data.creators}</p>
                     <p><span>VERIFIER</span> ${data.verifier}</p>
                     <p><span>PUBLISHER</span> ${data.publisher}</p>
                 </div>
                 <div class="video-container"><iframe src="https://www.youtube.com/embed/${data.youtubeId}" allowfullscreen></iframe></div>
-                <div style="text-align:center; margin-top:-15px; margin-bottom:20px;">
-                    <a href="https://youtube.com/watch?v=${data.youtubeId}" target="_blank" style="display:inline-block; font-size:0.85rem; color:#dc2626; font-weight:700; text-decoration:underline;">
-                        📺 Video blocked or not loading? Watch directly on YouTube ↗
-                    </a>
+                
+                <!-- Video Display Target Indicator Bar Framework Component -->
+                <div class="video-target-indicator">
+                    <span>📺 NOW DISPLAYING:</span>
+                    <span>${data.name} (GD ID: ${data.levelId}) — Rank #${data.rank}</span>
                 </div>
+
                 <div class="stats-grid">
                     <div class="stat-box points-value"><h4>Points</h4><p>${data.points}</p></div>
                     <div class="stat-box rating-value"><h4>Official Rating</h4><p>${data.difficulty || 'Extreme Demon'}</p></div>
-                    <div class="stat-box"><h4>Public Rating</h4><p>${data.publicRating || data.difficulty || 'Extreme Demon'}</p></div>
-                    <div class="stat-box"><h4>Level ID</h4><p>${data.levelId}</p></div>
                     <div class="stat-box"><h4>Method</h4><p>${data.method}${data.fps ? `<span class="fps-tag">${data.fps} FPS</span>` : ''}</p></div>
                 </div>
+
+                <!-- Comments Display System Block -->
+                <div class="comments-section-wrapper">
+                    <h3 class="comments-title">💭 Community Comments</h3>
+                    <div id="commentsStreamBox">Loaded database nodes...</div>
+                    <div class="comment-compose-box">
+                        <div class="comment-compose-row">
+                            <input type="text" id="commentAuthorInput" placeholder="Your Name/Alias" required>
+                            <input type="text" id="commentTextInput" placeholder="Write a comment about this track level..." required>
+                        </div>
+                        <button type="button" class="btn-approve" onclick="postNewComment(${data.rank})" style="width:140px; align-self:flex-end; padding:8px 12px; font-size:0.85rem;">Post Comment</button>
+                    </div>
+                </div>
             `;
+            streamComments(data.rank);
         }
+
+        function streamComments(levelRank) {
+            const streamBox = document.getElementById('commentsStreamBox');
+            database.ref(`level_comments/rank_${levelRank}`).on('value', (snapshot) => {
+                streamBox.innerHTML = '';
+                const data = snapshot.val();
+                if(!data) {
+                    streamBox.innerHTML = '<p style="color:var(--text-muted); font-size:0.85rem; font-style:italic;">No thoughts posted yet. Be the first to speak!</p>';
+                    return;
+                }
+                Object.keys(data).forEach(commentId => {
+                    const item = data[commentId];
+                    const node = document.createElement('div');
+                    node.className = 'comment-node';
+                    
+                    let deleteActionBtn = '';
+                    if(currentRole === "admin") {
+                        deleteActionBtn = `<button class="comment-admin-delete" onclick="purgeCommentNode(${levelRank}, '${commentId}')">✕ Delete</button>`;
+                    }
+
+                    node.innerHTML = `
+                        <div class="comment-node-meta"><span>👤 ${item.author}</span><span>${item.date || ''}</span></div>
+                        <div class="comment-node-body">${item.text}</div>
+                        ${deleteActionBtn}
+                    `;
+                    streamBox.appendChild(node);
+                });
+            });
+        }
+
+        window.postNewComment = function(levelRank) {
+            const authorInput = document.getElementById('commentAuthorInput');
+            const textInput = document.getElementById('commentTextInput');
+            const author = authorInput.value.trim();
+            const text = textInput.value.trim();
+
+            if(!author || !text) { alert("Please complete both form inputs."); return; }
+            const timestamp = new Date().toLocaleDateString('en-US', { hour: '2-digit', minute: '2-digit' });
+
+            database.ref(`level_comments/rank_${levelRank}`).push({
+                author: author, text: text, date: timestamp
+            }).then(() => {
+                textInput.value = '';
+            });
+        };
+
+        window.purgeCommentNode = function(levelRank, commentId) {
+            if(confirm("Confirm admin removal of this message text from servers?")) {
+                database.ref(`level_comments/rank_${levelRank}/${commentId}`).remove().then(() => {
+                    alert("Comment successfully wiped out.");
+                });
+            }
+        };
 
         function renderLeaderboard() {
             const tableBody = document.getElementById('leaderboardMainBody');
-            tableBody.innerHTML = '';
-            leaderboardData.sort((a, b) => b.points - a.points);
+            const topPanel = document.getElementById('topPlayersPanel');
+            tableBody.innerHTML = ''; topPanel.innerHTML = '';
 
-            if(leaderboardData.length === 0) {
-                tableBody.innerHTML = '<tr><td colspan="3" style="text-align:center; color:var(--text-muted); padding:20px;">Leaderboard empty.</td></tr>';
-                return;
+            const allowedPlayers = leaderboardData.filter(p => !bannedPlayers.includes(p.name));
+            allowedPlayers.sort((a, b) => b.points - a.points);
+
+            const maxTopPlayers = Math.min(3, allowedPlayers.length);
+            for (let i = 0; i < maxTopPlayers; i++) {
+                const player = allowedPlayers[i];
+                const card = document.createElement('div');
+                card.className = `top-player-card tier-shining ${i === 0 ? 'tier-platinum' : (i === 1 ? 'tier-gold' : 'tier-silver')}`;
+                card.innerHTML = `<h3>${i === 0 ? '💎' : (i === 1 ? '🥇' : '🥈')} ${player.name}</h3><div class="p-pts">${player.points} Points</div>`;
+                card.addEventListener('click', () => launchPlayerProfile(player));
+                topPanel.appendChild(card);
             }
 
-            leaderboardData.forEach((player, index) => {
+            allowedPlayers.forEach((player, index) => {
                 const rank = index + 1;
                 const row = document.createElement('tr');
-                row.className = 'leaderboard-row';
+                row.className = 'leaderboard-row' + (rank <= 3 ? ' tier-shining fiery-row ' + (rank===1?'tier-platinum':(rank===2?'tier-gold':'tier-silver')) : '');
                 
-                let dynamicClasses = '';
-                let badgeMarkup = '';
-                let fireLeft = '';
-                let fireRight = '';
-
-                if (rank === 1) {
-                    dynamicClasses = 'tier-shining tier-platinum fiery-row';
-                    badgeMarkup = '<span class="top-right-medal">💎</span>';
-                    fireLeft = '🔥 ';
-                    fireRight = ' 🔥';
-                } else if (rank === 2) {
-                    dynamicClasses = 'tier-shining tier-gold fiery-row';
-                    badgeMarkup = '<span class="top-right-medal">🥇</span>';
-                    fireLeft = '🔥 ';
-                    fireRight = ' 🔥';
-                } else if (rank === 3) {
-                    dynamicClasses = 'tier-shining tier-silver fiery-row';
-                    badgeMarkup = '<span class="top-right-medal">🥈</span>';
-                    fireLeft = '🔥 ';
-                    fireRight = ' 🔥';
-                } else if (rank === 4) {
-                    dynamicClasses = 'tier-shining tier-bronze';
-                    badgeMarkup = '<span class="top-right-medal">🥉</span>';
-                } else if (rank >= 5 && rank <= 100) {
-                    badgeMarkup = '<span class="top-right-medal">🏅</span>';
-                }
-
-                if (dynamicClasses) {
-                    row.className += ' ' + dynamicClasses;
-                }
-
                 row.innerHTML = `
-                    <td style="font-weight:bold; padding-left: 15px; width: 110px;">${fireLeft}#${rank}</td>
-                    <td style="font-weight:600;">${player.name} ${badgeMarkup}</td>
-                    <td style="text-align:right; font-weight:bold; padding-right: 35px; width: 170px;">${player.points}${fireRight}</td>
+                    <td style="font-weight:bold; padding-left: 15px; width: 110px;">${rank <= 3 ? '🔥 ' : ''}#${rank}</td>
+                    <td style="font-weight:600;">${player.name} ${rank===1?'💎':(rank===2?'🥇':(rank===3?'🥈':''))}</td>
+                    <td style="text-align:right; font-weight:bold; padding-right: 35px; width: 170px;">${player.points}${rank <= 3 ? ' 🔥' : ''}</td>
                 `;
                 row.addEventListener('click', () => launchPlayerProfile(player));
                 tableBody.appendChild(row);
@@ -783,7 +948,6 @@
             document.getElementById('modalProfilePoints').innerText = `Total Points: ${player.points}`;
             const recordsContainer = document.getElementById('modalProfileCompletionsList');
             recordsContainer.innerHTML = '';
-
             player.items.forEach(line => {
                 if(!line.trim()) return;
                 const badge = document.createElement('div');
@@ -795,121 +959,49 @@
         }
 
         function switchTab(target) {
-            if(target === 'admin' && currentRole !== 'admin') {
-                alert("Access Denied.");
-                return;
-            }
             document.getElementById('tabList').classList.remove('active');
             document.getElementById('tabLeaderboard').classList.remove('active');
             document.getElementById('tabAdmin').classList.remove('active');
-            detailsContainer.style.display = "none";
-            leaderboardView.style.display = "none";
-            adminView.style.display = "none";
+            detailsContainer.style.display = "none"; leaderboardView.style.display = "none"; adminView.style.display = "none";
 
-            if (target === 'list') {
-                document.getElementById('tabList').classList.add('active');
-                detailsContainer.style.display = "block";
-            } else if (target === 'leaderboard') {
-                document.getElementById('tabLeaderboard').classList.add('active');
-                leaderboardView.style.display = "block";
-                renderLeaderboard();
-            } else if (target === 'admin') {
-                document.getElementById('tabAdmin').classList.add('active');
-                adminView.style.display = "block";
-                renderAdminQueue();
-                renderAdminLiveLevels();
-                renderAdminEditScores();
-                updateAdminStats();
-            }
+            if (target === 'list') { document.getElementById('tabList').classList.add('active'); detailsContainer.style.display = "block"; }
+            else if (target === 'leaderboard') { document.getElementById('tabLeaderboard').classList.add('active'); leaderboardView.style.display = "block"; renderLeaderboard(); }
+            else if (target === 'admin') { document.getElementById('tabAdmin').classList.add('active'); adminView.style.display = "block"; renderAdminQueue(); renderAdminLiveLevels(); renderAdminEditScores(); }
         }
 
-        function toggleLoginModal(show) {
-            document.getElementById('loginModal').classList.toggle('open', show);
-        }
-
+        function toggleLoginModal(show) { document.getElementById('loginModal').classList.toggle('open', show); }
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            const email = document.getElementById('authUser').value.trim();
-            const pass = document.getElementById('authPass').value;
-
-            auth.signInWithEmailAndPassword(email, pass)
-                .then(() => {
-                    toggleLoginModal(false);
-                    alert("Access Granted. Secure context parsed.");
-                })
-                .catch((error) => {
-                    alert("Authentication Failed: " + error.message);
-                });
+            auth.signInWithEmailAndPassword(document.getElementById('authUser').value.trim(), document.getElementById('authPass').value)
+                .then(() => toggleLoginModal(false)).catch(err => alert("Err: " + err.message));
             this.reset();
         });
-
-        function logoutSession() {
-            auth.signOut().then(() => {
-                switchTab('list');
-                alert("Logged out securely.");
-            });
-        }
+        function logoutSession() { auth.signOut().then(() => { switchTab('list'); alert("Logged out."); }); }
 
         document.getElementById('adminPlayerForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const name = document.getElementById('pFormName').value.trim();
             const points = parseInt(document.getElementById('pFormPoints').value);
             const rawCompletions = document.getElementById('pFormCompletions').value.split('\n');
-
             const existingIdx = leaderboardData.findIndex(p => p.name.toLowerCase() === name.toLowerCase());
             const profileData = { name: name, points: points, items: rawCompletions.filter(l => l.trim() !== "") };
-
-            if(existingIdx !== -1) {
-                leaderboardData[existingIdx] = profileData;
-            } else {
-                leaderboardData.push(profileData);
-            }
-
-            saveStateToStorage();
-            alert(`Leaderboard updated! Profile saved.`);
-            this.reset();
+            if(existingIdx !== -1) leaderboardData[existingIdx] = profileData; else leaderboardData.push(profileData);
+            saveStateToStorage(); alert("Saved profile."); this.reset();
         });
 
         function renderAdminQueue() {
             const container = document.getElementById('adminQueueContainer');
-            document.getElementById('queueCount').innerText = pendingData.length;
-            container.innerHTML = '';
-
-            if (pendingData.length === 0) {
-                container.innerHTML = '<p style="color:var(--text-muted); padding:15px; text-align:center; font-size:0.85rem;">No levels currently awaiting validation reviews.</p>';
-                return;
-            }
-
+            document.getElementById('queueCount').innerText = pendingData.length; container.innerHTML = '';
+            if (pendingData.length === 0) { container.innerHTML = '<p style="font-size:0.85rem; text-align:center; color:var(--text-muted);">Queue clear.</p>'; return; }
             pendingData.forEach((item, idx) => {
-                const currentRating = item.difficulty || 'Extreme Demon';
-                const card = document.createElement('div');
-                card.className = 'queue-item-card';
+                const card = document.createElement('div'); card.className = 'queue-item-card';
                 card.innerHTML = `
-                    <div class="queue-header">
-                        <strong style="font-size:1rem; color:#111827;">${item.name} <span style="color:var(--text-muted); font-weight:500; font-size:0.8rem;">(ID: ${item.levelId})</span></strong>
-                        <span class="method-chip">${item.method}${item.fps ? ` &middot; ${item.fps} FPS` : ''}</span>
-                    </div>
-                    <p class="queue-meta"><strong>Creator:</strong> ${item.creators} &nbsp;|&nbsp; <strong>Verifier:</strong> ${item.verifier}</p>
-                    <p class="queue-meta"><strong>Proof:</strong> <a href="https://youtube.com/watch?v=${item.youtubeId}" target="_blank">Watch submission ↗</a></p>
-                    <p class="queue-meta"><strong>Submitter's suggested rating:</strong> ${item.difficulty || 'Extreme Demon'}</p>
-
+                    <div class="queue-header"><strong>${item.name}</strong></div>
                     <div class="queue-review-grid">
-                        <div class="form-group">
-                            <label>Official Rating</label>
-                            <select id="adminRate-${idx}">
-                                ${GD_DIFFICULTIES.map(d => `<option value="${d}" ${currentRating===d?'selected':''}>${d}</option>`).join('')}
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Custom Points</label>
-                            <input type="number" id="adminPoints-${idx}" value="${item.points}">
-                        </div>
+                        <div class="form-group"><label>Rating</label><select id="adminRate-${idx}">${GD_DIFFICULTIES.map(d => `<option value="${d}">${d}</option>`).join('')}</select></div>
+                        <div class="form-group"><label>Points</label><input type="number" id="adminPoints-${idx}" value="${item.points}"></div>
                     </div>
-
-                    <div class="queue-actions">
-                        <button class="btn-approve" onclick="handleDecision(${idx}, true)">✓ Approve</button>
-                        <button class="btn-reject" onclick="handleDecision(${idx}, false)">✕ Reject</button>
-                    </div>
+                    <div class="queue-actions"><button class="btn-approve" onclick="handleDecision(${idx}, true)">Approve</button><button class="btn-reject" onclick="handleDecision(${idx}, false)">Reject</button></div>
                 `;
                 container.appendChild(card);
             });
@@ -917,174 +1009,47 @@
 
         window.handleDecision = function(index, approved) {
             if (approved) {
-                const targetLevel = pendingData[index];
-                const finalRating = document.getElementById(`adminRate-${index}`).value;
-                const finalPoints = parseInt(document.getElementById(`adminPoints-${index}`).value) || 0;
-                
-                targetLevel.publicRating = targetLevel.difficulty; 
-                targetLevel.difficulty = finalRating; 
-                targetLevel.points = finalPoints;
-                
-                levelsData.push(targetLevel);
-                alert(`"${targetLevel.name}" approved.`);
-            } else {
-                alert(`Submission rejected.`);
+                pendingData[index].difficulty = document.getElementById(`adminRate-${index}`).value;
+                pendingData[index].points = parseInt(document.getElementById(`adminPoints-${index}`).value) || 0;
+                levelsData.push(pendingData[index]);
             }
-            pendingData.splice(index, 1);
-            saveStateToStorage();
+            pendingData.splice(index, 1); saveStateToStorage();
         };
 
         function renderAdminLiveLevels() {
-            const container = document.getElementById('adminLiveMaintenanceContainer');
-            container.innerHTML = '';
-
-            if (levelsData.length === 0) {
-                container.innerHTML = '<p style="color:var(--text-muted); padding:10px; text-align:center; font-size:0.85rem;">No active levels cataloged on the real-time node.</p>';
-                return;
-            }
-
+            const container = document.getElementById('adminLiveMaintenanceContainer'); container.innerHTML = '';
             levelsData.forEach((level, idx) => {
-                const row = document.createElement('div');
-                row.className = 'queue-item-card';
-                row.style.padding = '12px 16px';
-                row.style.marginBottom = '8px';
-                row.style.background = '#fcfdfe';
-                
-                row.innerHTML = `
-                    <div class="queue-header" style="margin-bottom:0;">
-                        <div>
-                            <strong style="color:#111827; font-size:0.95rem;">#${idx + 1} ${level.name}</strong>
-                            <span style="font-size:0.75rem; color:var(--text-muted); margin-left:6px;">(ID: ${level.levelId})</span>
-                        </div>
-                        <button class="btn-reject" onclick="deleteLiveLevel(${idx})" style="padding: 6px 14px; font-size: 0.8rem; width:auto; flex:none;">
-                            🗑️ Delete From List
-                        </button>
-                    </div>
-                `;
+                const row = document.createElement('div'); row.className = 'queue-item-card';
+                row.innerHTML = `<div class="queue-header"><strong>#${idx+1} ${level.name}</strong><button class="btn-reject" style="width:auto; padding:4px 8px;" onclick="deleteLiveLevel(${idx})">Delete</button></div>`;
                 container.appendChild(row);
             });
         }
 
         window.deleteLiveLevel = function(idx) {
-            const level = levelsData[idx];
-            
-            const gateOne = confirm(`[GATEWAY 1] Are you completely certain you want to remove "${level.name}" from the live database database?`);
-            if (gateOne) {
-                const gateTwo = confirm(`[GATEWAY 2 - WARNING] This structural wipe is absolute and cannot be undone. Execute removal sequence for "${level.name}" now?`);
-                if (gateTwo) {
-                    levelsData.splice(idx, 1);
-                    saveStateToStorage();
-                    alert("Node terminated and updated successfully.");
-                }
-            }
+            if(confirm("Delete level?")) { levelsData.splice(idx, 1); saveStateToStorage(); }
         };
 
         function renderAdminEditScores() {
-            const container = document.getElementById('adminEditScoresContainer');
+            const container = document.getElementById('adminEditScoresContainer'); container.innerHTML = '';
             document.getElementById('editPlayerCount').innerText = leaderboardData.length;
-            container.innerHTML = '';
-
-            if (leaderboardData.length === 0) {
-                container.innerHTML = '<p style="color:var(--text-muted); padding:15px; text-align:center; font-size:0.85rem;">No players on the leaderboard yet.</p>';
-                return;
-            }
-
             leaderboardData.forEach((player, idx) => {
-                const row = document.createElement('div');
-                row.className = 'queue-item-card';
-                row.innerHTML = `
-                    <div class="queue-header">
-                        <strong style="font-size:1rem; color:#111827;">${player.name}</strong>
-                        <span class="method-chip">Current: ${player.points} pts</span>
-                    </div>
-                    <div class="queue-review-grid" style="grid-template-columns: 1fr;">
-                        <div class="form-group">
-                            <label>New Point Total</label>
-                            <input type="number" id="editScore-${idx}" value="${player.points}">
-                        </div>
-                    </div>
-                    <div class="queue-actions">
-                        <button class="btn-approve" onclick="updatePlayerScore(${idx})">💾 Save Score</button>
-                        <button class="btn-reject" onclick="deletePlayerProfile(${idx})">🗑 Remove Player</button>
-                    </div>
-                `;
+                const row = document.createElement('div'); row.className = 'queue-item-card';
+                row.innerHTML = `<div class="queue-header"><strong>${player.name}</strong></div><input type="number" id="editScore-${idx}" value="${player.points}"><div class="queue-actions"><button class="btn-approve" onclick="updatePlayerScore(${idx})">Save</button><button class="btn-reject" onclick="deletePlayerProfile(${idx})">Remove</button></div>`;
                 container.appendChild(row);
             });
         }
 
-        window.updatePlayerScore = function(idx) {
-            const input = document.getElementById(`editScore-${idx}`);
-            const newPoints = parseInt(input.value);
-            if (isNaN(newPoints)) { alert("Enter a valid number."); return; }
-            leaderboardData[idx].points = newPoints;
-            saveStateToStorage();
-            alert("Score saved.");
-        };
-
-        window.deletePlayerProfile = function(idx) {
-            const player = leaderboardData[idx];
-            if (!confirm(`Remove ${player.name}?`)) return;
-            leaderboardData.splice(idx, 1);
-            saveStateToStorage();
-        };
+        window.updatePlayerScore = function(idx) { leaderboardData[idx].points = parseInt(document.getElementById(`editScore-${idx}`).value); saveStateToStorage(); alert("Saved Score."); };
+        window.deletePlayerProfile = function(idx) { if(confirm("Remove profile?")) { leaderboardData.splice(idx, 1); saveStateToStorage(); } };
 
         document.getElementById('submissionForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            const submitBtn = document.getElementById('submitBtnText');
-            submitBtn.innerText = "Sending...";
-            submitBtn.disabled = true;
-
-            const newSubmission = {
-                name: document.getElementById('lvlName').value,
-                creators: document.getElementById('lvlCreator').value,
-                verifier: document.getElementById('lvlVerifier').value,
-                publisher: document.getElementById('lvlCreator').value,
-                youtubeId: extractYouTubeId(document.getElementById('lvlYoutube').value),
-                points: parseInt(document.getElementById('lvlPoints').value),
-                difficulty: document.getElementById('lvlDifficulty').value,
-                levelId: document.getElementById('lvlId').value,
-                method: document.getElementById('lvlMethod').value,
-                fps: parseInt(document.getElementById('lvlFps').value) || null
-            };
-
-            pendingData.push(newSubmission);
-            
-            database.ref('pending_levels').set(pendingData)
-            .then(() => {
-                const discordPayload = {
-                    username: "3015 SCL Queue Alert",
-                    embeds: [{
-                        title: "📥 Admin Action Needed - New Level Submitted",
-                        color: 61695, 
-                        fields: [
-                            { name: "Level Name", value: newSubmission.name, inline: true },
-                            { name: "Level ID", value: newSubmission.levelId, inline: true },
-                            { name: "Creator", value: newSubmission.creators, inline: true },
-                            { name: "Suggested Rating", value: newSubmission.difficulty, inline: true },
-                            { name: "Method", value: `${newSubmission.method} (${newSubmission.fps || '?'} FPS)`, inline: true },
-                            { name: "Proof Link", value: "https://www.youtube.com/watch?v=" + newSubmission.youtubeId }
-                        ],
-                        footer: { text: "Login to the admin suite to review." }
-                    }]
-                };
-
-                return fetch(DISCORD_WEBHOOK_URL, {
-                    method: "POST", headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(discordPayload)
-                });
-            })
-            .then(() => {
-                alert("Level successfully submitted!");
-            })
-            .catch(err => {
-                alert("Submission failed: " + err.message);
-            })
-            .finally(() => {
-                submitBtn.innerText = "Send Submission";
-                submitBtn.disabled = false;
-                this.reset();
-                modal.classList.remove('open');
+            pendingData.push({
+                name: document.getElementById('lvlName').value, creators: document.getElementById('lvlCreator').value, verifier: document.getElementById('lvlVerifier').value, publisher: document.getElementById('lvlCreator').value,
+                youtubeId: extractYouTubeId(document.getElementById('lvlYoutube').value), points: parseInt(document.getElementById('lvlPoints').value), difficulty: document.getElementById('lvlDifficulty').value,
+                levelId: document.getElementById('lvlId').value, method: document.getElementById('lvlMethod').value, fps: parseInt(document.getElementById('lvlFps').value) || null
             });
+            database.ref('pending_levels').set(pendingData).then(() => { alert("Submitted!"); modal.classList.remove('open'); this.reset(); });
         });
 
         document.getElementById('openModalBtn').addEventListener('click', () => modal.classList.add('open'));
