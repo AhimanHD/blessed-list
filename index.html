@@ -127,7 +127,7 @@
         .meta-info p { margin-bottom: 6px; display: flex; }
         .meta-info span { font-weight: 700; width: 110px; color: var(--text-muted); font-size: 0.75rem; letter-spacing: 0.5px; }
         
-        /* 📺 OPTIMIZED DESKTOP VIDEO: Made wider and larger on desktop monitors */
+        /* 📺 Larger Cinematic Desktop Video Frame Layout */
         .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; background: #000; border-radius: var(--radius-md); margin-bottom: 25px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.15); width: 100%; }
         .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
 
@@ -139,12 +139,55 @@
         .stat-box.rating-value p { color: #d97706; }
         .fps-tag { display: block; margin-top: 2px; font-size: 0.65rem; font-weight: 700; color: var(--text-muted); letter-spacing: 0.3px; }
 
-        /* --- Leaderboard Tables --- */
+        /* --- Leaderboard Diamond Shimmer Styles --- */
+        @keyframes glitter-shine {
+            0% { background-position: -200% center; }
+            100% { background-position: 200% center; }
+        }
+
         .leaderboard-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
         .leaderboard-table th { text-align: left; padding: 12px; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; border-bottom: 2px solid #f3f4f6; }
         .leaderboard-table td { padding: 14px 12px; font-size: 0.9rem; border-bottom: 1px solid #f3f4f6; }
-        .leaderboard-row { cursor: pointer; transition: background 0.15s; }
-        .leaderboard-row:hover { background: #f9fafb; }
+        
+        .leaderboard-row { 
+            cursor: pointer; 
+            transition: transform 0.15s ease, box-shadow 0.15s ease; 
+            position: relative;
+        }
+        .leaderboard-row:hover { transform: scale(1.005); }
+
+        .tier-shining {
+            background-size: 400% 400% !important;
+            animation: glitter-shine 3.5s linear infinite;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+        }
+
+        .tier-platinum {
+            background: linear-gradient(135deg, #e5e9f0 0%, #ffffff 25%, #a3b1c6 50%, #ffffff 75%, #e5e9f0 100%);
+            color: #111827 !important; font-weight: 800;
+            box-shadow: 0 4px 12px rgba(229, 233, 240, 0.4);
+        }
+        .tier-gold {
+            background: linear-gradient(135deg, #ffd700 0%, #fff5cc 25%, #b8860b 50%, #fff5cc 75%, #ffd700 100%);
+            color: #2c1d00 !important; font-weight: 800;
+            box-shadow: 0 4px 12px rgba(255, 215, 0, 0.35);
+        }
+        .tier-silver {
+            background: linear-gradient(135deg, #cccccc 0%, #f2f2f2 25%, #7a7a7a 50%, #f2f2f2 75%, #cccccc 100%);
+            color: #222222 !important; font-weight: 700;
+            box-shadow: 0 4px 10px rgba(204, 204, 204, 0.3);
+        }
+        .tier-bronze {
+            background: linear-gradient(135deg, #cd7f32 0%, #ffebdb 25%, #8b4513 50%, #ffebdb 75%, #cd7f32 100%);
+            color: #ffffff !important; font-weight: 700;
+            box-shadow: 0 4px 10px rgba(205, 127, 50, 0.3);
+        }
+        .tier-bronze td { color: #ffffff !important; }
+
+        .top-right-medal {
+            position: absolute; top: 50%; right: 18px; transform: translateY(-50%);
+            font-size: 1.15rem; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));
+        }
         
         .completion-badge-row { display: flex; justify-content: space-between; background: #f9fafb; padding: 10px 14px; border-radius: var(--radius-md); margin-bottom: 8px; border: 1px solid #f3f4f6; font-size: 0.88rem; }
 
@@ -205,7 +248,7 @@
         .right-sidebar ul { list-style: none; }
         .right-sidebar li { margin-bottom: 10px; line-height: 1.5; color: var(--text-muted); }
 
-        /* --- Modals Base --- */
+        /* --- Modals --- */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(17, 24, 39, 0.6); backdrop-filter: blur(4px);
             display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: all 0.25s ease; z-index: 1000;
@@ -232,7 +275,7 @@
         .btn-cancel { background: #f3f4f6; color: #4b5563; border: none; padding: 10px 18px; border-radius: var(--radius-md); cursor: pointer; font-weight: 600; }
         .btn-submit { background: var(--nav-green); color: white; border: none; padding: 10px 20px; border-radius: var(--radius-md); cursor: pointer; font-weight: 700; }
 
-        /* 📱 MOBILE RESPONSIVENESS OVERHAUL (For Android & Touch Viewports) */
+        /* 📱 RESPONSIVE MEDIA UI OVERHAUL */
         @media (max-width: 992px) {
             nav { flex-direction: column; gap: 12px; padding: 14px; text-align: center; }
             .nav-right { width: 100%; justify-content: center; }
@@ -274,14 +317,14 @@
 
             <div class="leaderboard-view-card" id="leaderboardView" style="display: none;">
                 <h1 class="level-title">Top Players</h1>
-                <p style="color: var(--text-muted); margin-bottom: 20px; font-size: 0.9rem;">Click on any player to view their verified level completions and proof records.</p>
+                <p style="color: var(--text-muted); margin-bottom: 20px; font-size: 0.9rem;">Click on any player profile card to view completely verified level completions and proof records.</p>
                 <div style="overflow-x: auto;">
                     <table class="leaderboard-table">
                         <thead>
                             <tr>
-                                <th style="width: 70px;">Rank</th>
+                                <th style="width: 75px;">Rank</th>
                                 <th>Player</th>
-                                <th style="text-align: right; width: 120px;">Total Points</th>
+                                <th style="text-align: right; width: 140px; padding-right: 25px;">Total Points</th>
                             </tr>
                         </thead>
                         <tbody id="leaderboardMainBody"></tbody>
@@ -306,8 +349,9 @@
                 </div>
 
                 <div class="admin-section-card">
-                    <h3 style="margin-bottom: 12px; font-size: 1.1rem;">📜 Live List Management <span class="badge-count" id="liveCount">0</span></h3>
-                    <div id="adminLiveContainer"></div>
+                    <h3 style="margin-bottom: 6px; font-size: 1.1rem;">🗑️ Live List Level Removal</h3>
+                    <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 15px;">Instantly eject levels off the public layout indexes. Actions require dual authorization checks.</p>
+                    <div id="adminLiveMaintenanceContainer"></div>
                 </div>
 
                 <div class="admin-section-card">
@@ -569,23 +613,48 @@
             `;
         }
 
+        /* 💎 DYNAMIC GLITTER TIER CARD INJECTION LOOP */
         function renderLeaderboard() {
             const tableBody = document.getElementById('leaderboardMainBody');
             tableBody.innerHTML = '';
             leaderboardData.sort((a, b) => b.points - a.points);
 
             if(leaderboardData.length === 0) {
-                tableBody.innerHTML = '<tr><td colspan="3" style="text-align:center; color:var(--text-muted); padding:20px;">Leaderboard empty. Log in as Admin to add data.</td></tr>';
+                tableBody.innerHTML = '<tr><td colspan="3" style="text-align:center; color:var(--text-muted); padding:20px;">Leaderboard empty.</td></tr>';
                 return;
             }
 
             leaderboardData.forEach((player, index) => {
+                const rank = index + 1;
                 const row = document.createElement('tr');
                 row.className = 'leaderboard-row';
+                
+                let dynamicClasses = '';
+                let badgeMarkup = '';
+
+                // Assign glittering diamond tier styles & decorations based on tier
+                if (rank === 1) {
+                    dynamicClasses = 'tier-shining tier-platinum';
+                    badgeMarkup = '<span class="top-right-medal">👑</span>';
+                } else if (rank === 2) {
+                    dynamicClasses = 'tier-shining tier-gold';
+                } else if (rank === 3) {
+                    dynamicClasses = 'tier-shining tier-silver';
+                } else if (rank === 4) {
+                    dynamicClasses = 'tier-shining tier-bronze';
+                } else if (rank >= 5 && rank <= 100) {
+                    badgeMarkup = '<span class="top-right-medal">🏅</span>';
+                }
+
+                if (dynamicClasses) {
+                    row.className += ' ' + dynamicClasses;
+                }
+
                 row.innerHTML = `
-                    <td style="font-weight:bold; color:var(--text-muted)">#${index + 1}</td>
-                    <td style="font-weight:600; color:var(--nav-green);">${player.name}</td>
-                    <td style="text-align:right; font-weight:bold; color:#059669;">${player.points}</td>
+                    <td style="font-weight:bold; padding-left: 15px;">#${rank}</td>
+                    <td style="font-weight:600;">${player.name}</td>
+                    <td style="text-align:right; font-weight:bold; padding-right: 35px;">${player.points}</td>
+                    ${badgeMarkup}
                 `;
                 row.addEventListener('click', () => launchPlayerProfile(player));
                 tableBody.appendChild(row);
@@ -649,7 +718,7 @@
             auth.signInWithEmailAndPassword(email, pass)
                 .then(() => {
                     toggleLoginModal(false);
-                    alert("Access Granted. Firebase session initialized.");
+                    alert("Access Granted. Secure context parsed.");
                 })
                 .catch((error) => {
                     alert("Authentication Failed: " + error.message);
@@ -748,38 +817,51 @@
             saveStateToStorage();
         };
 
+        /* 🛠️ EASY ACCESS ADMINISTRATIVE LEVEL REMOVAL COMPONENT */
         function renderAdminLiveLevels() {
-            const container = document.getElementById('adminLiveContainer');
-            document.getElementById('liveCount').innerText = levelsData.length;
+            const container = document.getElementById('adminLiveMaintenanceContainer');
             container.innerHTML = '';
 
             if (levelsData.length === 0) {
-                container.innerHTML = '<p style="color:var(--text-muted); padding:15px; text-align:center; font-size:0.85rem;">No levels currently posted on the list.</p>';
+                container.innerHTML = '<p style="color:var(--text-muted); padding:10px; text-align:center; font-size:0.85rem;">No active levels cataloged on the real-time node.</p>';
                 return;
             }
 
             levelsData.forEach((level, idx) => {
                 const row = document.createElement('div');
                 row.className = 'queue-item-card';
+                row.style.padding = '12px 16px';
+                row.style.marginBottom = '8px';
+                row.style.background = '#fcfdfe';
+                
                 row.innerHTML = `
-                    <div class="queue-header">
-                        <strong style="font-size:1rem; color:#111827;">#${idx + 1} ${level.name} <span style="color:var(--text-muted); font-weight:500; font-size:0.8rem;">(ID: ${level.levelId})</span></strong>
-                        <span class="method-chip">${level.difficulty || 'Extreme Demon'}</span>
-                    </div>
-                    <p class="queue-meta"><strong>Creator:</strong> ${level.creators} &nbsp;|&nbsp; <strong>Points:</strong> ${level.points}</p>
-                    <div class="queue-actions">
-                        <button class="btn-reject" onclick="deleteLiveLevel(${idx})">🗑 Delete From List</button>
+                    <div class="queue-header" style="margin-bottom:0;">
+                        <div>
+                            <strong style="color:#111827; font-size:0.95rem;">#${idx + 1} ${level.name}</strong>
+                            <span style="font-size:0.75rem; color:var(--text-muted); margin-left:6px;">(ID: ${level.levelId})</span>
+                        </div>
+                        <button class="btn-reject" onclick="deleteLiveLevel(${idx})" style="padding: 6px 14px; font-size: 0.8rem; width:auto; flex:none;">
+                            🗑️ Delete From List
+                        </button>
                     </div>
                 `;
                 container.appendChild(row);
             });
         }
 
+        /* 🔒 DUAL GATE DELETION SAFETY CONFIRMATION WRAPPER */
         window.deleteLiveLevel = function(idx) {
             const level = levelsData[idx];
-            if (!confirm(`Remove "${level.name}" from the live list?`)) return;
-            levelsData.splice(idx, 1);
-            saveStateToStorage();
+            
+            const gateOne = confirm(`[GATEWAY 1] Are you completely certain you want to remove "${level.name}" from the live database layout?`);
+            if (gateOne) {
+                const gateTwo = confirm(`[GATEWAY 2 - WARNING] This structural wipe is absolute and cannot be undone. Execute removal sequence for "${level.name}" now?`);
+                if (gateTwo) {
+                    levelsData.splice(idx, 1);
+                    saveStateToStorage();
+                    alert("Node terminated and updated successfully.");
+                }
+            }
         };
 
         function renderAdminEditScores() {
