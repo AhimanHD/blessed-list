@@ -16,6 +16,8 @@
             --sidebar-width: 280px;
             --radius-md: 6px;
             --radius-lg: 12px;
+            --ruby-glow: #e0115f;
+            --ruby-bright: #ff2a75;
         }
 
         * {
@@ -30,13 +32,29 @@
         }
 
         body {
-            background-color: #f3f4f6;
+            background-color: #111827;
             color: var(--text-main);
             display: flex;
             flex-direction: column;
             min-height: 100vh;
             overflow-x: hidden;
             transition: background 0.5s ease;
+        }
+
+        /* --- Background Video Container Styling --- */
+        #bg-video {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            z-index: 0;
+            transform: translate(-50%, -50%);
+            object-fit: cover;
+            pointer-events: none;
+            opacity: 0.75; /* Slightly lowered opacity to give background elements punch */
         }
 
         body.admin-active {
@@ -46,6 +64,11 @@
         body.admin-active::before {
             content: "";
             position: fixed; inset: 0; background: rgba(11, 31, 20, 0.18); pointer-events: none; z-index: 0;
+        }
+
+        /* Hide background video completely in Admin mode */
+        body.admin-active #bg-video {
+            display: none;
         }
 
         body.admin-active .container { background: transparent; }
@@ -74,8 +97,9 @@
             justify-content: space-between;
             align-items: center;
             padding: 14px 24px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
             z-index: 10;
+            position: relative;
         }
 
         .nav-left { display: flex; align-items: center; gap: 10px; }
@@ -106,24 +130,50 @@
         }
         .login-btn:hover { background: rgba(255, 255, 255, 0.25); }
 
-        /* --- Main Layout --- */
-        .container { display: flex; flex: 1; overflow: hidden; position: relative; }
+        /* --- Main Layout Glassmorphism updates --- */
+        .container { display: flex; flex: 1; overflow: hidden; position: relative; z-index: 1; }
 
-        .left-sidebar { width: var(--sidebar-width); border-right: 1px solid #e5e7eb; overflow-y: auto; background: white; padding: 10px 0; }
+        .left-sidebar { 
+            width: var(--sidebar-width); 
+            border-right: 1px solid rgba(229, 231, 235, 0.3); 
+            overflow-y: auto; 
+            background: rgba(255, 255, 255, 0.82); 
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            padding: 10px 0; 
+        }
         
-        .level-item { display: flex; align-items: center; padding: 14px 20px; cursor: pointer; border-bottom: 1px solid #f3f4f6; font-size: 0.9rem; transition: all 0.2s; font-weight: 500; }
-        .level-item:hover { background-color: #f9fafb; padding-left: 24px; }
+        .level-item { display: flex; align-items: center; padding: 14px 20px; cursor: pointer; border-bottom: 1px solid rgba(243, 244, 246, 0.5); font-size: 0.9rem; transition: all 0.2s; font-weight: 500; }
+        .level-item:hover { background-color: rgba(249, 250, 251, 0.6); padding-left: 24px; }
         
         .level-item.active { 
-            background-color: rgba(0, 240, 255, 0.04); border-left: 4px solid var(--neon-blue); font-weight: 700; color: var(--nav-green);
+            background-color: rgba(0, 240, 255, 0.1); border-left: 4px solid var(--neon-blue); font-weight: 700; color: var(--nav-green);
         }
         .level-rank { width: 45px; color: var(--text-muted); font-weight: 700; }
 
-        .main-content { flex: 1; padding: 40px; overflow-y: auto; background: #fafafa; display: flex; flex-direction: column; align-items: center; z-index: 1; }
-        .level-details-card, .leaderboard-view-card, .admin-dashboard { width: 100%; max-width: 900px; background: white; padding: 30px; border-radius: var(--radius-lg); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+        .main-content { 
+            flex: 1; 
+            padding: 40px; 
+            overflow-y: auto; 
+            background: rgba(250, 250, 250, 0.45); 
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            z-index: 1; 
+        }
+        .level-details-card, .leaderboard-view-card, .admin-dashboard { 
+            width: 100%; 
+            max-width: 900px; 
+            background: rgba(255, 255, 255, 0.93); 
+            padding: 30px; 
+            border-radius: var(--radius-lg); 
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.15); 
+        }
         
         .level-title { font-size: 2.5rem; font-weight: 800; margin-bottom: 15px; color: #111827; letter-spacing: -0.5px; }
-        .meta-info { margin-bottom: 25px; font-size: 0.9rem; background: #f9fafb; padding: 15px; border-radius: var(--radius-md); border: 1px solid #f3f4f6; }
+        .meta-info { margin-bottom: 25px; font-size: 0.9rem; background: #f9fafb; padding: 15px; border-radius: var(--radius-md); border: 1px solid #e5e7eb; }
         .meta-info p { margin-bottom: 6px; display: flex; }
         .meta-info span { font-weight: 700; width: 110px; color: var(--text-muted); font-size: 0.75rem; letter-spacing: 0.5px; }
         
@@ -131,7 +181,7 @@
         .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
 
         .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; text-align: center; margin-bottom: 25px; }
-        .stat-box { background: #f9fafb; padding: 12px; border-radius: var(--radius-md); border: 1px solid #f3f4f6; }
+        .stat-box { background: #f9fafb; padding: 12px; border-radius: var(--radius-md); border: 1px solid #e5e7eb; }
         .stat-box h4 { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px; letter-spacing: 0.5px; }
         .stat-box p { font-size: 1.1rem; font-weight: 700; color: #111827; }
         .stat-box.points-value p { color: #059669; }
@@ -145,7 +195,7 @@
         }
 
         .leaderboard-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        .leaderboard-table th { text-align: left; padding: 12px; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; border-bottom: 2px solid #f3f4f6; }
+        .leaderboard-table th { text-align: left; padding: 12px; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; border-bottom: 2px solid #e5e7eb; }
         
         /* Base styles for standard rows */
         .leaderboard-row { 
@@ -244,11 +294,40 @@
         .btn-reject { background: var(--normal-red); color: white; border: none; padding: 10px 24px; border-radius: var(--radius-md); font-weight: 700; cursor: pointer; transition: all 0.15s; }
         .btn-approve:hover, .btn-reject:hover { opacity: 0.92; transform: translateY(-1px); }
 
-        .right-sidebar { width: 340px; border-left: 1px solid #e5e7eb; padding: 25px; overflow-y: auto; background: white; font-size: 0.85rem; }
-        .right-sidebar h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 12px; border-bottom: 2px solid #f3f4f6; padding-bottom: 6px; margin-top: 25px; color: #111827; }
+        /* --- Right Sidebar Glassmorphism & Ruby Glow Rules --- */
+        .right-sidebar { 
+            width: 340px; 
+            border-left: 1px solid rgba(229, 231, 235, 0.3); 
+            padding: 25px; 
+            overflow-y: auto; 
+            background: rgba(255, 255, 255, 0.85); 
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            font-size: 0.85rem; 
+        }
+        .right-sidebar h3 { 
+            font-size: 0.95rem; 
+            font-weight: 800; 
+            margin-bottom: 12px; 
+            border-bottom: 2px solid rgba(224, 17, 95, 0.4); 
+            padding-bottom: 6px; 
+            margin-top: 25px; 
+            color: var(--ruby-glow); 
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            text-shadow: 0 0 8px rgba(255, 42, 117, 0.4);
+        }
         .right-sidebar h3:first-of-type { margin-top: 0; }
         .right-sidebar ul { list-style: none; }
-        .right-sidebar li { margin-bottom: 10px; line-height: 1.5; color: var(--text-muted); }
+        
+        /* Ruby Glow List Items Style */
+        .right-sidebar li { 
+            margin-bottom: 10px; 
+            line-height: 1.5; 
+            color: #9b0034; /* Dark rubinous tone for rich backdrop contrast readability */
+            font-weight: 700;
+            text-shadow: 0 0 6px rgba(255, 42, 117, 0.55), 0 0 14px rgba(224, 17, 95, 0.2);
+        }
 
         /* --- Modals --- */
         .modal-overlay {
@@ -281,8 +360,8 @@
             nav { flex-direction: column; gap: 12px; padding: 14px; text-align: center; }
             .nav-right { width: 100%; justify-content: center; }
             .container { flex-direction: column; overflow: visible; height: auto; }
-            .left-sidebar { width: 100%; height: 300px; border-right: none; border-bottom: 1px solid #e5e7eb; }
-            .right-sidebar { width: 100%; border-left: none; border-top: 1px solid #e5e7eb; }
+            .left-sidebar { width: 100%; height: 300px; border-right: none; border-bottom: 1px solid rgba(229, 231, 235, 0.3); }
+            .right-sidebar { width: 100%; border-left: none; border-top: 1px solid rgba(229, 231, 235, 0.3); }
             .main-content { padding: 16px; }
             .stats-grid { grid-template-columns: repeat(2, 1fr); }
             .admin-stats-row { grid-template-columns: 1fr; }
@@ -293,6 +372,10 @@
     </style>
 </head>
 <body>
+
+    <video autoplay muted loop playsinline id="bg-video">
+        <source src="geometry_dash_gameplay.mp4" type="video/mp4">
+    </video>
 
     <nav>
         <div class="nav-left">
@@ -649,7 +732,6 @@
                     row.className += ' ' + dynamicClasses;
                 }
 
-                // FIXED HTML INNER DATA CELL ASSIGNMENTS
                 row.innerHTML = `
                     <td style="font-weight:bold; padding-left: 15px; width: 75px;">#${rank}</td>
                     <td style="font-weight:600;">${player.name} ${badgeMarkup}</td>
