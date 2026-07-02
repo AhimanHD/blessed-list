@@ -22,6 +22,11 @@
             box-sizing: border-box;
             margin: 0;
             padding: 0;
+            font-family: 'Times New Roman', Times, serif;
+        }
+
+        /* The "3015 SCL" brand mark keeps the original clean sans-serif look */
+        .nav-left .brand {
             font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
 
@@ -32,6 +37,41 @@
             flex-direction: column;
             height: 100vh;
             overflow: hidden;
+            transition: background 0.5s ease;
+        }
+
+        /* Admin ambience: uploaded artwork as the backdrop while signed in as admin */
+        body.admin-active {
+            background: url('71bd495e1821801272fa0f4358d7e0da.gif') no-repeat center center fixed;
+            background-size: cover;
+        }
+        body.admin-active::before {
+            content: "";
+            position: fixed; inset: 0; background: rgba(11, 31, 20, 0.18); pointer-events: none; z-index: 0;
+        }
+
+        /* Let the admin backdrop artwork actually show through the panels instead of being hidden behind solid white/grey */
+        body.admin-active .container { background: transparent; }
+        body.admin-active .main-content { background: rgba(250, 250, 250, 0.35); }
+        body.admin-active .left-sidebar,
+        body.admin-active .right-sidebar { background: rgba(255, 255, 255, 0.55); }
+
+        .corner-signature {
+            position: fixed; bottom: 14px; right: 14px; width: 56px; opacity: 0.55;
+            z-index: 999; pointer-events: none; transition: opacity 0.2s ease;
+        }
+        .corner-signature:hover { opacity: 0.9; }
+
+        .signature-badge {
+            display: inline-block;
+            background: url('cc00b6ec-be75-4bc6-950e-e46076e7d718.jpg') center/cover;
+            padding: 3px 10px; border-radius: 6px; color: #fff; font-weight: 700;
+            text-shadow: 0 1px 4px rgba(0,0,0,0.85);
+        }
+
+        .site-footer-credit {
+            text-align: center; font-size: 0.72rem; color: var(--text-muted);
+            padding: 10px 0 4px; font-style: italic;
         }
 
         /* --- Top Navigation --- */
@@ -47,10 +87,10 @@
 
         .nav-left { display: flex; align-items: center; gap: 10px; }
         .nav-left .brand { 
-            font-size: 1.25rem; 
+            font-size: 1.6rem; 
             font-weight: 800;
-            color: var(--neon-blue);
-            text-shadow: 0 0 12px rgba(0, 240, 255, 0.4);
+            color: #ffffff;
+            text-shadow: 0 0 12px rgba(255, 255, 255, 0.35);
             letter-spacing: 0.5px;
         }
         
@@ -96,12 +136,13 @@
         .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
 
         /* Modified into a clean 2x2 grid to fit the rating feature */
-        .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; text-align: center; margin-bottom: 25px; }
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; text-align: center; margin-bottom: 25px; }
         .stat-box { background: #f9fafb; padding: 12px; border-radius: var(--radius-md); border: 1px solid #f3f4f6; }
         .stat-box h4 { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px; letter-spacing: 0.5px; }
         .stat-box p { font-size: 1.1rem; font-weight: 700; color: #111827; }
         .stat-box.points-value p { color: #059669; }
         .stat-box.rating-value p { color: #d97706; }
+        .fps-tag { display: block; margin-top: 2px; font-size: 0.65rem; font-weight: 700; color: var(--text-muted); letter-spacing: 0.3px; }
 
         /* --- Leaderboard Tables --- */
         .leaderboard-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
@@ -113,15 +154,56 @@
         .completion-badge-row { display: flex; justify-content: space-between; background: #f9fafb; padding: 10px 14px; border-radius: var(--radius-md); margin-bottom: 8px; border: 1px solid #f3f4f6; font-size: 0.88rem; }
 
         /* --- Admin Dashboard Layouts --- */
-        .admin-dashboard { background: transparent; padding: 0; box-shadow: none; display: none; }
-        .admin-title { font-size: 1.8rem; font-weight: 800; margin-bottom: 20px; color: #111827; display: flex; justify-content: space-between; align-items: center; }
-        .queue-card, .admin-section-card { background: white; padding: 20px; border-radius: var(--radius-lg); border: 1px solid #e5e7eb; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); margin-bottom: 20px; }
-        .queue-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid #f3f4f6; padding-bottom: 10px; }
-        .queue-actions { display: flex; gap: 10px; margin-top: 15px; border-top: 1px solid #f3f4f6; padding-top: 15px; }
-        
-        .btn-approve { background: var(--dark-green); color: white; border: none; padding: 10px 24px; border-radius: var(--radius-md); font-weight: 700; cursor: pointer; transition: opacity 0.2s; }
-        .btn-reject { background: var(--normal-red); color: white; border: none; padding: 10px 24px; border-radius: var(--radius-md); font-weight: 700; cursor: pointer; transition: opacity 0.2s; }
-        .btn-approve:hover, .btn-reject:hover { opacity: 0.9; }
+        .admin-dashboard { background: transparent; padding: 0; box-shadow: none; display: none; max-width: 780px; }
+        .admin-title {
+            font-size: 1.7rem; font-weight: 800; margin-bottom: 18px; color: #ffffff; display: flex; justify-content: space-between; align-items: center;
+            background: linear-gradient(135deg, var(--nav-green), var(--dark-green)); padding: 20px 26px; border-radius: var(--radius-lg);
+            box-shadow: 0 8px 20px -6px rgba(20, 83, 45, 0.5);
+        }
+        .admin-title .admin-eyebrow { display: block; font-size: 0.68rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; opacity: 0.65; margin-bottom: 2px; }
+
+        .admin-stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
+        .admin-stat-pill {
+            background: white; border: 1px solid #e5e7eb; border-radius: var(--radius-lg); padding: 14px 16px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04);
+        }
+        .admin-stat-pill h4 { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); margin-bottom: 4px; }
+        .admin-stat-pill p { font-size: 1.4rem; font-weight: 800; color: #111827; }
+
+        .queue-card, .admin-section-card { background: white; padding: 22px; border-radius: var(--radius-lg); border: 1px solid #e5e7eb; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        .queue-card > h3, .admin-section-card > h3 { display: flex; align-items: center; gap: 8px; }
+        .queue-card > h3 .badge-count { background: var(--nav-green); color: white; font-size: 0.72rem; font-weight: 800; padding: 1px 9px; border-radius: 999px; }
+
+        .queue-item-card { background: #fafbfb; border: 1px solid #edf0ef; border-radius: var(--radius-md); padding: 16px; margin-bottom: 14px; transition: box-shadow 0.2s; }
+        .queue-item-card:hover { box-shadow: 0 4px 10px -2px rgba(0,0,0,0.06); }
+        .queue-item-card:last-child { margin-bottom: 0; }
+
+        .queue-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; gap: 10px; }
+        .queue-meta { margin: 3px 0; font-size: 0.85rem; color: var(--text-muted); }
+        .queue-meta strong { color: #111827; }
+        .queue-meta a { color: var(--nav-green); font-weight: 600; }
+
+        .method-chip {
+            background: rgba(0, 240, 255, 0.1); color: #0369a1; border: 1px solid rgba(0, 240, 255, 0.3);
+            padding: 3px 10px; border-radius: 999px; font-size: 0.7rem; font-weight: 700; white-space: nowrap;
+        }
+
+        .queue-review-grid {
+            margin-top: 12px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; background: white; padding: 12px;
+            border-radius: var(--radius-md); border: 1px solid #e5e7eb;
+        }
+        .queue-review-grid label { font-size: 0.65rem; font-weight: 700; color: var(--text-muted); margin-bottom: 3px; letter-spacing: 0.4px; text-transform: uppercase; display: block; }
+        .queue-review-grid select, .queue-review-grid input {
+            width: 100%; padding: 7px 8px; font-size: 0.82rem; border: 1px solid #d1d5db; border-radius: 5px; background: #f9fafb;
+        }
+
+        .queue-actions { display: flex; gap: 10px; margin-top: 14px; border-top: 1px solid #f3f4f6; padding-top: 14px; }
+        .queue-actions button { flex: 1; }
+
+        .btn-approve { background: var(--dark-green); color: white; border: none; padding: 10px 24px; border-radius: var(--radius-md); font-weight: 700; cursor: pointer; transition: all 0.15s; }
+        .btn-reject { background: var(--normal-red); color: white; border: none; padding: 10px 24px; border-radius: var(--radius-md); font-weight: 700; cursor: pointer; transition: all 0.15s; }
+        .btn-approve:hover, .btn-reject:hover { opacity: 0.92; transform: translateY(-1px); }
+        .btn-approve:active, .btn-reject:active { transform: translateY(0); }
 
         .right-sidebar { width: 340px; border-left: 1px solid #e5e7eb; padding: 25px; overflow-y: auto; background: white; font-size: 0.85rem; }
         .right-sidebar h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 12px; border-bottom: 2px solid #f3f4f6; padding-bottom: 6px; margin-top: 25px; color: #111827; }
@@ -168,7 +250,6 @@
             <a id="tabList" class="active" onclick="switchTab('list')">List</a>
             <a id="tabLeaderboard" onclick="switchTab('leaderboard')">Leaderboard</a>
             <a id="tabAdmin" style="display:none;" onclick="switchTab('admin')">Admin Area</a>
-            <a>Roulette</a>
         </div>
         <div class="nav-right">
             <button class="submit-btn" id="openModalBtn">Submit Level</button>
@@ -198,46 +279,56 @@
             </div>
 
             <div class="admin-dashboard" id="adminDashboardView">
-                <div class="admin-title">3015 SCL Admin Suite</div>
-                
+                <div class="admin-title">
+                    <div><span class="admin-eyebrow">Control Panel</span>3015 SCL Admin Suite</div>
+                </div>
+
+                <div class="admin-stats-row">
+                    <div class="admin-stat-pill"><h4>Pending Review</h4><p id="statPending">0</p></div>
+                    <div class="admin-stat-pill"><h4>Live Levels</h4><p id="statLive">0</p></div>
+                    <div class="admin-stat-pill"><h4>Ranked Players</h4><p id="statPlayers">0</p></div>
+                </div>
+
                 <div class="queue-card">
-                    <h3 style="margin-bottom: 12px; font-size: 1.1rem;">Level Verification Queue (<span id="queueCount">0</span>)</h3>
+                    <h3 style="margin-bottom: 12px; font-size: 1.1rem;">📋 Level Verification Queue <span class="badge-count" id="queueCount">0</span></h3>
                     <div id="adminQueueContainer"></div>
                 </div>
 
                 <div class="admin-section-card">
-                    <h3 style="margin-bottom: 12px; font-size: 1.1rem;">Quick Leaderboard Generator</h3>
+                    <h3 style="margin-bottom: 12px; font-size: 1.1rem;">📜 Live List Management <span class="badge-count" id="liveCount">0</span></h3>
+                    <div id="adminLiveContainer"></div>
+                </div>
+
+                <div class="admin-section-card">
+                    <h3 style="margin-bottom: 12px; font-size: 1.1rem;">🏆 Quick Leaderboard Generator</h3>
                     <form id="adminPlayerForm">
                         <div class="form-grid">
                             <div class="form-group">
                                 <label>Player Username</label>
-                                <input type="text" id="pFormName" required placeholder="e.g., Puremidnight">
+                                <input type="text" id="pFormName" required placeholder="Player username">
                             </div>
                             <div class="form-group">
                                 <label>Total Manual Score Points</label>
-                                <input type="number" id="pFormPoints" required placeholder="e.g., 200">
+                                <input type="number" id="pFormPoints" required placeholder="Total points">
                             </div>
                             <div class="form-group full-width">
                                 <label>Detailed Completed Level List (One per line)</label>
-                                <textarea id="pFormCompletions" rows="4" placeholder="Format: Level Name | Rank # | Method&#10;Example: 10s30 | #1 | Alternating" required></textarea>
+                                <textarea id="pFormCompletions" rows="4" placeholder="Format: Level Name | Rank # | Method" required></textarea>
                             </div>
                         </div>
                         <button type="submit" class="btn-approve" style="margin-top: 15px; width: 100%;">Push Player to Leaderboard</button>
                     </form>
                 </div>
+
+                <div class="admin-section-card">
+                    <h3 style="margin-bottom: 12px; font-size: 1.1rem;">✏️ Edit Scores in Real Time <span class="badge-count" id="editPlayerCount">0</span></h3>
+                    <div id="adminEditScoresContainer"></div>
+                </div>
             </div>
         </div>
         
         <div class="right-sidebar">
-            <p style="color:var(--text-muted); margin-bottom: 15px; font-size: 0.75rem; font-style: italic;">Website layout made by TheShittyList</p>
-            <h3>List Editors</h3>
-            <ul>
-                <li>👑 Puremidnight402</li>
-                <li>👑 Puremidnight</li>
-                <li>👤 Puremidnight</li>
-                <li>&lt;/&gt; None</li>
-            </ul>
-
+            <p style="color:var(--text-muted); margin-bottom: 15px; font-size: 0.75rem; font-style: italic;">Managed by <span class="signature-badge">Ahim4n</span></p>
             <h3>Submission Requirements</h3>
             <ul>
                 <li>• Your level must be under 30 seconds.</li>
@@ -246,9 +337,6 @@
                 <li>• Levels verified/beat with a cps cap will be placed separately.</li>
                 <li>• Levels verified/beat with a method outside alternating will be placed separately.</li>
                 <li>• Secret ways are absolutely prohibited.</li>
-                <li>• Levels have to be 30fps 15cps.</li>
-                <li>• The difficulty must be spam.</li>
-                <li>• Noclip is allowed as long as you have 0 deaths or 100% Accuracy.</li>
                 <li>• Clicks must be heard. Click Sounds aren't allowed.</li>
                 <li>• You have to be on the latest version of Geometry Dash in order to get your completions/verifications accepted.</li>
             </ul>
@@ -266,8 +354,12 @@
                     <div class="form-group full-width"><label>YouTube Link</label><input type="text" id="lvlYoutube" required placeholder="https://youtube.com/..."></div>
                     <div class="form-group"><label>Geometry Dash ID</label><input type="text" id="lvlId" required></div>
                     <div class="form-group"><label>Suggested Points</label><input type="number" id="lvlPoints" value="200" required></div>
-                    <div class="form-group"><label>Suggested GD Rating</label>
+                    <div class="form-group"><label>Public Rating (your suggestion)</label>
                         <select id="lvlDifficulty">
+                            <option value="Auto">Auto</option>
+                            <option value="Easy">Easy</option>
+                            <option value="Normal">Normal</option>
+                            <option value="Hard">Hard</option>
                             <option value="Harder">Harder</option>
                             <option value="Insane">Insane</option>
                             <option value="Easy Demon">Easy Demon</option>
@@ -277,7 +369,8 @@
                             <option value="Extreme Demon" selected>Extreme Demon</option>
                         </select>
                     </div>
-                    <div class="form-group"><label>Method Used</label><select id="lvlMethod"><option value="Alternating">Alternating</option><option value="Standard">Standard</option><option value="Spam">Spam</option></select></div>
+                    <div class="form-group"><label>Method Used</label><select id="lvlMethod"><option value="Alternating">Alternating</option><option value="Standard">Standard</option><option value="Spam">Spam</option><option value="Jitter">Jitter</option></select></div>
+                    <div class="form-group"><label>FPS Used</label><input type="number" id="lvlFps" required placeholder="FPS"></div>
                 </div>
                 <div class="modal-buttons">
                     <button type="button" class="btn-cancel" id="closeModalBtn">Cancel</button>
@@ -313,6 +406,8 @@
         </div>
     </div>
 
+    <img src="image_7e0698.jpg" alt="" class="corner-signature">
+
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
 
@@ -321,18 +416,21 @@
 
         // 🔥 FIREBASE SETUP: Loaded automatically from your registration parameters!
         const firebaseConfig = {
-            apiKey: "AIzaSyCDiBuKcKFmUwMHZelkeaz1aCzyqgDSiBA",
+            apiKey: "AIzaSyCOIBuKcKFmVWMRZelkeazIaCZyqgDSiBA",
             authDomain: "blessedgd-8b706.firebaseapp.com",
             databaseURL: "https://blessedgd-8b706-default-rtdb.firebaseio.com",
             projectId: "blessedgd-8b706",
             storageBucket: "blessedgd-8b706.firebasestorage.app",
             messagingSenderId: "808564176320",
-            appId: "1:808564176320:web:8d5f471a6b11fd0d934425"
+            appId: "1:808564176320:web:8d5f471a6b11fd0d934425",
+            measurementId: "G-XFVL54G396"
         };
 
         // Initialize Cloud Core Links
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
+
+        const GD_DIFFICULTIES = ["Auto", "Easy", "Normal", "Hard", "Harder", "Insane", "Easy Demon", "Medium Demon", "Hard Demon", "Insane Demon", "Extreme Demon"];
 
         let levelsData = [];
         let pendingData = [];
@@ -348,24 +446,38 @@
         // 🌐 LIVE INSTANT UPDATES: Watch Firebase streams in real-time
         database.ref('approved_levels').on('value', (snapshot) => {
             const data = snapshot.val();
-            levelsData = data ? Object.values(data) : [
-                { rank: 1, name: "10s30", creators: "1", verifier: "Aut0Plays", publisher: "Aut0Plays", youtubeId: "dQw4w9WgXcQ", points: 200, levelId: "140744149", method: "Alternating", difficulty: "Extreme Demon" }
-            ];
+            levelsData = data ? Object.values(data) : [];
             renderSidebar();
+            updateAdminStats();
             if (levelsData.length > 0 && !document.querySelector('.level-item.active')) selectLevel(1);
+            if (currentRole === "admin") renderAdminLiveLevels();
         });
 
         database.ref('pending_levels').on('value', (snapshot) => {
             const data = snapshot.val();
             pendingData = data ? Object.values(data) : [];
+            updateAdminStats();
             if(currentRole === "admin") renderAdminQueue();
         });
 
         database.ref('leaderboard_profiles').on('value', (snapshot) => {
             const data = snapshot.val();
             leaderboardData = data ? Object.values(data) : [];
+            updateAdminStats();
             if(leaderboardView.style.display !== "none") renderLeaderboard();
+            if(currentRole === "admin") renderAdminEditScores();
         });
+
+        // Keeps the admin summary pills (pending / live / players) in sync with live data
+        function updateAdminStats() {
+            const pendingEl = document.getElementById('statPending');
+            const liveEl = document.getElementById('statLive');
+            const playersEl = document.getElementById('statPlayers');
+            if (!pendingEl || !liveEl || !playersEl) return;
+            pendingEl.innerText = pendingData.length;
+            liveEl.innerText = levelsData.length;
+            playersEl.innerText = leaderboardData.length;
+        }
 
         function extractYouTubeId(url) {
             url = url.trim();
@@ -418,9 +530,10 @@
                 <div class="video-container"><iframe src="https://www.youtube.com/embed/${data.youtubeId}" allowfullscreen></iframe></div>
                 <div class="stats-grid">
                     <div class="stat-box points-value"><h4>Points</h4><p>${data.points}</p></div>
-                    <div class="stat-box rating-value"><h4>GD Rating</h4><p>${data.difficulty || 'Extreme Demon'}</p></div>
+                    <div class="stat-box rating-value"><h4>Official Rating</h4><p>${data.difficulty || 'Extreme Demon'}</p></div>
+                    <div class="stat-box"><h4>Public Rating</h4><p>${data.publicRating || data.difficulty || 'Extreme Demon'}</p></div>
                     <div class="stat-box"><h4>Level ID</h4><p>${data.levelId}</p></div>
-                    <div class="stat-box"><h4>Method</h4><p>${data.method}</p></div>
+                    <div class="stat-box"><h4>Method</h4><p>${data.method}${data.fps ? `<span class="fps-tag">${data.fps} FPS</span>` : ''}</p></div>
                 </div>
             `;
         }
@@ -483,6 +596,9 @@
                 document.getElementById('tabAdmin').classList.add('active');
                 adminView.style.display = "block";
                 renderAdminQueue();
+                renderAdminLiveLevels();
+                renderAdminEditScores();
+                updateAdminStats();
             }
         }
 
@@ -497,11 +613,14 @@
 
             if (user === "admin" && pass === "blessedgdiscool") {
                 currentRole = "admin";
+                document.body.classList.add('admin-active');
                 document.getElementById('tabAdmin').style.display = "inline-block";
                 document.getElementById('loginNavBtn').innerText = "Logout (Admin)";
                 document.getElementById('loginNavBtn').onclick = logoutSession;
                 toggleLoginModal(false);
                 alert("Access Granted. 3015 SCL Admin panel configuration loaded.");
+            } else if (user === "admin") {
+                alert("stop pretending to be an admin blud");
             } else {
                 alert("Invalid configuration credentials.");
             }
@@ -510,6 +629,7 @@
 
         function logoutSession() {
             currentRole = "member";
+            document.body.classList.remove('admin-active');
             document.getElementById('tabAdmin').style.display = "none";
             document.getElementById('loginNavBtn').innerText = "Login";
             document.getElementById('loginNavBtn').onclick = () => toggleLoginModal(true);
@@ -550,38 +670,32 @@
             pendingData.forEach((item, idx) => {
                 const currentRating = item.difficulty || 'Extreme Demon';
                 const card = document.createElement('div');
-                card.className = 'queue-card';
-                card.style.background = "#f9fafb";
+                card.className = 'queue-item-card';
                 card.innerHTML = `
                     <div class="queue-header">
-                        <strong style="font-size:1rem; color:#111827;">${item.name} (ID: ${item.levelId})</strong>
-                        <span style="background:#e5e7eb; padding:2px 8px; border-radius:4px; font-size:0.72rem; font-weight:bold;">${item.method}</span>
+                        <strong style="font-size:1rem; color:#111827;">${item.name} <span style="color:var(--text-muted); font-weight:500; font-size:0.8rem;">(ID: ${item.levelId})</span></strong>
+                        <span class="method-chip">${item.method}${item.fps ? ` &middot; ${item.fps} FPS` : ''}</span>
                     </div>
-                    <p style="margin:2px 0; font-size:0.85rem;"><strong>Creator:</strong> ${item.creators} | <strong>Verifier:</strong> ${item.verifier}</p>
-                    <p style="margin:2px 0; font-size:0.85rem;"><strong>Proof URL:</strong> <a href="https://youtube.com/watch?v=${item.youtubeId}" target="_blank">Open Link</a></p>
-                    
-                    <div style="margin-top:12px; display:grid; grid-template-columns:1fr 1fr; gap:10px; background:white; padding:10px; border-radius:6px; border:1px solid #e5e7eb;">
+                    <p class="queue-meta"><strong>Creator:</strong> ${item.creators} &nbsp;|&nbsp; <strong>Verifier:</strong> ${item.verifier}</p>
+                    <p class="queue-meta"><strong>Proof:</strong> <a href="https://youtube.com/watch?v=${item.youtubeId}" target="_blank">Watch submission ↗</a></p>
+                    <p class="queue-meta"><strong>Submitter's suggested rating:</strong> ${item.difficulty || 'Extreme Demon'}</p>
+
+                    <div class="queue-review-grid">
                         <div class="form-group">
-                            <label style="font-size:0.68rem; font-weight:bold; color:var(--text-muted); margin-bottom:3px;">OFFICIAL RATING</label>
-                            <select id="adminRate-${idx}" style="padding:4px; font-size:0.82rem;">
-                                <option value="Harder" ${currentRating==='Harder'?'selected':''}>Harder</option>
-                                <option value="Insane" ${currentRating==='Insane'?'selected':''}>Insane</option>
-                                <option value="Easy Demon" ${currentRating==='Easy Demon'?'selected':''}>Easy Demon</option>
-                                <option value="Medium Demon" ${currentRating==='Medium Demon'?'selected':''}>Medium Demon</option>
-                                <option value="Hard Demon" ${currentRating==='Hard Demon'?'selected':''}>Hard Demon</option>
-                                <option value="Insane Demon" ${currentRating==='Insane Demon'?'selected':''}>Insane Demon</option>
-                                <option value="Extreme Demon" ${currentRating==='Extreme Demon'?'selected':''}>Extreme Demon</option>
+                            <label>Official Rating</label>
+                            <select id="adminRate-${idx}">
+                                ${GD_DIFFICULTIES.map(d => `<option value="${d}" ${currentRating===d?'selected':''}>${d}</option>`).join('')}
                             </select>
                         </div>
                         <div class="form-group">
-                            <label style="font-size:0.68rem; font-weight:bold; color:var(--text-muted); margin-bottom:3px;">CUSTOM POINTS</label>
-                            <input type="number" id="adminPoints-${idx}" value="${item.points}" style="padding:4px; font-size:0.82rem;">
+                            <label>Custom Points</label>
+                            <input type="number" id="adminPoints-${idx}" value="${item.points}">
                         </div>
                     </div>
 
                     <div class="queue-actions">
-                        <button class="btn-approve" onclick="handleDecision(${idx}, true)">Yes</button>
-                        <button class="btn-reject" onclick="handleDecision(${idx}, false)">No</button>
+                        <button class="btn-approve" onclick="handleDecision(${idx}, true)">✓ Approve</button>
+                        <button class="btn-reject" onclick="handleDecision(${idx}, false)">✕ Reject</button>
                     </div>
                 `;
                 container.appendChild(card);
@@ -596,7 +710,8 @@
                 const finalRating = document.getElementById(`adminRate-${index}`).value;
                 const finalPoints = parseInt(document.getElementById(`adminPoints-${index}`).value) || 0;
                 
-                targetLevel.difficulty = finalRating;
+                targetLevel.publicRating = targetLevel.difficulty; // keep the submitter's original suggestion
+                targetLevel.difficulty = finalRating; // official rating set by admin
                 targetLevel.points = finalPoints;
                 
                 levelsData.push(targetLevel);
@@ -606,6 +721,94 @@
             }
             pendingData.splice(index, 1);
             saveStateToStorage();
+        };
+
+        // --- Live List Management: lets an admin pull an already-posted level off the list ---
+        function renderAdminLiveLevels() {
+            const container = document.getElementById('adminLiveContainer');
+            document.getElementById('liveCount').innerText = levelsData.length;
+            container.innerHTML = '';
+
+            if (levelsData.length === 0) {
+                container.innerHTML = '<p style="color:var(--text-muted); padding:15px; text-align:center; font-size:0.85rem;">No levels currently posted on the list.</p>';
+                return;
+            }
+
+            levelsData.forEach((level, idx) => {
+                const row = document.createElement('div');
+                row.className = 'queue-item-card';
+                row.innerHTML = `
+                    <div class="queue-header">
+                        <strong style="font-size:1rem; color:#111827;">#${idx + 1} ${level.name} <span style="color:var(--text-muted); font-weight:500; font-size:0.8rem;">(ID: ${level.levelId})</span></strong>
+                        <span class="method-chip">${level.difficulty || 'Extreme Demon'}</span>
+                    </div>
+                    <p class="queue-meta"><strong>Creator:</strong> ${level.creators} &nbsp;|&nbsp; <strong>Points:</strong> ${level.points}</p>
+                    <div class="queue-actions">
+                        <button class="btn-reject" onclick="deleteLiveLevel(${idx})">🗑 Delete From List</button>
+                    </div>
+                `;
+                container.appendChild(row);
+            });
+        }
+
+        window.deleteLiveLevel = function(idx) {
+            const level = levelsData[idx];
+            if (!confirm(`Remove "${level.name}" from the live list? This cannot be undone.`)) return;
+            levelsData.splice(idx, 1);
+            saveStateToStorage();
+            alert(`"${level.name}" has been removed from the list.`);
+            renderAdminLiveLevels();
+        };
+
+        // --- Real-Time Score Editing: lets an admin adjust a player's total points on the fly ---
+        function renderAdminEditScores() {
+            const container = document.getElementById('adminEditScoresContainer');
+            document.getElementById('editPlayerCount').innerText = leaderboardData.length;
+            container.innerHTML = '';
+
+            if (leaderboardData.length === 0) {
+                container.innerHTML = '<p style="color:var(--text-muted); padding:15px; text-align:center; font-size:0.85rem;">No players on the leaderboard yet.</p>';
+                return;
+            }
+
+            leaderboardData.forEach((player, idx) => {
+                const row = document.createElement('div');
+                row.className = 'queue-item-card';
+                row.innerHTML = `
+                    <div class="queue-header">
+                        <strong style="font-size:1rem; color:#111827;">${player.name}</strong>
+                        <span class="method-chip">Current: ${player.points} pts</span>
+                    </div>
+                    <div class="queue-review-grid" style="grid-template-columns: 1fr;">
+                        <div class="form-group">
+                            <label>New Point Total</label>
+                            <input type="number" id="editScore-${idx}" value="${player.points}">
+                        </div>
+                    </div>
+                    <div class="queue-actions">
+                        <button class="btn-approve" onclick="updatePlayerScore(${idx})">💾 Save Score</button>
+                        <button class="btn-reject" onclick="deletePlayerProfile(${idx})">🗑 Remove Player</button>
+                    </div>
+                `;
+                container.appendChild(row);
+            });
+        }
+
+        window.updatePlayerScore = function(idx) {
+            const input = document.getElementById(`editScore-${idx}`);
+            const newPoints = parseInt(input.value);
+            if (isNaN(newPoints)) { alert("Enter a valid number for the score."); return; }
+            leaderboardData[idx].points = newPoints;
+            saveStateToStorage();
+            alert(`${leaderboardData[idx].name}'s score updated to ${newPoints} in real time!`);
+        };
+
+        window.deletePlayerProfile = function(idx) {
+            const player = leaderboardData[idx];
+            if (!confirm(`Remove ${player.name} from the leaderboard?`)) return;
+            leaderboardData.splice(idx, 1);
+            saveStateToStorage();
+            renderAdminEditScores();
         };
 
         document.getElementById('submissionForm').addEventListener('submit', function(e) {
@@ -623,7 +826,8 @@
                 points: parseInt(document.getElementById('lvlPoints').value),
                 difficulty: document.getElementById('lvlDifficulty').value,
                 levelId: document.getElementById('lvlId').value,
-                method: document.getElementById('lvlMethod').value
+                method: document.getElementById('lvlMethod').value,
+                fps: parseInt(document.getElementById('lvlFps').value) || null
             };
 
             pendingData.push(newSubmission);
@@ -639,6 +843,7 @@
                         { name: "Level ID", value: newSubmission.levelId, inline: true },
                         { name: "Creator", value: newSubmission.creators, inline: true },
                         { name: "Suggested Rating", value: newSubmission.difficulty, inline: true },
+                        { name: "Method", value: `${newSubmission.method} (${newSubmission.fps || '?'} FPS)`, inline: true },
                         { name: "Proof Link", value: "https://www.youtube.com/watch?v=" + newSubmission.youtubeId }
                     ],
                     footer: { text: "Login to the admin section of your dashboard to update changes." }
