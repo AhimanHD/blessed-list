@@ -25,7 +25,6 @@
             font-family: 'Times New Roman', Times, serif;
         }
 
-        /* The "3015 SCL" brand mark keeps the original clean sans-serif look */
         .nav-left .brand {
             font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
@@ -35,12 +34,11 @@
             color: var(--text-main);
             display: flex;
             flex-direction: column;
-            height: 100vh;
-            overflow: hidden;
+            min-height: 100vh;
+            overflow-x: hidden;
             transition: background 0.5s ease;
         }
 
-        /* Admin ambience: uploaded artwork as the backdrop while signed in as admin */
         body.admin-active {
             background: url('71bd495e1821801272fa0f4358d7e0da.gif') no-repeat center center fixed;
             background-size: cover;
@@ -50,7 +48,6 @@
             position: fixed; inset: 0; background: rgba(11, 31, 20, 0.18); pointer-events: none; z-index: 0;
         }
 
-        /* Let the admin backdrop artwork actually show through the panels instead of being hidden behind solid white/grey */
         body.admin-active .container { background: transparent; }
         body.admin-active .main-content { background: rgba(250, 250, 250, 0.35); }
         body.admin-active .left-sidebar,
@@ -69,11 +66,6 @@
             text-shadow: 0 1px 4px rgba(0,0,0,0.85);
         }
 
-        .site-footer-credit {
-            text-align: center; font-size: 0.72rem; color: var(--text-muted);
-            padding: 10px 0 4px; font-style: italic;
-        }
-
         /* --- Top Navigation --- */
         nav {
             background-color: var(--nav-green);
@@ -83,6 +75,7 @@
             align-items: center;
             padding: 14px 24px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 10;
         }
 
         .nav-left { display: flex; align-items: center; gap: 10px; }
@@ -95,7 +88,9 @@
         }
         
         .nav-left .version { font-size: 0.8rem; opacity: 0.7; font-weight: normal; background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px; }
-        .nav-center a { color: white; text-decoration: none; margin: 0 16px; font-size: 0.9rem; font-weight: 600; opacity: 0.8; transition: opacity 0.2s; cursor: pointer; }
+        
+        .nav-center { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px; }
+        .nav-center a { color: white; text-decoration: none; margin: 0 12px; font-size: 0.9rem; font-weight: 600; opacity: 0.8; transition: opacity 0.2s; cursor: pointer; }
         .nav-center a:hover, .nav-center a.active { opacity: 1; text-decoration: underline; text-underline-offset: 4px; }
         
         .nav-right { display: flex; align-items: center; gap: 12px; }
@@ -112,7 +107,7 @@
         .login-btn:hover { background: rgba(255, 255, 255, 0.25); }
 
         /* --- Main Layout --- */
-        .container { display: flex; flex: 1; overflow: hidden; }
+        .container { display: flex; flex: 1; overflow: hidden; position: relative; }
 
         .left-sidebar { width: var(--sidebar-width); border-right: 1px solid #e5e7eb; overflow-y: auto; background: white; padding: 10px 0; }
         
@@ -124,18 +119,18 @@
         }
         .level-rank { width: 45px; color: var(--text-muted); font-weight: 700; }
 
-        .main-content { flex: 1; padding: 40px; overflow-y: auto; background: #fafafa; display: flex; flex-direction: column; align-items: center; }
-        .level-details-card, .leaderboard-view-card, .admin-dashboard { width: 100%; max-width: 680px; background: white; padding: 30px; border-radius: var(--radius-lg); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+        .main-content { flex: 1; padding: 40px; overflow-y: auto; background: #fafafa; display: flex; flex-direction: column; align-items: center; z-index: 1; }
+        .level-details-card, .leaderboard-view-card, .admin-dashboard { width: 100%; max-width: 900px; background: white; padding: 30px; border-radius: var(--radius-lg); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
         
         .level-title { font-size: 2.5rem; font-weight: 800; margin-bottom: 15px; color: #111827; letter-spacing: -0.5px; }
         .meta-info { margin-bottom: 25px; font-size: 0.9rem; background: #f9fafb; padding: 15px; border-radius: var(--radius-md); border: 1px solid #f3f4f6; }
         .meta-info p { margin-bottom: 6px; display: flex; }
         .meta-info span { font-weight: 700; width: 110px; color: var(--text-muted); font-size: 0.75rem; letter-spacing: 0.5px; }
         
-        .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; background: #000; border-radius: var(--radius-md); margin-bottom: 25px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+        /* 📺 OPTIMIZED DESKTOP VIDEO: Made wider and larger on desktop monitors */
+        .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; background: #000; border-radius: var(--radius-md); margin-bottom: 25px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.15); width: 100%; }
         .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
 
-        /* Modified into a clean 2x2 grid to fit the rating feature */
         .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; text-align: center; margin-bottom: 25px; }
         .stat-box { background: #f9fafb; padding: 12px; border-radius: var(--radius-md); border: 1px solid #f3f4f6; }
         .stat-box h4 { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px; letter-spacing: 0.5px; }
@@ -154,7 +149,7 @@
         .completion-badge-row { display: flex; justify-content: space-between; background: #f9fafb; padding: 10px 14px; border-radius: var(--radius-md); margin-bottom: 8px; border: 1px solid #f3f4f6; font-size: 0.88rem; }
 
         /* --- Admin Dashboard Layouts --- */
-        .admin-dashboard { background: transparent; padding: 0; box-shadow: none; display: none; max-width: 780px; }
+        .admin-dashboard { background: transparent; padding: 0; box-shadow: none; display: none; max-width: 900px; }
         .admin-title {
             font-size: 1.7rem; font-weight: 800; margin-bottom: 18px; color: #ffffff; display: flex; justify-content: space-between; align-items: center;
             background: linear-gradient(135deg, var(--nav-green), var(--dark-green)); padding: 20px 26px; border-radius: var(--radius-lg);
@@ -203,7 +198,6 @@
         .btn-approve { background: var(--dark-green); color: white; border: none; padding: 10px 24px; border-radius: var(--radius-md); font-weight: 700; cursor: pointer; transition: all 0.15s; }
         .btn-reject { background: var(--normal-red); color: white; border: none; padding: 10px 24px; border-radius: var(--radius-md); font-weight: 700; cursor: pointer; transition: all 0.15s; }
         .btn-approve:hover, .btn-reject:hover { opacity: 0.92; transform: translateY(-1px); }
-        .btn-approve:active, .btn-reject:active { transform: translateY(0); }
 
         .right-sidebar { width: 340px; border-left: 1px solid #e5e7eb; padding: 25px; overflow-y: auto; background: white; font-size: 0.85rem; }
         .right-sidebar h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 12px; border-bottom: 2px solid #f3f4f6; padding-bottom: 6px; margin-top: 25px; color: #111827; }
@@ -237,6 +231,21 @@
         .modal-buttons { display: flex; justify-content: flex-end; gap: 10px; margin-top: 25px; border-top: 1px solid #f3f4f6; padding-top: 15px; }
         .btn-cancel { background: #f3f4f6; color: #4b5563; border: none; padding: 10px 18px; border-radius: var(--radius-md); cursor: pointer; font-weight: 600; }
         .btn-submit { background: var(--nav-green); color: white; border: none; padding: 10px 20px; border-radius: var(--radius-md); cursor: pointer; font-weight: 700; }
+
+        /* 📱 MOBILE RESPONSIVENESS OVERHAUL (For Android & Touch Viewports) */
+        @media (max-width: 992px) {
+            nav { flex-direction: column; gap: 12px; padding: 14px; text-align: center; }
+            .nav-right { width: 100%; justify-content: center; }
+            .container { flex-direction: column; overflow: visible; height: auto; }
+            .left-sidebar { width: 100%; height: 300px; border-right: none; border-bottom: 1px solid #e5e7eb; }
+            .right-sidebar { width: 100%; border-left: none; border-top: 1px solid #e5e7eb; }
+            .main-content { padding: 16px; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .admin-stats-row { grid-template-columns: 1fr; }
+            .form-grid { grid-template-columns: 1fr; }
+            .form-group.full-width { grid-column: span 1; }
+            .queue-review-grid { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
@@ -266,16 +275,18 @@
             <div class="leaderboard-view-card" id="leaderboardView" style="display: none;">
                 <h1 class="level-title">Top Players</h1>
                 <p style="color: var(--text-muted); margin-bottom: 20px; font-size: 0.9rem;">Click on any player to view their verified level completions and proof records.</p>
-                <table class="leaderboard-table">
-                    <thead>
-                        <tr>
-                            <th style="width: 70px;">Rank</th>
-                            <th>Player</th>
-                            <th style="text-align: right; width: 120px;">Total Points</th>
-                        </tr>
-                    </thead>
-                    <tbody id="leaderboardMainBody"></tbody>
-                </table>
+                <div style="overflow-x: auto;">
+                    <table class="leaderboard-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 70px;">Rank</th>
+                                <th>Player</th>
+                                <th style="text-align: right; width: 120px;">Total Points</th>
+                            </tr>
+                        </thead>
+                        <tbody id="leaderboardMainBody"></tbody>
+                    </table>
+                </div>
             </div>
 
             <div class="admin-dashboard" id="adminDashboardView">
@@ -428,7 +439,7 @@
 
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
-        const auth = firebase.auth(); // Initialized Auth module
+        const auth = firebase.auth();
 
         const GD_DIFFICULTIES = ["Auto", "Easy", "Normal", "Hard", "Harder", "Insane", "Easy Demon", "Medium Demon", "Hard Demon", "Insane Demon", "Extreme Demon"];
 
@@ -443,7 +454,6 @@
         const adminView = document.getElementById('adminDashboardView');
         const modal = document.getElementById('submissionModal');
 
-        // 🔐 SECURE STATE OBSERVER: Dynamically tracks Firebase authentication states
         auth.onAuthStateChanged((user) => {
             if (user) {
                 currentRole = "admin";
@@ -452,7 +462,6 @@
                 document.getElementById('loginNavBtn').innerText = "Logout (Admin)";
                 document.getElementById('loginNavBtn').onclick = logoutSession;
                 
-                // Repopulate components under admin privilege context
                 renderAdminQueue();
                 renderAdminLiveLevels();
                 renderAdminEditScores();
@@ -632,7 +641,6 @@
             document.getElementById('loginModal').classList.toggle('open', show);
         }
 
-        // UPDATED: Standard programmatic checks replaced with real Firebase Authentication calls
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const email = document.getElementById('authUser').value.trim();
