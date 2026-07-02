@@ -12,7 +12,7 @@ permissions:
 
 concurrency:
   group: "pages"
-  cancel-in-progress: true # Changed to true to automatically clear stuck queues
+  cancel-in-progress: true # Automatically cancels older stuck runs
 
 jobs:
   deploy:
@@ -34,4 +34,4 @@ jobs:
 
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v5 # Upgraded from v4 to support Node 24 natively
+        uses: actions/deploy-pages@v5 # Upgraded to v5 for Node 24 support
