@@ -7,22 +7,26 @@
     <style>
         :root {
             --nav-green: #1b4322;
+            --dark-green: #14532d;
+            --normal-red: #dc2626;
             --neon-blue: #00f0ff;
             --dark-bg: #111827;
-            --text-main: #333333;
-            --text-muted: #666666;
-            --sidebar-width: 260px;
+            --text-main: #1f2937;
+            --text-muted: #4b5563;
+            --sidebar-width: 280px;
+            --radius-md: 6px;
+            --radius-lg: 12px;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
 
         body {
-            background-color: #f9fafb;
+            background-color: #f3f4f6;
             color: var(--text-main);
             display: flex;
             flex-direction: column;
@@ -37,114 +41,118 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px 20px;
-            font-weight: bold;
+            padding: 14px 24px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
-        .nav-left {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
+        .nav-left { display: flex; align-items: center; gap: 10px; }
         .nav-left .brand { 
-            font-size: 1.2rem; 
+            font-size: 1.25rem; 
+            font-weight: 800;
             color: var(--neon-blue);
-            text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+            text-shadow: 0 0 12px rgba(0, 240, 255, 0.4);
             letter-spacing: 0.5px;
         }
         
-        .nav-left .version { font-size: 0.8rem; opacity: 0.8; font-weight: normal; color: white; }
-        .nav-center a { color: white; text-decoration: none; margin: 0 12px; font-size: 0.9rem; opacity: 0.9; }
-        .nav-center a.active { text-decoration: underline; }
+        .nav-left .version { font-size: 0.8rem; opacity: 0.7; font-weight: normal; background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px; }
+        .nav-center a { color: white; text-decoration: none; margin: 0 16px; font-size: 0.9rem; font-weight: 600; opacity: 0.8; transition: opacity 0.2s; cursor: pointer; }
+        .nav-center a:hover, .nav-center a.active { opacity: 1; text-decoration: underline; text-underline-offset: 4px; }
         
+        .nav-right { display: flex; align-items: center; gap: 12px; }
         .submit-btn {
-            background: white;
-            color: var(--nav-green);
-            border: none;
-            padding: 6px 14px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: background 0.2s;
+            background: white; color: var(--nav-green); border: none; padding: 8px 16px; border-radius: var(--radius-md);
+            cursor: pointer; font-weight: 700; transition: all 0.2s ease; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
-        .submit-btn:hover { background: #f3f4f6; }
+        .submit-btn:hover { background: #f3f4f6; transform: translateY(-1px); }
+        
+        .login-btn {
+            background: rgba(255, 255, 255, 0.15); color: white; border: 1px solid rgba(255,255,255,0.3); 
+            padding: 7px 14px; border-radius: var(--radius-md); cursor: pointer; font-weight: 600; font-size: 0.85rem; transition: all 0.2s;
+        }
+        .login-btn:hover { background: rgba(255, 255, 255, 0.25); }
 
-        /* --- Main Layout Split --- */
+        /* --- Main Layout --- */
         .container { display: flex; flex: 1; overflow: hidden; }
 
-        .left-sidebar { width: var(--sidebar-width); border-right: 1px solid #e5e7eb; overflow-y: auto; background: white; }
+        .left-sidebar { width: var(--sidebar-width); border-right: 1px solid #e5e7eb; overflow-y: auto; background: white; padding: 10px 0; }
         
-        .level-item { display: flex; align-items: center; padding: 10px 15px; cursor: pointer; border-bottom: 1px solid #f3f4f6; font-size: 0.88rem; }
-        .level-item:hover { background-color: #f3f4f6; }
+        .level-item { display: flex; align-items: center; padding: 14px 20px; cursor: pointer; border-bottom: 1px solid #f3f4f6; font-size: 0.9rem; transition: all 0.2s; font-weight: 500; }
+        .level-item:hover { background-color: #f9fafb; padding-left: 24px; }
         
         .level-item.active { 
-            background-color: rgba(0, 240, 255, 0.05); 
-            border: 2px solid var(--neon-blue);
-            font-weight: bold; 
-            box-shadow: 0 0 8px rgba(0, 240, 255, 0.3);
+            background-color: rgba(0, 240, 255, 0.04); border-left: 4px solid var(--neon-blue); font-weight: 700; color: var(--nav-green);
         }
-        .level-rank { width: 45px; color: var(--text-muted); font-weight: bold; }
+        .level-rank { width: 45px; color: var(--text-muted); font-weight: 700; }
 
-        .main-content { flex: 1; padding: 30px; overflow-y: auto; background: white; display: flex; flex-direction: column; align-items: center; }
-        .level-details-card { width: 100%; max-width: 600px; }
-        .level-title { font-size: 2.5rem; font-weight: 800; margin-bottom: 10px; }
-        .meta-info { margin-bottom: 20px; font-size: 0.95rem; line-height: 1.5; }
-        .meta-info span { font-weight: bold; }
+        .main-content { flex: 1; padding: 40px; overflow-y: auto; background: #fafafa; display: flex; flex-direction: column; align-items: center; }
+        .level-details-card, .leaderboard-view-card, .admin-dashboard { width: 100%; max-width: 680px; background: white; padding: 30px; border-radius: var(--radius-lg); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
         
-        .video-container { 
-            position: relative; 
-            padding-bottom: 56.25%; 
-            height: 0; 
-            overflow: hidden; 
-            background: #000; 
-            border-radius: 4px; 
-            margin-bottom: 20px; 
-            border: 2px solid var(--neon-blue);
-            box-shadow: 0 0 20px rgba(0, 240, 255, 0.6);
-        }
+        .level-title { font-size: 2.5rem; font-weight: 800; margin-bottom: 15px; color: #111827; letter-spacing: -0.5px; }
+        .meta-info { margin-bottom: 25px; font-size: 0.9rem; background: #f9fafb; padding: 15px; border-radius: var(--radius-md); border: 1px solid #f3f4f6; }
+        .meta-info p { margin-bottom: 6px; display: flex; }
+        .meta-info span { font-weight: 700; width: 110px; color: var(--text-muted); font-size: 0.75rem; letter-spacing: 0.5px; }
+        
+        .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; background: #000; border-radius: var(--radius-md); margin-bottom: 25px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
         .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
 
-        .stats-grid { display: flex; justify-content: space-between; text-align: center; margin-bottom: 30px; border-bottom: 1px solid #e5e7eb; padding-bottom: 20px; }
-        .stat-box h4 { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 5px; }
-        .stat-box p { font-size: 1.1rem; font-weight: bold; }
-        
-        .stat-box.points-value p {
-            color: var(--neon-blue);
-            text-shadow: 0 0 5px rgba(0, 240, 255, 0.4);
-        }
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; text-align: center; margin-bottom: 25px; }
+        .stat-box { background: #f9fafb; padding: 12px; border-radius: var(--radius-md); border: 1px solid #f3f4f6; }
+        .stat-box h4 { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px; letter-spacing: 0.5px; }
+        .stat-box p { font-size: 1.1rem; font-weight: 700; color: #111827; }
+        .stat-box.points-value p { color: #059669; }
 
-        .right-sidebar { width: 320px; border-left: 1px solid #e5e7eb; padding: 20px; overflow-y: auto; background: white; font-size: 0.85rem; }
-        .right-sidebar h3 { font-size: 1rem; margin-bottom: 10px; border-bottom: 1px solid #e5e7eb; padding-bottom: 5px; margin-top: 20px; }
+        /* --- Leaderboard Tables & Layouts --- */
+        .leaderboard-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        .leaderboard-table th { text-align: left; padding: 12px; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; border-bottom: 2px solid #f3f4f6; }
+        .leaderboard-table td { padding: 14px 12px; font-size: 0.9rem; border-bottom: 1px solid #f3f4f6; }
+        .leaderboard-row { cursor: pointer; transition: background 0.15s; }
+        .leaderboard-row:hover { background: #f9fafb; }
+        
+        .completion-badge-row { display: flex; justify-content: space-between; background: #f9fafb; padding: 10px 14px; border-radius: var(--radius-md); margin-bottom: 8px; border: 1px solid #f3f4f6; font-size: 0.88rem; }
+
+        /* --- Admin Queue & Panel Styling --- */
+        .admin-dashboard { background: transparent; padding: 0; box-shadow: none; display: none; }
+        .admin-title { font-size: 1.8rem; font-weight: 800; margin-bottom: 20px; color: #111827; display: flex; justify-content: space-between; align-items: center; }
+        .queue-card, .admin-section-card { background: white; padding: 20px; border-radius: var(--radius-lg); border: 1px solid #e5e7eb; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        .queue-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid #f3f4f6; padding-bottom: 10px; }
+        .queue-actions { display: flex; gap: 10px; margin-top: 15px; border-top: 1px solid #f3f4f6; padding-top: 15px; }
+        
+        .btn-approve { background: var(--dark-green); color: white; border: none; padding: 10px 24px; border-radius: var(--radius-md); font-weight: 700; cursor: pointer; transition: opacity 0.2s; }
+        .btn-reject { background: var(--normal-red); color: white; border: none; padding: 10px 24px; border-radius: var(--radius-md); font-weight: 700; cursor: pointer; transition: opacity 0.2s; }
+        .btn-approve:hover, .btn-reject:hover { opacity: 0.9; }
+
+        .right-sidebar { width: 340px; border-left: 1px solid #e5e7eb; padding: 25px; overflow-y: auto; background: white; font-size: 0.85rem; }
+        .right-sidebar h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 12px; border-bottom: 2px solid #f3f4f6; padding-bottom: 6px; margin-top: 25px; color: #111827; }
         .right-sidebar h3:first-of-type { margin-top: 0; }
         .right-sidebar ul { list-style: none; }
-        .right-sidebar li { margin-bottom: 10px; line-height: 1.4; color: #222; }
+        .right-sidebar li { margin-bottom: 10px; line-height: 1.5; color: var(--text-muted); }
 
-        /* --- Submission Modal Popup --- */
+        /* --- Modals Base --- */
         .modal-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            display: flex; justify-content: center; align-items: center;
-            opacity: 0; pointer-events: none;
-            transition: opacity 0.2s ease;
-            z-index: 1000;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(17, 24, 39, 0.6); backdrop-filter: blur(4px);
+            display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: all 0.25s ease; z-index: 1000;
         }
         .modal-overlay.open { opacity: 1; pointer-events: auto; }
         .modal-box {
-            background: white; padding: 25px; border-radius: 8px;
-            width: 100%; max-width: 450px; box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            position: relative;
+            background: white; padding: 30px; border-radius: var(--radius-lg); width: 100%; max-width: 520px; 
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); transform: scale(0.95); transition: transform 0.2s ease;
+            max-height: 90vh; overflow-y: auto;
         }
-        .modal-box h2 { margin-bottom: 15px; font-size: 1.4rem; color: var(--text-main); }
-        .form-group { margin-bottom: 12px; }
-        .form-group label { display: block; font-size: 0.8rem; font-weight: bold; margin-bottom: 4px; color: var(--text-muted); }
-        .form-group input, .form-group select {
-            width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 0.9rem;
+        .modal-overlay.open .modal-box { transform: scale(1); }
+        .modal-box h2 { margin-bottom: 20px; font-size: 1.5rem; font-weight: 800; color: #111827; }
+        
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+        .form-group { display: flex; flex-direction: column; }
+        .form-group.full-width { grid-column: span 2; }
+        .form-group label { font-size: 0.75rem; font-weight: 700; margin-bottom: 5px; color: #4b5563; text-transform: uppercase; }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%; padding: 10px 12px; border: 1px solid #d1d5db; border-radius: var(--radius-md); font-size: 0.9rem; background: #f9fafb; color: #111827;
         }
-        .modal-buttons { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
-        .btn-cancel { background: #e5e7eb; color: #333; border: none; padding: 8px 14px; border-radius: 4px; cursor: pointer; }
-        .btn-submit { background: var(--nav-green); color: white; border: none; padding: 8px 14px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        .form-group input:focus, .form-group textarea:focus { border-color: var(--neon-blue); outline: none; box-shadow: 0 0 0 3px rgba(0, 240, 255, 0.15); }
+
+        .modal-buttons { display: flex; justify-content: flex-end; gap: 10px; margin-top: 25px; border-top: 1px solid #f3f4f6; padding-top: 15px; }
+        .btn-cancel { background: #f3f4f6; color: #4b5563; border: none; padding: 10px 18px; border-radius: var(--radius-md); cursor: pointer; font-weight: 600; }
+        .btn-submit { background: var(--nav-green); color: white; border: none; padding: 10px 20px; border-radius: var(--radius-md); cursor: pointer; font-weight: 700; }
     </style>
 </head>
 <body>
@@ -155,46 +163,92 @@
             <span class="version">v1.0</span>
         </div>
         <div class="nav-center">
-            <a href="#" class="active">List</a>
-            <a href="#">Leaderboard</a>
-            <a href="#">Roulette</a>
+            <a id="tabList" class="active" onclick="switchTab('list')">List</a>
+            <a id="tabLeaderboard" onclick="switchTab('leaderboard')">Leaderboard</a>
+            <a id="tabAdmin" style="display:none;" onclick="switchTab('admin')">Admin Area</a>
+            <a>Roulette</a>
         </div>
         <div class="nav-right">
             <button class="submit-btn" id="openModalBtn">Submit Level</button>
+            <button class="login-btn" id="loginNavBtn" onclick="toggleLoginModal(true)">Login</button>
         </div>
     </nav>
 
     <div class="container">
         <div class="left-sidebar" id="levelList"></div>
+        
         <div class="main-content">
             <div class="level-details-card" id="levelDetails"></div>
+
+            <div class="leaderboard-view-card" id="leaderboardView" style="display: none;">
+                <h1 class="level-title">Top Players</h1>
+                <p style="color: var(--text-muted); margin-bottom: 20px; font-size: 0.9rem;">Click on any player to view their verified level completions and proof records.</p>
+                <table class="leaderboard-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 70px;">Rank</th>
+                            <th>Player</th>
+                            <th style="text-align: right; width: 120px;">Total Points</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboardMainBody"></tbody>
+                </table>
+            </div>
+
+            <div class="admin-dashboard" id="adminDashboardView">
+                <div class="admin-title">Admin Management Suite</div>
+                
+                <div class="queue-card">
+                    <h3 style="margin-bottom: 12px; font-size: 1.1rem;">Level Verification Queue (<span id="queueCount">0</span>)</h3>
+                    <div id="adminQueueContainer"></div>
+                </div>
+
+                <div class="admin-section-card">
+                    <h3 style="margin-bottom: 12px; font-size: 1.1rem;">Quick Leaderboard Generator</h3>
+                    <form id="adminPlayerForm">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Player Username</label>
+                                <input type="text" id="pFormName" required placeholder="e.g., Puremidnight">
+                            </div>
+                            <div class="form-group">
+                                <label>Total Manual Score Points</label>
+                                <input type="number" id="pFormPoints" required placeholder="e.g., 200">
+                            </div>
+                            <div class="form-group full-width">
+                                <label>Detailed Completed Level List (One per line)</label>
+                                <textarea id="pFormCompletions" rows="4" placeholder="Format: Level Name | Rank # | Method&#10;Example: 10s30 | #1 | Alternating&#10;Example: Trick Extension | #2 | Spam" required></textarea>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-approve" style="margin-top: 15px; width: 100%;">Push Player to Leaderboard</button>
+                    </form>
+                </div>
+            </div>
         </div>
         
         <div class="right-sidebar">
-            <p style="color:var(--text-muted); margin-bottom: 15px; font-size: 0.8rem;">Website layout made by TheShittyList</p>
-            
+            <p style="color:var(--text-muted); margin-bottom: 15px; font-size: 0.75rem; font-style: italic;">Website layout made by TheShittyList</p>
             <h3>List Editors</h3>
             <ul>
                 <li>👑 Puremidnight402</li>
                 <li>👑 Puremidnight</li>
-                <li>👤 Puremidnight</li>
                 <li>👤 Puremidnight</li>
                 <li>&lt;/&gt; None</li>
             </ul>
 
             <h3>Submission Requirements</h3>
             <ul>
-                <li>Your level must be under 30 seconds.</li>
-                <li style="margin-top: 5px;">Level must be harder than the level of the lowest spot on the list.</li>
-                <li style="margin-top: 5px;">No inappropriate levels, as this includes NSFW levels/videos.</li>
-                <li style="margin-top: 5px;">Levels verified/beat with a cps cap will be placed separately.</li>
-                <li style="margin-top: 5px;">Levels verified/beat with a method outside alternating will be placed separately.</li>
-                <li style="margin-top: 5px;">Secret ways are absolutely prohibited.</li>
-                <li style="margin-top: 5px;">Levels have to be 30fps 15cps.</li>
-                <li style="margin-top: 5px;">The difficulty must be spam.</li>
-                <li style="margin-top: 5px;">Noclip is allowed as long as you have 0 deaths of 100% Accuracy.</li>
-                <li style="margin-top: 5px;">Clicks must be heard. Click Sounds aren't allowed.</li>
-                <li style="margin-top: 5px;">You have to be on the latest version of Geometry Dash in order to get your completions/verifications accepted.</li>
+                <li>• Your level must be under 30 seconds.</li>
+                <li>• Level must be harder than the level of the lowest spot on the list.</li>
+                <li>• No inappropriate levels, as this includes NSFW levels/videos.</li>
+                <li>• Levels verified/beat with a cps cap will be placed separately.</li>
+                <li>• Levels verified/beat with a method outside alternating will be placed separately.</li>
+                <li>• Secret ways are absolutely prohibited.</li>
+                <li>• Levels have to be 30fps 15cps.</li>
+                <li>• The difficulty must be spam.</li>
+                <li>• Noclip is allowed as long as you have 0 deaths or 100% Accuracy.</li>
+                <li>• Clicks must be heard. Click Sounds aren't allowed.</li>
+                <li>• You have to be on the latest version of Geometry Dash in order to get your completions/verifications accepted.</li>
             </ul>
         </div>
     </div>
@@ -203,37 +257,14 @@
         <div class="modal-box">
             <h2>Submit a New Level</h2>
             <form id="submissionForm">
-                <div class="form-group">
-                    <label>Level Name</label>
-                    <input type="text" id="lvlName" required placeholder="e.g., Chaos">
-                </div>
-                <div class="form-group">
-                    <label>Creator Name / Count</label>
-                    <input type="text" id="lvlCreator" required placeholder="e.g., 1 or Player Name">
-                </div>
-                <div class="form-group">
-                    <label>Verifier</label>
-                    <input type="text" id="lvlVerifier" required placeholder="Who verified it?">
-                </div>
-                <div class="form-group">
-                    <label>YouTube Link or ID</label>
-                    <input type="text" id="lvlYoutube" required placeholder="Paste link or ID here">
-                </div>
-                <div class="form-group">
-                    <label>Points Provided</label>
-                    <input type="number" id="lvlPoints" value="200" required>
-                </div>
-                <div class="form-group">
-                    <label>Level ID</label>
-                    <input type="text" id="lvlId" required placeholder="Geometry Dash ID">
-                </div>
-                <div class="form-group">
-                    <label>Method</label>
-                    <select id="lvlMethod">
-                        <option value="Alternating">Alternating</option>
-                        <option value="Standard">Standard</option>
-                        <option value="Spam">Spam</option>
-                    </select>
+                <div class="form-grid">
+                    <div class="form-group full-width"><label>Level Name</label><input type="text" id="lvlName" required></div>
+                    <div class="form-group"><label>Creator</label><input type="text" id="lvlCreator" required></div>
+                    <div class="form-group"><label>Verifier</label><input type="text" id="lvlVerifier" required></div>
+                    <div class="form-group full-width"><label>YouTube Link</label><input type="text" id="lvlYoutube" required placeholder="https://youtube.com/..."></div>
+                    <div class="form-group"><label>Geometry Dash ID</label><input type="text" id="lvlId" required></div>
+                    <div class="form-group"><label>Points Value</label><input type="number" id="lvlPoints" value="200" required></div>
+                    <div class="form-group full-width"><label>Method Used</label><select id="lvlMethod"><option value="Alternating">Alternating</option><option value="Standard">Standard</option><option value="Spam">Spam</option></select></div>
                 </div>
                 <div class="modal-buttons">
                     <button type="button" class="btn-cancel" id="closeModalBtn">Cancel</button>
@@ -243,73 +274,83 @@
         </div>
     </div>
 
+    <div class="modal-overlay" id="playerProfileModal">
+        <div class="modal-box">
+            <h2 id="modalProfileName" style="font-size: 1.8rem; margin-bottom: 2px;">Player</h2>
+            <p id="modalProfilePoints" style="color: #059669; font-weight: bold; margin-bottom: 20px;">Points: 0</p>
+            <h3 style="font-size: 0.85rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 10px; letter-spacing: 0.5px;">Verified Complete Records</h3>
+            <div id="modalProfileCompletionsList"></div>
+            <div class="modal-buttons">
+                <button type="button" class="btn-cancel" onclick="document.getElementById('playerProfileModal').classList.remove('open')">Close Profile</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="loginModal">
+        <div class="modal-box" style="max-width: 360px;">
+            <h2>Portal Sign In</h2>
+            <form id="loginForm">
+                <div class="form-group" style="margin-bottom:12px;"><label>Username</label><input type="text" id="authUser" required></div>
+                <div class="form-group" style="margin-bottom:12px;"><label>Password</label><input type="password" id="authPass" required></div>
+                <div class="modal-buttons">
+                    <button type="button" class="btn-cancel" onclick="toggleLoginModal(false)">Dismiss</button>
+                    <button type="submit" class="btn-submit">Sign In</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script>
-        // Connected Discord Webhook URL Link
         const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1522213490532679713/0K61UUX7H_7iWqYtfu6Iz8-q2Fm6UsL_DnQ3zwCOJPk5SQHsZvrS4Z6o5oDbiSMyQ6fr";
 
-        // Full 40 levels array mapping extracted directly from your visual sidebar snapshot
-        const levelsData = [
-            { rank: 1, name: "10s30", creators: "1", verifier: "Aut0Plays", publisher: "Aut0Plays", youtubeId: "dQw4w9WgXcQ", points: 200, levelId: "140744149", method: "Alternating" },
-            { rank: 2, name: "Trick Extension", creators: "Puremidnight", verifier: "Puremidnight", publisher: "Puremidnight", youtubeId: "dQw4w9WgXcQ", points: 195, levelId: "00000000", method: "Alternating" },
-            { rank: 3, name: "1C34", creators: "Unknown", verifier: "Unknown", publisher: "Unknown", youtubeId: "dQw4w9WgXcQ", points: 190, levelId: "00000000", method: "Alternating" },
-            { rank: 4, name: "Game Over", creators: "Unknown", verifier: "Unknown", publisher: "Unknown", youtubeId: "dQw4w9WgXcQ", points: 185, levelId: "00000000", method: "Alternating" },
-            { rank: 5, name: "Back to the Past", creators: "Unknown", verifier: "Unknown", publisher: "Unknown", youtubeId: "dQw4w9WgXcQ", points: 180, levelId: "00000000", method: "Alternating" },
-            { rank: 6, name: "CHAOS", creators: "Unknown", verifier: "Unknown", publisher: "Unknown", youtubeId: "dQw4w9WgXcQ", points: 175, levelId: "00000000", method: "Alternating" },
-            { rank: 7, name: "I AM SPAM", creators: "Unknown", verifier: "Unknown", publisher: "Unknown", youtubeId: "dQw4w9WgXcQ", points: 170, levelId: "00000000", method: "Alternating" },
-            { rank: 8, name: "Not Hard R", creators: "Unknown", verifier: "Unknown", publisher: "Unknown", youtubeId: "dQw4w9WgXcQ", points: 165, levelId: "00000000", method: "Alternating" },
-            { rank: 9, name: "Controlled Chaos", creators: "Unknown", verifier: "Unknown", publisher: "Unknown", youtubeId: "dQw4w9WgXcQ", points: 160, levelId: "00000000", method: "Alternating" },
-            { rank: 10, name: "Crescent", creators: "Unknown", verifier: "Unknown", publisher: "Unknown", youtubeId: "dQw4w9WgXcQ", points: 155, levelId: "00000000", method: "Alternating" },
-            { rank: 11, name: "wôo", creators: "Unknown", verifier: "Unknown", publisher: "Unknown", youtubeId: "dQw4w9WgXcQ", points: 150, levelId: "00000000", method: "Alternating" },
-            { rank: 12, name: "Dont Even", creators: "Unknown", verifier: "Unknown", publisher: "Unknown", youtubeId: "dQw4w9WgXcQ", points: 145, levelId: "00000000", method: "Alternating" },
-            { rank: 13, name: "PeePeePooPoo Check", creators: "Unknown", verifier: "Unknown", publisher: "Unknown", youtubeId: "dQw4w9WgXcQ", points: 140, levelId: "00000000", method: "Alternating" },
-            { rank: 14, name: "Fart Money", creators: "Unknown", verifier: "Unknown", publisher: "Unknown", youtubeId: "dQw4w9WgXcQ", points: 135, levelId: "00000000", method: "Alternating" },
-            { rank: 15, name: "cats", creators: "Unknown", verifier: "Unknown", publisher: "Unknown", youtubeId: "dQw4w9WgXcQ", points: 130, levelId: "00000000", method: "Alternating" },
-            { rank: 16, name: "Fein Spam", creators: "Unknown", verifier: "Unknown", publisher: "Unknown", youtubeId: "dQw4w9WgXcQ", points: 125, levelId: "00000000", method: "Alternating" },
-            { rank: 17, name: "I am Scam", creators: "Unknown", verifier: "Unknown", publisher: "Unknown", youtubeId: "dQw4w9WgXcQ", points: 120, levelId: "00000000", method: "Alternating" },
-            { rank: 18, name: "Stonetomb", creators: "Unknown", verifier: "Unknown", publisher: "Unknown", youtubeId: "dQw4w9WgXcQ", points: 115, levelId: "00000000", method: "Alternating" },
-            { rank: 19, name: "Loss of Blood", creators: "Unknown", verifier: "Unknown", publisher: "Unknown", youtubeId: "dQw4w9WgXcQ", points: 110, levelId: "00000000", method: "Alternating" },
-            { rank: 20, name: "MeA", creators: "Unknown", verifier: "Unknown", publisher: "Unknown", youtubeId: "dQw4w9WgXcQ", points: 105, levelId: "00000000", method: "Alternating" },
-            { rank: 21, name: "Singularity lol", creators: "Unknown", verifier: "Unknown", publisher: "Unknown", youtubeId: "dQw4w9WgXcQ", points: 100, levelId: "00000000", method: "Alternating" },
-            { rank: 22, name: "Feeling 60 Inches", creators: "Unknown", verifier: "Unknown", publisher: "Unknown", youtubeId: "dQw4w9WgXcQ", points: 95, levelId: "00000000", method: "Alternating" },
-            { rank: 23, name: "End Credits", creators: "Unknown", verifier: "Unknown", publisher: "Unknown", youtubeId: "dQw4w9WgXcQ", points: 90, levelId: "00000000", method: "Alternating" },
-            { rank: 24, name: "Ancient MVP", creators: "Unknown", verifier: "Unknown", publisher: "Unknown", youtubeId: "dQw4w9WgXcQ", points: 85, levelId: "00000000", method: "Alternating" },
-            { rank: 25, name: "Modern VIP", creators: "Unknown", verifier: "Unknown", publisher: "Unknown", youtubeId: "dQw4w9WgXcQ", points: 80, levelId: "00000000", method: "Alternating" },
-            { rank: 26, name: "Cod Crack Extention", creators: "Unknown", verifier: "Unknown", publisher: "Unknown", youtubeId: "dQw4w9WgXcQ", points: 75, levelId: "00000000", method: "Alternating" },
-            { rank: 27, name: "Salami Slap", creators: "Unknown", verifier: "Unknown", publisher: "Unknown", youtubeId: "dQw4w9WgXcQ", points: 70, levelId: "00000000", method: "Alternating" },
-            { rank: 28, name: "30fps ig idk lol", creators: "Unknown", verifier: "Unknown", publisher: "Unknown", youtubeId: "dQw4w9WgXcQ", points: 65, levelId: "00000000", method: "Alternating" },
-            { rank: 29, name: "Sonder", creators: "Unknown", verifier: "Unknown", publisher: "Unknown", youtubeId: "dQw4w9WgXcQ", points: 60, levelId: "00000000", method: "Alternating" },
-            { rank: 30, name: "coastline chamber", creators: "Unknown", verifier: "Unknown", publisher: "Unknown", youtubeId: "dQw4w9WgXcQ", points: 55, levelId: "00000000", method: "Alternating" },
-            { rank: 31, name: "Pulse Challenge", creators: "Unknown", verifier: "Unknown", publisher: "Unknown", youtubeId: "dQw4w9WgXcQ", points: 50, levelId: "00000000", method: "Alternating" },
-            { rank: 32, name: "Sfa Ultima", creators: "Unknown", verifier: "Unknown", publisher: "Unknown", youtubeId: "dQw4w9WgXcQ", points: 45, levelId: "00000000", method: "Alternating" },
-            { rank: 33, name: "I am Sam", creators: "Unknown", verifier: "Unknown", publisher: "Unknown", youtubeId: "dQw4w9WgXcQ", points: 40, levelId: "00000000", method: "Alternating" },
-            { rank: 34, name: "Under Streetlights", creators: "Unknown", verifier: "Unknown", publisher: "Unknown", youtubeId: "dQw4w9WgXcQ", points: 35, levelId: "00000000", method: "Alternating" },
-            { rank: 35, name: "Garbanzo noclip 60fp", creators: "Unknown", verifier: "Unknown", publisher: "Unknown", youtubeId: "dQw4w9WgXcQ", points: 30, levelId: "00000000", method: "Alternating" },
-            { rank: 36, name: "Cherry Spam", creators: "Unknown", verifier: "Unknown", publisher: "Unknown", youtubeId: "dQw4w9WgXcQ", points: 25, levelId: "00000000", method: "Alternating" },
-            { rank: 37, name: "noisypoopiecookie", creators: "Unknown", verifier: "Unknown", publisher: "Unknown", youtubeId: "dQw4w9WgXcQ", points: 20, levelId: "00000000", method: "Alternating" },
-            { rank: 38, name: "TraP", creators: "Unknown", verifier: "Unknown", publisher: "Unknown", youtubeId: "dQw4w9WgXcQ", points: 15, levelId: "00000000", method: "Alternating" },
-            { rank: 39, name: "I am Lamb", creators: "Unknown", verifier: "Unknown", publisher: "Unknown", youtubeId: "dQw4w9WgXcQ", points: 10, levelId: "00000000", method: "Alternating" },
-            { rank: 40, name: "Sakupen Spam", creators: "Unknown", verifier: "Unknown", publisher: "Unknown", youtubeId: "dQw4w9WgXcQ", points: 5, levelId: "00000000", method: "Alternating" }
+        // Initializing State Store Matrices
+        let levelsData = JSON.parse(localStorage.getItem('approved_levels')) || [
+            { rank: 1, name: "10s30", creators: "1", verifier: "Aut0Plays", publisher: "Aut0Plays", youtubeId: "dQw4w9WgXcQ", points: 200, levelId: "140744149", method: "Alternating" }
         ];
+        let pendingData = JSON.parse(localStorage.getItem('pending_levels')) || [];
+        
+        // Setup initial default entries for the leaderboard to see system details immediately
+        let leaderboardData = JSON.parse(localStorage.getItem('leaderboard_profiles')) || [
+            { name: "Puremidnight402", points: 395, items: ["10s30 | #1 | Alternating", "Trick Extension | #2 | Spam"] }
+        ];
+        
+        let currentRole = "member";
 
         const listContainer = document.getElementById('levelList');
         const detailsContainer = document.getElementById('levelDetails');
+        const leaderboardView = document.getElementById('leaderboardView');
+        const adminView = document.getElementById('adminDashboardView');
         const modal = document.getElementById('submissionModal');
 
-        // Helper logic to grab YouTube IDs safely from full URL submissions
         function extractYouTubeId(url) {
+            url = url.trim();
             const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
             const match = url.match(regExp);
             return (match && match[2].length === 11) ? match[2] : url;
         }
 
+        function saveStateToStorage() {
+            localStorage.setItem('approved_levels', JSON.stringify(levelsData));
+            localStorage.setItem('pending_levels', JSON.stringify(pendingData));
+            localStorage.setItem('leaderboard_profiles', JSON.stringify(leaderboardData));
+        }
+
         function renderSidebar() {
             listContainer.innerHTML = '';
-            levelsData.forEach(level => {
+            if (levelsData.length === 0) {
+                listContainer.innerHTML = '<p style="padding:20px; color:var(--text-muted); font-size:0.85rem; text-align:center;">No levels active.</p>';
+                return;
+            }
+            levelsData.forEach((level, index) => {
+                level.rank = index + 1;
                 const item = document.createElement('div');
                 item.className = 'level-item';
                 item.id = `rank-${level.rank}`;
                 item.innerHTML = `<div class="level-rank">#${level.rank}</div><div>${level.name}</div>`;
-                item.addEventListener('click', () => selectLevel(level.rank));
+                item.addEventListener('click', () => {
+                    switchTab('list');
+                    selectLevel(level.rank);
+                });
                 listContainer.appendChild(item);
             });
         }
@@ -325,87 +366,243 @@
             detailsContainer.innerHTML = `
                 <h1 class="level-title">${data.name}</h1>
                 <div class="meta-info">
-                    <p><span>CREATORS</span> &nbsp;&nbsp;${data.creators}</p>
-                    <p><span>VERIFIER</span> &nbsp;&nbsp;${data.verifier}</p>
-                    <p><span>PUBLISHER</span> &nbsp;&nbsp;${data.publisher}</p>
+                    <p><span>CREATORS</span> ${data.creators}</p>
+                    <p><span>VERIFIER</span> ${data.verifier}</p>
+                    <p><span>PUBLISHER</span> ${data.publisher}</p>
                 </div>
-                <div class="video-container">
-                    <iframe src="https://www.youtube.com/embed/${data.youtubeId}" allowfullscreen></iframe>
-                </div>
+                <div class="video-container"><iframe src="https://www.youtube.com/embed/${data.youtubeId}" allowfullscreen></iframe></div>
                 <div class="stats-grid">
-                    <div class="stat-box points-value"><h4>Points when Completed</h4><p>${data.points}</p></div>
-                    <div class="stat-box"><h4>ID</h4><p>${data.levelId}</p></div>
+                    <div class="stat-box points-value"><h4>Points</h4><p>${data.points}</p></div>
+                    <div class="stat-box"><h4>Level ID</h4><p>${data.levelId}</p></div>
                     <div class="stat-box"><h4>Method</h4><p>${data.method}</p></div>
-                </div>
-                <div class="records-section">
-                    <h3 style="margin-bottom:10px; font-size:1.4rem;">Records</h3>
-                    <p style="color: var(--text-muted);">100% or better to qualify</p>
                 </div>
             `;
         }
 
-        document.getElementById('openModalBtn').addEventListener('click', () => modal.classList.add('open'));
-        document.getElementById('closeModalBtn').addEventListener('click', () => modal.classList.remove('open'));
+        // Public Leaderboard Engine
+        function renderLeaderboard() {
+            const tableBody = document.getElementById('leaderboardMainBody');
+            tableBody.innerHTML = '';
 
+            // Sort data matrices in descending priority arrays
+            leaderboardData.sort((a, b) => b.points - a.points);
+
+            if(leaderboardData.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="3" style="text-align:center; color:var(--text-muted); padding:20px;">Leaderboard empty. Log in as Admin to add data.</td></tr>';
+                return;
+            }
+
+            leaderboardData.forEach((player, index) => {
+                const row = document.createElement('tr');
+                row.className = 'leaderboard-row';
+                row.innerHTML = `
+                    <td style="font-weight:bold; color:var(--text-muted)">#${index + 1}</td>
+                    <td style="font-weight:600; color:var(--nav-green);">${player.name}</td>
+                    <td style="text-align:right; font-weight:bold; color:#059669;">${player.points}</td>
+                `;
+                row.addEventListener('click', () => launchPlayerProfile(player));
+                tableBody.appendChild(row);
+            });
+        }
+
+        function launchPlayerProfile(player) {
+            document.getElementById('modalProfileName').innerText = player.name;
+            document.getElementById('modalProfilePoints').innerText = `Total Points: ${player.points}`;
+            
+            const recordsContainer = document.getElementById('modalProfileCompletionsList');
+            recordsContainer.innerHTML = '';
+
+            player.items.forEach(line => {
+                if(!line.trim()) return;
+                const badge = document.createElement('div');
+                badge.className = 'completion-badge-row';
+                badge.innerHTML = `<span>🏆 <strong>${line}</strong></span>`;
+                recordsContainer.appendChild(badge);
+            });
+
+            document.getElementById('playerProfileModal').classList.add('open');
+        }
+
+        // View Routing Controls
+        function switchTab(target) {
+            document.getElementById('tabList').classList.remove('active');
+            document.getElementById('tabLeaderboard').classList.remove('active');
+            document.getElementById('tabAdmin').classList.remove('active');
+            
+            detailsContainer.style.display = "none";
+            leaderboardView.style.display = "none";
+            adminView.style.display = "none";
+
+            if (target === 'list') {
+                document.getElementById('tabList').classList.add('active');
+                detailsContainer.style.display = "block";
+                if(levelsData.length > 0 && !document.querySelector('.level-item.active')) selectLevel(1);
+            } else if (target === 'leaderboard') {
+                document.getElementById('tabLeaderboard').classList.add('active');
+                leaderboardView.style.display = "block";
+                renderLeaderboard();
+            } else if (target === 'admin') {
+                document.getElementById('tabAdmin').classList.add('active');
+                adminView.style.display = "block";
+                renderAdminQueue();
+            }
+        }
+
+        function toggleLoginModal(show) {
+            document.getElementById('loginModal').classList.toggle('open', show);
+        }
+
+        // Authentication Controller
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const user = document.getElementById('authUser').value.trim();
+            const pass = document.getElementById('authPass').value;
+
+            if (user === "admin" && pass === "blessedgdiscool") {
+                currentRole = "admin";
+                document.getElementById('tabAdmin').style.display = "inline-block";
+                document.getElementById('loginNavBtn').innerText = "Logout (Admin)";
+                document.getElementById('loginNavBtn').onclick = logoutSession;
+                toggleLoginModal(false);
+                alert("Access Granted. Admin control panel successfully unlocked.");
+            } else {
+                alert("Invalid configuration credentials.");
+            }
+            this.reset();
+        });
+
+        function logoutSession() {
+            currentRole = "member";
+            document.getElementById('tabAdmin').style.display = "none";
+            document.getElementById('loginNavBtn').innerText = "Login";
+            document.getElementById('loginNavBtn').onclick = () => toggleLoginModal(true);
+            switchTab('list');
+            alert("Logged out successfully.");
+        }
+
+        // Admin Leaderboard Form Processing Handler
+        document.getElementById('adminPlayerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('pFormName').value.trim();
+            const points = parseInt(document.getElementById('pFormPoints').value);
+            const rawCompletions = document.getElementById('pFormCompletions').value.split('\n');
+
+            // Find if player matrix structure already exists to avoid duplication errors
+            const existingIdx = leaderboardData.findIndex(p => p.name.toLowerCase() === name.toLowerCase());
+            
+            const profileData = { name: name, points: points, items: rawCompletions.filter(l => l.trim() !== "") };
+
+            if(existingIdx !== -1) {
+                leaderboardData[existingIdx] = profileData; // Update profile
+            } else {
+                leaderboardData.push(profileData); // Create fresh profile
+            }
+
+            saveStateToStorage();
+            alert(`Leaderboard updated! ${name} pushed to rank rosters.`);
+            this.reset();
+            if(leaderboardView.style.display !== "none") renderLeaderboard();
+        });
+
+        // Submissions Panel Renderer
+        function renderAdminQueue() {
+            const container = document.getElementById('adminQueueContainer');
+            document.getElementById('queueCount').innerText = pendingData.length;
+            container.innerHTML = '';
+
+            if (pendingData.length === 0) {
+                container.innerHTML = '<p style="color:var(--text-muted); padding:15px; text-align:center; font-size:0.85rem;">No levels currently awaiting validation reviews.</p>';
+                return;
+            }
+
+            pendingData.forEach((item, idx) => {
+                const card = document.createElement('div');
+                card.className = 'queue-card';
+                card.style.background = "#f9fafb";
+                card.innerHTML = `
+                    <div class="queue-header">
+                        <strong style="font-size:1rem; color:#111827;">${item.name} (ID: ${item.levelId})</strong>
+                        <span style="background:#e5e7eb; padding:2px 8px; border-radius:4px; font-size:0.72rem; font-weight:bold;">${item.method}</span>
+                    </div>
+                    <p style="margin:2px 0; font-size:0.85rem;"><strong>Creator:</strong> ${item.creators} | <strong>Verifier:</strong> ${item.verifier}</p>
+                    <p style="margin:2px 0; font-size:0.85rem;"><strong>Proposed Points:</strong> ${item.points}</p>
+                    <p style="margin:2px 0; font-size:0.85rem;"><strong>Proof URL:</strong> <a href="https://youtube.com/watch?v=${item.youtubeId}" target="_blank">Open Link</a></p>
+                    <div class="queue-actions">
+                        <button class="btn-approve" onclick="handleDecision(${idx}, true)">Yes</button>
+                        <button class="btn-reject" onclick="handleDecision(${idx}, false)">No</button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        window.handleDecision = function(index, approved) {
+            if (approved) {
+                const targetLevel = pendingData[index];
+                levelsData.push(targetLevel);
+                alert(`"${targetLevel.name}" approved and dynamically inserted into the list structure.`);
+            } else {
+                alert(`Submission rejected and cleared.`);
+            }
+            pendingData.splice(index, 1);
+            saveStateToStorage();
+            renderSidebar();
+            renderAdminQueue();
+        };
+
+        // User Entry Pipeline Submission Configuration
         document.getElementById('submissionForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            
             const submitBtn = document.getElementById('submitBtnText');
             submitBtn.innerText = "Sending...";
             submitBtn.disabled = true;
 
-            const name = document.getElementById('lvlName').value;
-            const creator = document.getElementById('lvlCreator').value;
-            const verifier = document.getElementById('lvlVerifier').value;
-            const rawYoutubeInput = document.getElementById('lvlYoutube').value;
-            const points = document.getElementById('lvlPoints').value;
-            const lvlId = document.getElementById('lvlId').value;
-            const method = document.getElementById('lvlMethod').value;
+            const newSubmission = {
+                name: document.getElementById('lvlName').value,
+                creators: document.getElementById('lvlCreator').value,
+                verifier: document.getElementById('lvlVerifier').value,
+                publisher: document.getElementById('lvlCreator').value,
+                youtubeId: extractYouTubeId(document.getElementById('lvlYoutube').value),
+                points: parseInt(document.getElementById('lvlPoints').value),
+                levelId: document.getElementById('lvlId').value,
+                method: document.getElementById('lvlMethod').value
+            };
 
-            // Clean input down to a true 11-char ID string
-            const cleanedYoutubeId = extractYouTubeId(rawYoutubeInput);
+            pendingData.push(newSubmission);
+            saveStateToStorage();
 
             const discordPayload = {
-                username: "Blessed List Submissions",
+                username: "Blessed List Queue Alert",
                 embeds: [{
-                    title: "📥 New Level Submission!",
+                    title: "📥 Admin Action Needed - New Level Submitted",
                     color: 61695, 
                     fields: [
-                        { name: "Level Name", value: name, inline: true },
-                        { name: "Level ID", value: lvlId, inline: true },
-                        { name: "Creator/Count", value: creator, inline: true },
-                        { name: "Verifier", value: verifier, inline: true },
-                        { name: "Points Provided", value: points, inline: true },
-                        { name: "Method Type", value: method, inline: true },
-                        { name: "Video Proof Link", value: "https://www.youtube.com/watch?v=" + cleanedYoutubeId }
+                        { name: "Level Name", value: newSubmission.name, inline: true },
+                        { name: "Level ID", value: newSubmission.levelId, inline: true },
+                        { name: "Creator", value: newSubmission.creators, inline: true },
+                        { name: "Verifier", value: newSubmission.verifier, inline: true },
+                        { name: "Proof Link", value: "https://www.youtube.com/watch?v=" + newSubmission.youtubeId }
                     ],
-                    footer: { text: "Review details. Paste new node line to your index.html levelsData array to build permanently." },
-                    timestamp: new Date()
+                    footer: { text: "Login to the admin section of your dashboard to execute action updates." }
                 }]
             };
 
             fetch(DISCORD_WEBHOOK_URL, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
+                method: "POST", headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(discordPayload)
             })
-            .then(response => {
-                if (response.ok) {
-                    alert("Submission sent successfully to the List Editors Discord!");
-                } else {
-                    alert("Webhook error encountered during submit.");
-                }
-            })
-            .catch(error => {
-                alert("Network error: Check connectivity setup.");
-            })
             .finally(() => {
+                alert("Your level has been successfully submitted! Administrators will review it shortly.");
                 submitBtn.innerText = "Send Submission";
                 submitBtn.disabled = false;
                 this.reset();
                 modal.classList.remove('open');
+                if(currentRole === "admin") renderAdminQueue();
             });
         });
+
+        document.getElementById('openModalBtn').addEventListener('click', () => modal.classList.add('open'));
+        document.getElementById('closeModalBtn').addEventListener('click', () => modal.classList.remove('open'));
 
         renderSidebar();
         if (levelsData.length > 0) selectLevel(1);
