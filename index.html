@@ -396,7 +396,7 @@
         <div class="modal-box" style="max-width: 360px;">
             <h2>Portal Sign In</h2>
             <form id="loginForm">
-                <div class="form-group" style="margin-bottom:12px;"><label>Username</label><input type="text" id="authUser" required></div>
+                <div class="form-group" style="margin-bottom:12px;"><label>Email Address</label><input type="email" id="authUser" required placeholder="admin@domain.com"></div>
                 <div class="form-group" style="margin-bottom:12px;"><label>Password</label><input type="password" id="authPass" required></div>
                 <div class="modal-buttons">
                     <button type="button" class="btn-cancel" onclick="toggleLoginModal(false)">Dismiss</button>
@@ -410,11 +410,11 @@
 
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 
     <script>
         const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1522213490532679713/0K61UUX7H_7iWqYtfu6Iz8-q2Fm6UsL_DnQ3zwCOJPk5SQHsZvrS4Z6o5oDbiSMyQ6fr";
 
-        // 🔥 FIREBASE SETUP: Loaded automatically from your registration parameters!
         const firebaseConfig = {
             apiKey: "AIzaSyCOIBuKcKFmVWMRZelkeazIaCZyqgDSiBA",
             authDomain: "blessedgd-8b706.firebaseapp.com",
@@ -426,9 +426,9 @@
             measurementId: "G-XFVL54G396"
         };
 
-        // Initialize Cloud Core Links
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
+        const auth = firebase.auth(); // Initialized Auth module
 
         const GD_DIFFICULTIES = ["Auto", "Easy", "Normal", "Hard", "Harder", "Insane", "Easy Demon", "Medium Demon", "Hard Demon", "Insane Demon", "Extreme Demon"];
 
@@ -443,7 +443,30 @@
         const adminView = document.getElementById('adminDashboardView');
         const modal = document.getElementById('submissionModal');
 
-        // 🌐 LIVE INSTANT UPDATES: Watch Firebase streams in real-time
+        // 🔐 SECURE STATE OBSERVER: Dynamically tracks Firebase authentication states
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                currentRole = "admin";
+                document.body.classList.add('admin-active');
+                document.getElementById('tabAdmin').style.display = "inline-block";
+                document.getElementById('loginNavBtn').innerText = "Logout (Admin)";
+                document.getElementById('loginNavBtn').onclick = logoutSession;
+                
+                // Repopulate components under admin privilege context
+                renderAdminQueue();
+                renderAdminLiveLevels();
+                renderAdminEditScores();
+            } else {
+                currentRole = "member";
+                document.body.classList.remove('admin-active');
+                document.getElementById('tabAdmin').style.display = "none";
+                document.getElementById('loginNavBtn').innerText = "Login";
+                document.getElementById('loginNavBtn').onclick = () => toggleLoginModal(true);
+                if(adminView.style.display !== "none") switchTab('list');
+            }
+            updateAdminStats();
+        });
+
         database.ref('approved_levels').on('value', (snapshot) => {
             const data = snapshot.val();
             levelsData = data ? Object.values(data) : [];
@@ -468,7 +491,6 @@
             if(currentRole === "admin") renderAdminEditScores();
         });
 
-        // Keeps the admin summary pills (pending / live / players) in sync with live data
         function updateAdminStats() {
             const pendingEl = document.getElementById('statPending');
             const liveEl = document.getElementById('statLive');
@@ -487,9 +509,9 @@
         }
 
         function saveStateToStorage() {
-            database.ref('approved_levels').set(levelsData);
-            database.ref('pending_levels').set(pendingData);
-            database.ref('leaderboard_profiles').set(leaderboardData);
+            database.ref('approved_levels').set(levelsData).catch(err => alert("Error writing data: " + err.message));
+            database.ref('pending_levels').set(pendingData).catch(err => alert("Error writing data: " + err.message));
+            database.ref('leaderboard_profiles').set(leaderboardData).catch(err => alert("Error writing data: " + err.message));
         }
 
         function renderSidebar() {
@@ -578,6 +600,10 @@
         }
 
         function switchTab(target) {
+            if(target === 'admin' && currentRole !== 'admin') {
+                alert("Access Denied.");
+                return;
+            }
             document.getElementById('tabList').classList.remove('active');
             document.getElementById('tabLeaderboard').classList.remove('active');
             document.getElementById('tabAdmin').classList.remove('active');
@@ -606,35 +632,28 @@
             document.getElementById('loginModal').classList.toggle('open', show);
         }
 
+        // UPDATED: Standard programmatic checks replaced with real Firebase Authentication calls
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            const user = document.getElementById('authUser').value.trim();
+            const email = document.getElementById('authUser').value.trim();
             const pass = document.getElementById('authPass').value;
 
-            if (user === "admin" && pass === "blessedgdiscool") {
-                currentRole = "admin";
-                document.body.classList.add('admin-active');
-                document.getElementById('tabAdmin').style.display = "inline-block";
-                document.getElementById('loginNavBtn').innerText = "Logout (Admin)";
-                document.getElementById('loginNavBtn').onclick = logoutSession;
-                toggleLoginModal(false);
-                alert("Access Granted. 3015 SCL Admin panel configuration loaded.");
-            } else if (user === "admin") {
-                alert("stop pretending to be an admin blud");
-            } else {
-                alert("Invalid configuration credentials.");
-            }
+            auth.signInWithEmailAndPassword(email, pass)
+                .then(() => {
+                    toggleLoginModal(false);
+                    alert("Access Granted. Firebase session initialized.");
+                })
+                .catch((error) => {
+                    alert("Authentication Failed: " + error.message);
+                });
             this.reset();
         });
 
         function logoutSession() {
-            currentRole = "member";
-            document.body.classList.remove('admin-active');
-            document.getElementById('tabAdmin').style.display = "none";
-            document.getElementById('loginNavBtn').innerText = "Login";
-            document.getElementById('loginNavBtn').onclick = () => toggleLoginModal(true);
-            switchTab('list');
-            alert("Logged out successfully.");
+            auth.signOut().then(() => {
+                switchTab('list');
+                alert("Logged out securely.");
+            });
         }
 
         document.getElementById('adminPlayerForm').addEventListener('submit', function(e) {
@@ -705,25 +724,22 @@
         window.handleDecision = function(index, approved) {
             if (approved) {
                 const targetLevel = pendingData[index];
-                
-                // Read adjusted admin specifications right before confirmation
                 const finalRating = document.getElementById(`adminRate-${index}`).value;
                 const finalPoints = parseInt(document.getElementById(`adminPoints-${index}`).value) || 0;
                 
-                targetLevel.publicRating = targetLevel.difficulty; // keep the submitter's original suggestion
-                targetLevel.difficulty = finalRating; // official rating set by admin
+                targetLevel.publicRating = targetLevel.difficulty; 
+                targetLevel.difficulty = finalRating; 
                 targetLevel.points = finalPoints;
                 
                 levelsData.push(targetLevel);
-                alert(`"${targetLevel.name}" approved. Rated as ${finalRating} with ${finalPoints} points!`);
+                alert(`"${targetLevel.name}" approved.`);
             } else {
-                alert(`Submission rejected and cleared.`);
+                alert(`Submission rejected.`);
             }
             pendingData.splice(index, 1);
             saveStateToStorage();
         };
 
-        // --- Live List Management: lets an admin pull an already-posted level off the list ---
         function renderAdminLiveLevels() {
             const container = document.getElementById('adminLiveContainer');
             document.getElementById('liveCount').innerText = levelsData.length;
@@ -753,14 +769,11 @@
 
         window.deleteLiveLevel = function(idx) {
             const level = levelsData[idx];
-            if (!confirm(`Remove "${level.name}" from the live list? This cannot be undone.`)) return;
+            if (!confirm(`Remove "${level.name}" from the live list?`)) return;
             levelsData.splice(idx, 1);
             saveStateToStorage();
-            alert(`"${level.name}" has been removed from the list.`);
-            renderAdminLiveLevels();
         };
 
-        // --- Real-Time Score Editing: lets an admin adjust a player's total points on the fly ---
         function renderAdminEditScores() {
             const container = document.getElementById('adminEditScoresContainer');
             document.getElementById('editPlayerCount').innerText = leaderboardData.length;
@@ -797,18 +810,17 @@
         window.updatePlayerScore = function(idx) {
             const input = document.getElementById(`editScore-${idx}`);
             const newPoints = parseInt(input.value);
-            if (isNaN(newPoints)) { alert("Enter a valid number for the score."); return; }
+            if (isNaN(newPoints)) { alert("Enter a valid number."); return; }
             leaderboardData[idx].points = newPoints;
             saveStateToStorage();
-            alert(`${leaderboardData[idx].name}'s score updated to ${newPoints} in real time!`);
+            alert("Score saved.");
         };
 
         window.deletePlayerProfile = function(idx) {
             const player = leaderboardData[idx];
-            if (!confirm(`Remove ${player.name} from the leaderboard?`)) return;
+            if (!confirm(`Remove ${player.name}?`)) return;
             leaderboardData.splice(idx, 1);
             saveStateToStorage();
-            renderAdminEditScores();
         };
 
         document.getElementById('submissionForm').addEventListener('submit', function(e) {
@@ -831,31 +843,38 @@
             };
 
             pendingData.push(newSubmission);
-            saveStateToStorage();
+            
+            database.ref('pending_levels').set(pendingData)
+            .then(() => {
+                const discordPayload = {
+                    username: "3015 SCL Queue Alert",
+                    embeds: [{
+                        title: "📥 Admin Action Needed - New Level Submitted",
+                        color: 61695, 
+                        fields: [
+                            { name: "Level Name", value: newSubmission.name, inline: true },
+                            { name: "Level ID", value: newSubmission.levelId, inline: true },
+                            { name: "Creator", value: newSubmission.creators, inline: true },
+                            { name: "Suggested Rating", value: newSubmission.difficulty, inline: true },
+                            { name: "Method", value: `${newSubmission.method} (${newSubmission.fps || '?'} FPS)`, inline: true },
+                            { name: "Proof Link", value: "https://www.youtube.com/watch?v=" + newSubmission.youtubeId }
+                        ],
+                        footer: { text: "Login to the admin suite to review." }
+                    }]
+                };
 
-            const discordPayload = {
-                username: "3015 SCL Queue Alert",
-                embeds: [{
-                    title: "📥 Admin Action Needed - New Level Submitted",
-                    color: 61695, 
-                    fields: [
-                        { name: "Level Name", value: newSubmission.name, inline: true },
-                        { name: "Level ID", value: newSubmission.levelId, inline: true },
-                        { name: "Creator", value: newSubmission.creators, inline: true },
-                        { name: "Suggested Rating", value: newSubmission.difficulty, inline: true },
-                        { name: "Method", value: `${newSubmission.method} (${newSubmission.fps || '?'} FPS)`, inline: true },
-                        { name: "Proof Link", value: "https://www.youtube.com/watch?v=" + newSubmission.youtubeId }
-                    ],
-                    footer: { text: "Login to the admin section of your dashboard to update changes." }
-                }]
-            };
-
-            fetch(DISCORD_WEBHOOK_URL, {
-                method: "POST", headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(discordPayload)
+                return fetch(DISCORD_WEBHOOK_URL, {
+                    method: "POST", headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(discordPayload)
+                });
+            })
+            .then(() => {
+                alert("Level successfully submitted!");
+            })
+            .catch(err => {
+                alert("Submission failed: " + err.message);
             })
             .finally(() => {
-                alert("Your level has been successfully submitted! Administrators will review it shortly.");
                 submitBtn.innerText = "Send Submission";
                 submitBtn.disabled = false;
                 this.reset();
