@@ -95,11 +95,13 @@
         .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; background: #000; border-radius: var(--radius-md); margin-bottom: 25px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
         .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
 
-        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; text-align: center; margin-bottom: 25px; }
+        /* Modified into a clean 2x2 grid to fit the rating feature */
+        .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; text-align: center; margin-bottom: 25px; }
         .stat-box { background: #f9fafb; padding: 12px; border-radius: var(--radius-md); border: 1px solid #f3f4f6; }
         .stat-box h4 { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px; letter-spacing: 0.5px; }
         .stat-box p { font-size: 1.1rem; font-weight: 700; color: #111827; }
         .stat-box.points-value p { color: #059669; }
+        .stat-box.rating-value p { color: #d97706; }
 
         /* --- Leaderboard Tables --- */
         .leaderboard-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
@@ -263,8 +265,19 @@
                     <div class="form-group"><label>Verifier</label><input type="text" id="lvlVerifier" required></div>
                     <div class="form-group full-width"><label>YouTube Link</label><input type="text" id="lvlYoutube" required placeholder="https://youtube.com/..."></div>
                     <div class="form-group"><label>Geometry Dash ID</label><input type="text" id="lvlId" required></div>
-                    <div class="form-group"><label>Points Value</label><input type="number" id="lvlPoints" value="200" required></div>
-                    <div class="form-group full-width"><label>Method Used</label><select id="lvlMethod"><option value="Alternating">Alternating</option><option value="Standard">Standard</option><option value="Spam">Spam</option></select></div>
+                    <div class="form-group"><label>Suggested Points</label><input type="number" id="lvlPoints" value="200" required></div>
+                    <div class="form-group"><label>Suggested GD Rating</label>
+                        <select id="lvlDifficulty">
+                            <option value="Harder">Harder</option>
+                            <option value="Insane">Insane</option>
+                            <option value="Easy Demon">Easy Demon</option>
+                            <option value="Medium Demon">Medium Demon</option>
+                            <option value="Hard Demon">Hard Demon</option>
+                            <option value="Insane Demon">Insane Demon</option>
+                            <option value="Extreme Demon" selected>Extreme Demon</option>
+                        </select>
+                    </div>
+                    <div class="form-group"><label>Method Used</label><select id="lvlMethod"><option value="Alternating">Alternating</option><option value="Standard">Standard</option><option value="Spam">Spam</option></select></div>
                 </div>
                 <div class="modal-buttons">
                     <button type="button" class="btn-cancel" id="closeModalBtn">Cancel</button>
@@ -336,7 +349,7 @@
         database.ref('approved_levels').on('value', (snapshot) => {
             const data = snapshot.val();
             levelsData = data ? Object.values(data) : [
-                { rank: 1, name: "10s30", creators: "1", verifier: "Aut0Plays", publisher: "Aut0Plays", youtubeId: "dQw4w9WgXcQ", points: 200, levelId: "140744149", method: "Alternating" }
+                { rank: 1, name: "10s30", creators: "1", verifier: "Aut0Plays", publisher: "Aut0Plays", youtubeId: "dQw4w9WgXcQ", points: 200, levelId: "140744149", method: "Alternating", difficulty: "Extreme Demon" }
             ];
             renderSidebar();
             if (levelsData.length > 0 && !document.querySelector('.level-item.active')) selectLevel(1);
@@ -405,6 +418,7 @@
                 <div class="video-container"><iframe src="https://www.youtube.com/embed/${data.youtubeId}" allowfullscreen></iframe></div>
                 <div class="stats-grid">
                     <div class="stat-box points-value"><h4>Points</h4><p>${data.points}</p></div>
+                    <div class="stat-box rating-value"><h4>GD Rating</h4><p>${data.difficulty || 'Extreme Demon'}</p></div>
                     <div class="stat-box"><h4>Level ID</h4><p>${data.levelId}</p></div>
                     <div class="stat-box"><h4>Method</h4><p>${data.method}</p></div>
                 </div>
@@ -534,6 +548,7 @@
             }
 
             pendingData.forEach((item, idx) => {
+                const currentRating = item.difficulty || 'Extreme Demon';
                 const card = document.createElement('div');
                 card.className = 'queue-card';
                 card.style.background = "#f9fafb";
@@ -543,8 +558,27 @@
                         <span style="background:#e5e7eb; padding:2px 8px; border-radius:4px; font-size:0.72rem; font-weight:bold;">${item.method}</span>
                     </div>
                     <p style="margin:2px 0; font-size:0.85rem;"><strong>Creator:</strong> ${item.creators} | <strong>Verifier:</strong> ${item.verifier}</p>
-                    <p style="margin:2px 0; font-size:0.85rem;"><strong>Proposed Points:</strong> ${item.points}</p>
                     <p style="margin:2px 0; font-size:0.85rem;"><strong>Proof URL:</strong> <a href="https://youtube.com/watch?v=${item.youtubeId}" target="_blank">Open Link</a></p>
+                    
+                    <div style="margin-top:12px; display:grid; grid-template-columns:1fr 1fr; gap:10px; background:white; padding:10px; border-radius:6px; border:1px solid #e5e7eb;">
+                        <div class="form-group">
+                            <label style="font-size:0.68rem; font-weight:bold; color:var(--text-muted); margin-bottom:3px;">OFFICIAL RATING</label>
+                            <select id="adminRate-${idx}" style="padding:4px; font-size:0.82rem;">
+                                <option value="Harder" ${currentRating==='Harder'?'selected':''}>Harder</option>
+                                <option value="Insane" ${currentRating==='Insane'?'selected':''}>Insane</option>
+                                <option value="Easy Demon" ${currentRating==='Easy Demon'?'selected':''}>Easy Demon</option>
+                                <option value="Medium Demon" ${currentRating==='Medium Demon'?'selected':''}>Medium Demon</option>
+                                <option value="Hard Demon" ${currentRating==='Hard Demon'?'selected':''}>Hard Demon</option>
+                                <option value="Insane Demon" ${currentRating==='Insane Demon'?'selected':''}>Insane Demon</option>
+                                <option value="Extreme Demon" ${currentRating==='Extreme Demon'?'selected':''}>Extreme Demon</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label style="font-size:0.68rem; font-weight:bold; color:var(--text-muted); margin-bottom:3px;">CUSTOM POINTS</label>
+                            <input type="number" id="adminPoints-${idx}" value="${item.points}" style="padding:4px; font-size:0.82rem;">
+                        </div>
+                    </div>
+
                     <div class="queue-actions">
                         <button class="btn-approve" onclick="handleDecision(${idx}, true)">Yes</button>
                         <button class="btn-reject" onclick="handleDecision(${idx}, false)">No</button>
@@ -557,8 +591,16 @@
         window.handleDecision = function(index, approved) {
             if (approved) {
                 const targetLevel = pendingData[index];
+                
+                // Read adjusted admin specifications right before confirmation
+                const finalRating = document.getElementById(`adminRate-${index}`).value;
+                const finalPoints = parseInt(document.getElementById(`adminPoints-${index}`).value) || 0;
+                
+                targetLevel.difficulty = finalRating;
+                targetLevel.points = finalPoints;
+                
                 levelsData.push(targetLevel);
-                alert(`"${targetLevel.name}" approved and dynamically inserted into the list structure.`);
+                alert(`"${targetLevel.name}" approved. Rated as ${finalRating} with ${finalPoints} points!`);
             } else {
                 alert(`Submission rejected and cleared.`);
             }
@@ -579,6 +621,7 @@
                 publisher: document.getElementById('lvlCreator').value,
                 youtubeId: extractYouTubeId(document.getElementById('lvlYoutube').value),
                 points: parseInt(document.getElementById('lvlPoints').value),
+                difficulty: document.getElementById('lvlDifficulty').value,
                 levelId: document.getElementById('lvlId').value,
                 method: document.getElementById('lvlMethod').value
             };
@@ -595,7 +638,7 @@
                         { name: "Level Name", value: newSubmission.name, inline: true },
                         { name: "Level ID", value: newSubmission.levelId, inline: true },
                         { name: "Creator", value: newSubmission.creators, inline: true },
-                        { name: "Verifier", value: newSubmission.verifier, inline: true },
+                        { name: "Suggested Rating", value: newSubmission.difficulty, inline: true },
                         { name: "Proof Link", value: "https://www.youtube.com/watch?v=" + newSubmission.youtubeId }
                     ],
                     footer: { text: "Login to the admin section of your dashboard to update changes." }
