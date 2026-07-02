@@ -127,7 +127,6 @@
         .meta-info p { margin-bottom: 6px; display: flex; }
         .meta-info span { font-weight: 700; width: 110px; color: var(--text-muted); font-size: 0.75rem; letter-spacing: 0.5px; }
         
-        /* 📺 Cinematic Video Frame Layout */
         .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; background: #000; border-radius: var(--radius-md); margin-bottom: 25px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.15); width: 100%; }
         .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
 
@@ -139,7 +138,7 @@
         .stat-box.rating-value p { color: #d97706; }
         .fps-tag { display: block; margin-top: 2px; font-size: 0.65rem; font-weight: 700; color: var(--text-muted); letter-spacing: 0.3px; }
 
-        /* --- Leaderboard Diamond Shimmer Styles --- */
+        /* --- Leaderboard & Diamond Shimmer Table Rules --- */
         @keyframes glitter-shine {
             0% { background-position: -200% center; }
             100% { background-position: 200% center; }
@@ -147,46 +146,49 @@
 
         .leaderboard-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
         .leaderboard-table th { text-align: left; padding: 12px; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; border-bottom: 2px solid #f3f4f6; }
-        .leaderboard-table td { padding: 14px 12px; font-size: 0.9rem; border-bottom: 1px solid #f3f4f6; }
         
+        /* Base styles for standard rows */
         .leaderboard-row { 
             cursor: pointer; 
             transition: transform 0.15s ease, box-shadow 0.15s ease; 
-            position: relative;
         }
         .leaderboard-row:hover { transform: scale(1.005); }
+        .leaderboard-row td { padding: 14px 12px; font-size: 0.9rem; border-bottom: 1px solid #f3f4f6; color: var(--text-main); vertical-align: middle; }
 
+        /* Tier Modifier classes applied to rows */
         .tier-shining {
             background-size: 400% 400% !important;
             animation: glitter-shine 3.5s linear infinite;
-            border: 1px solid rgba(255, 255, 255, 0.25);
         }
+        .tier-shining td { background: transparent !important; } /* Force cells to show row background */
 
         .tier-platinum {
             background: linear-gradient(135deg, #e5e9f0 0%, #ffffff 25%, #a3b1c6 50%, #ffffff 75%, #e5e9f0 100%);
-            color: #111827 !important; font-weight: 800;
             box-shadow: 0 4px 12px rgba(229, 233, 240, 0.4);
         }
+        .tier-platinum td { color: #111827 !important; font-weight: bold; }
+
         .tier-gold {
             background: linear-gradient(135deg, #ffd700 0%, #fff5cc 25%, #b8860b 50%, #fff5cc 75%, #ffd700 100%);
-            color: #2c1d00 !important; font-weight: 800;
             box-shadow: 0 4px 12px rgba(255, 215, 0, 0.35);
         }
+        .tier-gold td { color: #2c1d00 !important; font-weight: bold; }
+
         .tier-silver {
             background: linear-gradient(135deg, #cccccc 0%, #f2f2f2 25%, #7a7a7a 50%, #f2f2f2 75%, #cccccc 100%);
-            color: #222222 !important; font-weight: 700;
             box-shadow: 0 4px 10px rgba(204, 204, 204, 0.3);
         }
+        .tier-silver td { color: #222222 !important; font-weight: bold; }
+
         .tier-bronze {
             background: linear-gradient(135deg, #cd7f32 0%, #ffebdb 25%, #8b4513 50%, #ffebdb 75%, #cd7f32 100%);
-            color: #ffffff !important; font-weight: 700;
             box-shadow: 0 4px 10px rgba(205, 127, 50, 0.3);
         }
-        .tier-bronze td { color: #ffffff !important; }
+        .tier-bronze td { color: #ffffff !important; font-weight: bold; }
 
         .top-right-medal {
-            position: absolute; top: 50%; right: 18px; transform: translateY(-50%);
             font-size: 1.15rem; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));
+            display: inline-block; vertical-align: middle; margin-left: 6px;
         }
         
         .completion-badge-row { display: flex; justify-content: space-between; background: #f9fafb; padding: 10px 14px; border-radius: var(--radius-md); margin-bottom: 8px; border: 1px solid #f3f4f6; font-size: 0.88rem; }
@@ -275,7 +277,6 @@
         .btn-cancel { background: #f3f4f6; color: #4b5563; border: none; padding: 10px 18px; border-radius: var(--radius-md); cursor: pointer; font-weight: 600; }
         .btn-submit { background: var(--nav-green); color: white; border: none; padding: 10px 20px; border-radius: var(--radius-md); cursor: pointer; font-weight: 700; }
 
-        /* 📱 Responsive Media UI Adjustments */
         @media (max-width: 992px) {
             nav { flex-direction: column; gap: 12px; padding: 14px; text-align: center; }
             .nav-right { width: 100%; justify-content: center; }
@@ -613,7 +614,6 @@
             `;
         }
 
-        /* 💎 FIXED DYNAMIC GLITTER TIER CARD INJECTION LOOP */
         function renderLeaderboard() {
             const tableBody = document.getElementById('leaderboardMainBody');
             tableBody.innerHTML = '';
@@ -649,11 +649,11 @@
                     row.className += ' ' + dynamicClasses;
                 }
 
+                // FIXED HTML INNER DATA CELL ASSIGNMENTS
                 row.innerHTML = `
-                    <td style="font-weight:bold; padding: 14px 12px; padding-left: 15px; width: 75px;">#${rank}</td>
-                    <td style="font-weight:600; padding: 14px 12px;">${player.name}</td>
-                    <td style="text-align:right; font-weight:bold; padding: 14px 12px; padding-right: 35px; width: 140px;">${player.points}</td>
-                    ${badgeMarkup}
+                    <td style="font-weight:bold; padding-left: 15px; width: 75px;">#${rank}</td>
+                    <td style="font-weight:600;">${player.name} ${badgeMarkup}</td>
+                    <td style="text-align:right; font-weight:bold; padding-right: 35px; width: 140px;">${player.points}</td>
                 `;
                 row.addEventListener('click', () => launchPlayerProfile(player));
                 tableBody.appendChild(row);
@@ -816,7 +816,6 @@
             saveStateToStorage();
         };
 
-        /* 🛠️ EASY ACCESS ADMINISTRATIVE LEVEL REMOVAL COMPONENT */
         function renderAdminLiveLevels() {
             const container = document.getElementById('adminLiveMaintenanceContainer');
             container.innerHTML = '';
@@ -848,7 +847,6 @@
             });
         }
 
-        /* 🔒 DUAL GATE DELETION SAFETY CONFIRMATION WRAPPER */
         window.deleteLiveLevel = function(idx) {
             const level = levelsData[idx];
             
