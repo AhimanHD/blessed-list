@@ -127,7 +127,7 @@
         .meta-info p { margin-bottom: 6px; display: flex; }
         .meta-info span { font-weight: 700; width: 110px; color: var(--text-muted); font-size: 0.75rem; letter-spacing: 0.5px; }
         
-        /* 📺 Larger Cinematic Desktop Video Frame Layout */
+        /* 📺 Cinematic Video Frame Layout */
         .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; background: #000; border-radius: var(--radius-md); margin-bottom: 25px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.15); width: 100%; }
         .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
 
@@ -275,7 +275,7 @@
         .btn-cancel { background: #f3f4f6; color: #4b5563; border: none; padding: 10px 18px; border-radius: var(--radius-md); cursor: pointer; font-weight: 600; }
         .btn-submit { background: var(--nav-green); color: white; border: none; padding: 10px 20px; border-radius: var(--radius-md); cursor: pointer; font-weight: 700; }
 
-        /* 📱 RESPONSIVE MEDIA UI OVERHAUL */
+        /* 📱 Responsive Media UI Adjustments */
         @media (max-width: 992px) {
             nav { flex-direction: column; gap: 12px; padding: 14px; text-align: center; }
             .nav-right { width: 100%; justify-content: center; }
@@ -322,9 +322,9 @@
                     <table class="leaderboard-table">
                         <thead>
                             <tr>
-                                <th style="width: 75px;">Rank</th>
+                                <th style="width: 75px; padding-left: 15px;">Rank</th>
                                 <th>Player</th>
-                                <th style="text-align: right; width: 140px; padding-right: 25px;">Total Points</th>
+                                <th style="text-align: right; width: 140px; padding-right: 35px;">Total Points</th>
                             </tr>
                         </thead>
                         <tbody id="leaderboardMainBody"></tbody>
@@ -613,7 +613,7 @@
             `;
         }
 
-        /* 💎 DYNAMIC GLITTER TIER CARD INJECTION LOOP */
+        /* 💎 FIXED DYNAMIC GLITTER TIER CARD INJECTION LOOP */
         function renderLeaderboard() {
             const tableBody = document.getElementById('leaderboardMainBody');
             tableBody.innerHTML = '';
@@ -632,7 +632,6 @@
                 let dynamicClasses = '';
                 let badgeMarkup = '';
 
-                // Assign glittering diamond tier styles & decorations based on tier
                 if (rank === 1) {
                     dynamicClasses = 'tier-shining tier-platinum';
                     badgeMarkup = '<span class="top-right-medal">👑</span>';
@@ -651,9 +650,9 @@
                 }
 
                 row.innerHTML = `
-                    <td style="font-weight:bold; padding-left: 15px;">#${rank}</td>
-                    <td style="font-weight:600;">${player.name}</td>
-                    <td style="text-align:right; font-weight:bold; padding-right: 35px;">${player.points}</td>
+                    <td style="font-weight:bold; padding: 14px 12px; padding-left: 15px; width: 75px;">#${rank}</td>
+                    <td style="font-weight:600; padding: 14px 12px;">${player.name}</td>
+                    <td style="text-align:right; font-weight:bold; padding: 14px 12px; padding-right: 35px; width: 140px;">${player.points}</td>
                     ${badgeMarkup}
                 `;
                 row.addEventListener('click', () => launchPlayerProfile(player));
