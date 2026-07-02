@@ -16,8 +16,6 @@
             --sidebar-width: 280px;
             --radius-md: 6px;
             --radius-lg: 12px;
-            --ruby-glow: #e0115f;
-            --ruby-bright: #ff2a75;
         }
 
         * {
@@ -32,29 +30,13 @@
         }
 
         body {
-            background-color: #111827;
+            background-color: #f3f4f6;
             color: var(--text-main);
             display: flex;
             flex-direction: column;
             min-height: 100vh;
             overflow-x: hidden;
             transition: background 0.5s ease;
-        }
-
-        /* --- Background Video Container Styling --- */
-        #bg-video {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            min-width: 100%;
-            min-height: 100%;
-            width: auto;
-            height: auto;
-            z-index: 0;
-            transform: translate(-50%, -50%);
-            object-fit: cover;
-            pointer-events: none;
-            opacity: 0.75; /* Slightly lowered opacity to give background elements punch */
         }
 
         body.admin-active {
@@ -64,11 +46,6 @@
         body.admin-active::before {
             content: "";
             position: fixed; inset: 0; background: rgba(11, 31, 20, 0.18); pointer-events: none; z-index: 0;
-        }
-
-        /* Hide background video completely in Admin mode */
-        body.admin-active #bg-video {
-            display: none;
         }
 
         body.admin-active .container { background: transparent; }
@@ -97,9 +74,8 @@
             justify-content: space-between;
             align-items: center;
             padding: 14px 24px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             z-index: 10;
-            position: relative;
         }
 
         .nav-left { display: flex; align-items: center; gap: 10px; }
@@ -130,50 +106,24 @@
         }
         .login-btn:hover { background: rgba(255, 255, 255, 0.25); }
 
-        /* --- Main Layout Glassmorphism updates --- */
-        .container { display: flex; flex: 1; overflow: hidden; position: relative; z-index: 1; }
+        /* --- Main Layout --- */
+        .container { display: flex; flex: 1; overflow: hidden; position: relative; }
 
-        .left-sidebar { 
-            width: var(--sidebar-width); 
-            border-right: 1px solid rgba(229, 231, 235, 0.3); 
-            overflow-y: auto; 
-            background: rgba(255, 255, 255, 0.82); 
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            padding: 10px 0; 
-        }
+        .left-sidebar { width: var(--sidebar-width); border-right: 1px solid #e5e7eb; overflow-y: auto; background: white; padding: 0; display: flex; flex-direction: column; }
         
-        .level-item { display: flex; align-items: center; padding: 14px 20px; cursor: pointer; border-bottom: 1px solid rgba(243, 244, 246, 0.5); font-size: 0.9rem; transition: all 0.2s; font-weight: 500; }
-        .level-item:hover { background-color: rgba(249, 250, 251, 0.6); padding-left: 24px; }
+        .level-item { display: flex; align-items: center; padding: 14px 20px; cursor: pointer; border-bottom: 1px solid #f3f4f6; font-size: 0.9rem; transition: all 0.2s; font-weight: 500; }
+        .level-item:hover { background-color: #f9fafb; padding-left: 24px; }
         
         .level-item.active { 
-            background-color: rgba(0, 240, 255, 0.1); border-left: 4px solid var(--neon-blue); font-weight: 700; color: var(--nav-green);
+            background-color: rgba(0, 240, 255, 0.04); border-left: 4px solid var(--neon-blue); font-weight: 700; color: var(--nav-green);
         }
         .level-rank { width: 45px; color: var(--text-muted); font-weight: 700; }
 
-        .main-content { 
-            flex: 1; 
-            padding: 40px; 
-            overflow-y: auto; 
-            background: rgba(250, 250, 250, 0.45); 
-            backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            z-index: 1; 
-        }
-        .level-details-card, .leaderboard-view-card, .admin-dashboard { 
-            width: 100%; 
-            max-width: 900px; 
-            background: rgba(255, 255, 255, 0.93); 
-            padding: 30px; 
-            border-radius: var(--radius-lg); 
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.15); 
-        }
+        .main-content { flex: 1; padding: 40px; overflow-y: auto; background: #fafafa; display: flex; flex-direction: column; align-items: center; z-index: 1; }
+        .level-details-card, .leaderboard-view-card, .admin-dashboard { width: 100%; max-width: 900px; background: white; padding: 30px; border-radius: var(--radius-lg); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
         
         .level-title { font-size: 2.5rem; font-weight: 800; margin-bottom: 15px; color: #111827; letter-spacing: -0.5px; }
-        .meta-info { margin-bottom: 25px; font-size: 0.9rem; background: #f9fafb; padding: 15px; border-radius: var(--radius-md); border: 1px solid #e5e7eb; }
+        .meta-info { margin-bottom: 25px; font-size: 0.9rem; background: #f9fafb; padding: 15px; border-radius: var(--radius-md); border: 1px solid #f3f4f6; }
         .meta-info p { margin-bottom: 6px; display: flex; }
         .meta-info span { font-weight: 700; width: 110px; color: var(--text-muted); font-size: 0.75rem; letter-spacing: 0.5px; }
         
@@ -181,7 +131,7 @@
         .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
 
         .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; text-align: center; margin-bottom: 25px; }
-        .stat-box { background: #f9fafb; padding: 12px; border-radius: var(--radius-md); border: 1px solid #e5e7eb; }
+        .stat-box { background: #f9fafb; padding: 12px; border-radius: var(--radius-md); border: 1px solid #f3f4f6; }
         .stat-box h4 { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px; letter-spacing: 0.5px; }
         .stat-box p { font-size: 1.1rem; font-weight: 700; color: #111827; }
         .stat-box.points-value p { color: #059669; }
@@ -195,7 +145,7 @@
         }
 
         .leaderboard-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        .leaderboard-table th { text-align: left; padding: 12px; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; border-bottom: 2px solid #e5e7eb; }
+        .leaderboard-table th { text-align: left; padding: 12px; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; border-bottom: 2px solid #f3f4f6; }
         
         /* Base styles for standard rows */
         .leaderboard-row { 
@@ -205,36 +155,36 @@
         .leaderboard-row:hover { transform: scale(1.005); }
         .leaderboard-row td { padding: 14px 12px; font-size: 0.9rem; border-bottom: 1px solid #f3f4f6; color: var(--text-main); vertical-align: middle; }
 
-        /* Tier Modifier classes applied to rows */
+        /* Tier Modifier classes applied to rows and level layout items */
         .tier-shining {
             background-size: 400% 400% !important;
             animation: glitter-shine 3.5s linear infinite;
         }
-        .tier-shining td { background: transparent !important; } /* Force cells to show row background */
+        .tier-shining td { background: transparent !important; } 
 
         .tier-platinum {
             background: linear-gradient(135deg, #e5e9f0 0%, #ffffff 25%, #a3b1c6 50%, #ffffff 75%, #e5e9f0 100%);
             box-shadow: 0 4px 12px rgba(229, 233, 240, 0.4);
         }
-        .tier-platinum td { color: #111827 !important; font-weight: bold; }
+        .tier-platinum td, .level-item.tier-platinum, .level-item.tier-platinum .level-rank { color: #111827 !important; font-weight: bold; }
 
         .tier-gold {
             background: linear-gradient(135deg, #ffd700 0%, #fff5cc 25%, #b8860b 50%, #fff5cc 75%, #ffd700 100%);
             box-shadow: 0 4px 12px rgba(255, 215, 0, 0.35);
         }
-        .tier-gold td { color: #2c1d00 !important; font-weight: bold; }
+        .tier-gold td, .level-item.tier-gold, .level-item.tier-gold .level-rank { color: #2c1d00 !important; font-weight: bold; }
 
         .tier-silver {
             background: linear-gradient(135deg, #cccccc 0%, #f2f2f2 25%, #7a7a7a 50%, #f2f2f2 75%, #cccccc 100%);
             box-shadow: 0 4px 10px rgba(204, 204, 204, 0.3);
         }
-        .tier-silver td { color: #222222 !important; font-weight: bold; }
+        .tier-silver td, .level-item.tier-silver, .level-item.tier-silver .level-rank { color: #222222 !important; font-weight: bold; }
 
         .tier-bronze {
             background: linear-gradient(135deg, #cd7f32 0%, #ffebdb 25%, #8b4513 50%, #ffebdb 75%, #cd7f32 100%);
             box-shadow: 0 4px 10px rgba(205, 127, 50, 0.3);
         }
-        .tier-bronze td { color: #ffffff !important; font-weight: bold; }
+        .tier-bronze td, .level-item.tier-bronze, .level-item.tier-bronze .level-rank { color: #ffffff !important; font-weight: bold; }
 
         .top-right-medal {
             font-size: 1.15rem; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));
@@ -294,40 +244,11 @@
         .btn-reject { background: var(--normal-red); color: white; border: none; padding: 10px 24px; border-radius: var(--radius-md); font-weight: 700; cursor: pointer; transition: all 0.15s; }
         .btn-approve:hover, .btn-reject:hover { opacity: 0.92; transform: translateY(-1px); }
 
-        /* --- Right Sidebar Glassmorphism & Ruby Glow Rules --- */
-        .right-sidebar { 
-            width: 340px; 
-            border-left: 1px solid rgba(229, 231, 235, 0.3); 
-            padding: 25px; 
-            overflow-y: auto; 
-            background: rgba(255, 255, 255, 0.85); 
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            font-size: 0.85rem; 
-        }
-        .right-sidebar h3 { 
-            font-size: 0.95rem; 
-            font-weight: 800; 
-            margin-bottom: 12px; 
-            border-bottom: 2px solid rgba(224, 17, 95, 0.4); 
-            padding-bottom: 6px; 
-            margin-top: 25px; 
-            color: var(--ruby-glow); 
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            text-shadow: 0 0 8px rgba(255, 42, 117, 0.4);
-        }
+        .right-sidebar { width: 340px; border-left: 1px solid #e5e7eb; padding: 25px; overflow-y: auto; background: white; font-size: 0.85rem; }
+        .right-sidebar h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 12px; border-bottom: 2px solid #f3f4f6; padding-bottom: 6px; margin-top: 25px; color: #111827; }
         .right-sidebar h3:first-of-type { margin-top: 0; }
         .right-sidebar ul { list-style: none; }
-        
-        /* Ruby Glow List Items Style */
-        .right-sidebar li { 
-            margin-bottom: 10px; 
-            line-height: 1.5; 
-            color: #9b0034; /* Dark rubinous tone for rich backdrop contrast readability */
-            font-weight: 700;
-            text-shadow: 0 0 6px rgba(255, 42, 117, 0.55), 0 0 14px rgba(224, 17, 95, 0.2);
-        }
+        .right-sidebar li { margin-bottom: 10px; line-height: 1.5; color: var(--text-muted); }
 
         /* --- Modals --- */
         .modal-overlay {
@@ -360,8 +281,8 @@
             nav { flex-direction: column; gap: 12px; padding: 14px; text-align: center; }
             .nav-right { width: 100%; justify-content: center; }
             .container { flex-direction: column; overflow: visible; height: auto; }
-            .left-sidebar { width: 100%; height: 300px; border-right: none; border-bottom: 1px solid rgba(229, 231, 235, 0.3); }
-            .right-sidebar { width: 100%; border-left: none; border-top: 1px solid rgba(229, 231, 235, 0.3); }
+            .left-sidebar { width: 100%; height: 350px; border-right: none; border-bottom: 1px solid #e5e7eb; }
+            .right-sidebar { width: 100%; border-left: none; border-top: 1px solid #e5e7eb; }
             .main-content { padding: 16px; }
             .stats-grid { grid-template-columns: repeat(2, 1fr); }
             .admin-stats-row { grid-template-columns: 1fr; }
@@ -372,10 +293,6 @@
     </style>
 </head>
 <body>
-
-    <video autoplay muted loop playsinline id="bg-video">
-        <source src="geometry_dash_gameplay.mp4" type="video/mp4">
-    </video>
 
     <nav>
         <div class="nav-left">
@@ -394,7 +311,12 @@
     </nav>
 
     <div class="container">
-        <div class="left-sidebar" id="levelList"></div>
+        <div class="left-sidebar">
+            <div style="padding: 12px 16px; border-bottom: 1px solid #e5e7eb; background: #ffffff; position: sticky; top: 0; z-index: 5;">
+                <input type="text" id="levelSearchInput" placeholder="🔍 Search levels..." style="width: 100%; padding: 8px 12px; border: 1px solid #d1d5db; border-radius: var(--radius-md); font-size: 0.88rem; font-family: system-ui, sans-serif; outline: none;">
+            </div>
+            <div id="levelList" style="flex: 1; overflow-y: auto; padding: 10px 0;"></div>
+        </div>
         
         <div class="main-content">
             <div class="level-details-card" id="levelDetails"></div>
@@ -467,7 +389,15 @@
         </div>
         
         <div class="right-sidebar">
-            <p style="color:var(--text-muted); margin-bottom: 15px; font-size: 0.75rem; font-style: italic;">Managed by <span class="signature-badge">Ahim4n</span></p>
+            <div style="margin-bottom: 22px;">
+                <p style="color:var(--text-muted); margin-bottom: 6px; font-size: 0.75rem; font-style: italic;">Managed by <span class="signature-badge">Ahim4n</span></p>
+                <div style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.45; padding-left: 2px;">
+                    <p style="margin-bottom: 2px;"><strong>Managers:</strong> <span style="color: #111827;">Manager 1, Manager 2</span></p>
+                    <p style="margin-bottom: 2px;"><strong>Editors:</strong> <span style="color: #111827;">Editor 1, Editor 2</span></p>
+                    <p style="margin-bottom: 0;"><strong>Members:</strong> <span style="color: #111827;">Member 1, Member 2, Member 3</span></p>
+                </div>
+            </div>
+            
             <h3>Submission Requirements</h3>
             <ul>
                 <li>• Your level must be under 30 seconds.</li>
@@ -575,12 +505,14 @@
         let pendingData = [];
         let leaderboardData = [];
         let currentRole = "member";
+        let currentSelectedRank = 1;
 
         const listContainer = document.getElementById('levelList');
         const detailsContainer = document.getElementById('levelDetails');
         const leaderboardView = document.getElementById('leaderboardView');
         const adminView = document.getElementById('adminDashboardView');
         const modal = document.getElementById('submissionModal');
+        const searchInput = document.getElementById('levelSearchInput');
 
         auth.onAuthStateChanged((user) => {
             if (user) {
@@ -607,9 +539,11 @@
         database.ref('approved_levels').on('value', (snapshot) => {
             const data = snapshot.val();
             levelsData = data ? Object.values(data) : [];
-            renderSidebar();
+            levelsData.forEach((level, index) => { level.rank = index + 1; });
+            
+            renderSidebar(searchInput.value);
             updateAdminStats();
-            if (levelsData.length > 0 && !document.querySelector('.level-item.active')) selectLevel(1);
+            if (levelsData.length > 0 && !document.querySelector('.level-item.active')) selectLevel(currentSelectedRank || 1);
             if (currentRole === "admin") renderAdminLiveLevels();
         });
 
@@ -651,17 +585,40 @@
             database.ref('leaderboard_profiles').set(leaderboardData).catch(err => alert("Error writing data: " + err.message));
         }
 
-        function renderSidebar() {
+        // Live searchable sidebar renderer + automatic rank tiers assigned to left components
+        function renderSidebar(filterText = '') {
             listContainer.innerHTML = '';
-            if (levelsData.length === 0) {
-                listContainer.innerHTML = '<p style="padding:20px; color:var(--text-muted); font-size:0.85rem; text-align:center;">No levels active.</p>';
+            const cleanFilterText = filterText.toLowerCase().trim();
+
+            const filteredLevels = levelsData.filter(level => 
+                level.name.toLowerCase().includes(cleanFilterText)
+            );
+
+            if (filteredLevels.length === 0) {
+                listContainer.innerHTML = '<p style="padding:20px; color:var(--text-muted); font-size:0.85rem; text-align:center;">No levels found.</p>';
                 return;
             }
-            levelsData.forEach((level, index) => {
-                level.rank = index + 1;
+
+            filteredLevels.forEach((level) => {
                 const item = document.createElement('div');
                 item.className = 'level-item';
                 item.id = `rank-${level.rank}`;
+                
+                let dynamicClasses = '';
+                if (level.rank === 1) {
+                    dynamicClasses = 'tier-shining tier-platinum';
+                } else if (level.rank === 2) {
+                    dynamicClasses = 'tier-shining tier-gold';
+                } else if (level.rank === 3) {
+                    dynamicClasses = 'tier-shining tier-silver';
+                } else if (level.rank === 4) {
+                    dynamicClasses = 'tier-shining tier-bronze';
+                }
+
+                if (dynamicClasses) {
+                    item.className += ' ' + dynamicClasses;
+                }
+
                 item.innerHTML = `<div class="level-rank">#${level.rank}</div><div>${level.name}</div>`;
                 item.addEventListener('click', () => {
                     switchTab('list');
@@ -669,9 +626,19 @@
                 });
                 listContainer.appendChild(item);
             });
+
+            // Maintain visually active assignment status across dynamic updates
+            const activeItem = document.getElementById(`rank-${currentSelectedRank}`);
+            if (activeItem) activeItem.classList.add('active');
         }
 
+        // Search Input Listener configuration
+        searchInput.addEventListener('input', function() {
+            renderSidebar(this.value);
+        });
+
         function selectLevel(rank) {
+            currentSelectedRank = rank;
             document.querySelectorAll('.level-item').forEach(el => el.classList.remove('active'));
             const activeItem = document.getElementById(`rank-${rank}`);
             if (activeItem) activeItem.classList.add('active');
