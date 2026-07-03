@@ -6,8 +6,8 @@
     <title>3015 SCL - Challenge List</title>
     <style>
         :root {
-            /* VIBRANT THEME UPDATE */
-            --nav-green: #00e676; /* Vibrant Neon Green */
+            /* VIBRANT THEME (Public View) */
+            --nav-green: #00e676; 
             --dark-green: #00b359; 
             --normal-red: #ff3b6b;
             --neon-blue: #00f0ff;
@@ -15,12 +15,19 @@
             --text-main: #1f2937;
             --text-muted: #4b5563;
             --sidebar-width: 280px;
-            --radius-md: 8px; /* Slightly rounder */
+            --radius-md: 8px; 
             --radius-lg: 14px;
             
             /* Ruby theme palette */
             --ruby-glitter: #ff1476;
             --ruby-glow: #ff4d88;
+
+            /* FRIEREN THEME PALETTE FOR ADMIN PANEL */
+            --frieren-teal: #78a2a5;
+            --frieren-light-teal: #a5c8c9;
+            --frieren-gold: #d4af37;
+            --frieren-bg: #fdfbf7; 
+            --frieren-text: #2c3a47;
         }
 
         * {
@@ -47,47 +54,27 @@
 
         /* --- Main Video Background --- */
         #main-video-bg-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            overflow: hidden;
-            z-index: -1;
-            opacity: 0.85;
-            pointer-events: none;
-            background-color: #0f172a;
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            overflow: hidden; z-index: -1; opacity: 0.85; pointer-events: none; background-color: #0f172a;
         }
         
         #main-video-bg-container iframe {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            /* Scale up to cover the screen with the vertical 9:16 Shorts video */
-            width: 300vw;
-            height: 300vh;
-            transform: translate(-50%, -50%);
-            border: none;
+            position: absolute; top: 50%; left: 50%; width: 300vw; height: 300vh;
+            transform: translate(-50%, -50%); border: none;
         }
 
+        /* --- FRIEREN ADMIN ACTIVE BACKGROUND --- */
         body.admin-active {
-            background: url('71bd495e1821801272fa0f4358d7e0da.gif') no-repeat center center fixed;
+            background: url('https://i.pinimg.com/originals/81/c8/10/81c810a9a405908e70b3e51dff6e1d32.gif') no-repeat center center fixed;
             background-size: cover;
         }
         
-        body.admin-active #main-video-bg-container {
-            display: none; /* Hide video when in admin mode */
-        }
-
-        body.admin-active::before {
-            content: "";
-            position: fixed; inset: 0; background: rgba(11, 31, 20, 0.4); pointer-events: none; z-index: 0;
-        }
-
+        body.admin-active #main-video-bg-container { display: none; }
+        body.admin-active::before { content: ""; position: fixed; inset: 0; background: rgba(253, 251, 247, 0.85); pointer-events: none; z-index: 0; }
         body.admin-active .container { background: transparent; }
-        body.admin-active .main-content { background: rgba(250, 250, 250, 0.25); }
+        body.admin-active .main-content { background: transparent; }
         body.admin-active .left-sidebar,
-        body.admin-active .right-sidebar { background: rgba(255, 255, 255, 0.75); backdrop-filter: blur(12px); }
+        body.admin-active .right-sidebar { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); border-color: var(--frieren-light-teal); }
 
         .corner-signature {
             position: fixed; bottom: 14px; right: 14px; width: 56px; opacity: 0.55;
@@ -96,8 +83,7 @@
         .corner-signature:hover { opacity: 0.9; }
 
         .signature-badge {
-            display: inline-block;
-            background: url('cc00b6ec-be75-4bc6-950e-e46076e7d718.jpg') center/cover;
+            display: inline-block; background: url('cc00b6ec-be75-4bc6-950e-e46076e7d718.jpg') center/cover;
             padding: 3px 10px; border-radius: 6px; color: #fff; font-weight: 700;
             text-shadow: 0 1px 4px rgba(0,0,0,0.85);
         }
@@ -105,24 +91,17 @@
         /* --- Top Navigation --- */
         nav {
             background: linear-gradient(90deg, var(--dark-green), var(--nav-green));
-            color: #111827;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 14px 24px;
-            box-shadow: 0 4px 15px rgba(0, 230, 118, 0.3);
-            z-index: 10;
+            color: #111827; display: flex; justify-content: space-between; align-items: center;
+            padding: 14px 24px; box-shadow: 0 4px 15px rgba(0, 230, 118, 0.3); z-index: 10; transition: all 0.5s ease;
+        }
+
+        body.admin-active nav {
+            background: linear-gradient(90deg, var(--frieren-teal), var(--frieren-light-teal));
+            box-shadow: 0 4px 15px rgba(120, 162, 165, 0.4); border-bottom: 2px solid var(--frieren-gold);
         }
 
         .nav-left { display: flex; align-items: center; gap: 10px; }
-        .nav-left .brand { 
-            font-size: 1.6rem; 
-            font-weight: 800;
-            color: #ffffff;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-            letter-spacing: 0.5px;
-        }
-        
+        .nav-left .brand { font-size: 1.6rem; font-weight: 800; color: #ffffff; text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3); letter-spacing: 0.5px; }
         .nav-left .version { font-size: 0.8rem; font-weight: bold; background: rgba(0,0,0,0.2); color: white; padding: 2px 8px; border-radius: 4px; }
         
         .nav-center { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px; }
@@ -134,6 +113,7 @@
             background: #ffffff; color: var(--dark-green); border: none; padding: 8px 18px; border-radius: var(--radius-md);
             cursor: pointer; font-weight: 800; transition: all 0.2s ease; box-shadow: 0 2px 8px rgba(0,0,0,0.15);
         }
+        body.admin-active .submit-btn { color: var(--frieren-teal); }
         .submit-btn:hover { background: #f0fdfa; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
         
         .login-btn {
@@ -145,15 +125,14 @@
         /* --- Main Layout --- */
         .container { display: flex; flex: 1; overflow: hidden; position: relative; }
 
-        /* Frosted Glass Effect on Sidebars to show video */
         .left-sidebar { width: var(--sidebar-width); border-right: 1px solid rgba(255,255,255,0.2); overflow-y: auto; background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); padding: 0; display: flex; flex-direction: column; }
         
         .level-item { display: flex; align-items: center; padding: 14px 20px; cursor: pointer; border-bottom: 1px solid rgba(0,0,0,0.05); font-size: 0.95rem; transition: all 0.2s; font-weight: 600; }
         .level-item:hover { background-color: rgba(255, 255, 255, 0.8); padding-left: 24px; box-shadow: inset 4px 0 0 var(--nav-green); }
+        body.admin-active .level-item:hover { box-shadow: inset 4px 0 0 var(--frieren-teal); }
         
-        .level-item.active { 
-            background-color: rgba(0, 240, 255, 0.1); border-left: 5px solid var(--neon-blue); font-weight: 800; color: var(--dark-green);
-        }
+        .level-item.active { background-color: rgba(0, 240, 255, 0.1); border-left: 5px solid var(--neon-blue); font-weight: 800; color: var(--dark-green); }
+        body.admin-active .level-item.active { background-color: rgba(120, 162, 165, 0.1); border-left-color: var(--frieren-teal); color: var(--frieren-text); }
         .level-rank { width: 45px; color: var(--text-muted); font-weight: 800; }
 
         .watch-indicator-pill {
@@ -188,36 +167,25 @@
         .stat-box.rating-value p { color: #f59e0b; }
         .fps-tag { display: block; margin-top: 4px; font-size: 0.7rem; font-weight: 800; color: white; background: #475569; padding: 2px 6px; border-radius: 4px; letter-spacing: 0.5px; width: fit-content; margin-inline: auto; }
 
-        /* --- Comments Element Engine --- */
+        /* Comments */
         .comments-section-wrapper { border-top: 3px dashed #e2e8f0; margin-top: 40px; padding-top: 30px; }
         .comments-title { font-size: 1.5rem; font-weight: 900; margin-bottom: 20px; color: #111827; }
         .comment-node { background: #ffffff; border: 1px solid #e2e8f0; padding: 16px 20px; border-radius: var(--radius-md); margin-bottom: 14px; position: relative; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
         .comment-node-meta { font-size: 0.8rem; font-weight: 800; color: var(--text-muted); margin-bottom: 6px; display: flex; justify-content: space-between; }
         .comment-node-body { font-size: 0.95rem; color: var(--text-main); line-height: 1.5; font-weight: 500; }
         .comment-admin-delete { position: absolute; right: 12px; top: 12px; background: var(--normal-red); color: white; border: none; font-size: 0.7rem; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-weight: bold; box-shadow: 0 2px 4px rgba(255, 59, 107, 0.3); }
-        
         .comment-compose-box { display: flex; flex-direction: column; gap: 12px; margin-top: 25px; background: #f8fafc; padding: 20px; border-radius: var(--radius-md); border: 1px solid #e2e8f0; }
         .comment-compose-row { display: grid; grid-template-columns: 220px 1fr; gap: 12px; }
         .comment-compose-row input { padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 6px; font-weight: 500; }
 
         /* Animations */
-        @keyframes glitter-shine-rtl {
-            0% { background-position: 200% center; }
-            100% { background-position: -200% center; }
-        }
-        @keyframes ruby-glint {
-            0% { text-shadow: 0 0 4px var(--ruby-glitter), 0 0 1px var(--ruby-glow); }
-            50% { text-shadow: 0 0 14px var(--ruby-glow), 0 0 8px #ff0055, 0 0 3px #fff; }
-            100% { text-shadow: 0 0 4px var(--ruby-glitter), 0 0 1px var(--ruby-glow); }
-        }
-        @keyframes flame-glow {
-            0% { box-shadow: 0 0 12px #ff4500, inset 0 1px 2px rgba(255,255,255,0.6); }
-            100% { box-shadow: 0 0 24px #ff8c00, inset 0 1px 2px rgba(255,255,255,0.6); }
-        }
+        @keyframes glitter-shine-rtl { 0% { background-position: 200% center; } 100% { background-position: -200% center; } }
+        @keyframes ruby-glint { 0% { text-shadow: 0 0 4px var(--ruby-glitter), 0 0 1px var(--ruby-glow); } 50% { text-shadow: 0 0 14px var(--ruby-glow), 0 0 8px #ff0055, 0 0 3px #fff; } 100% { text-shadow: 0 0 4px var(--ruby-glitter), 0 0 1px var(--ruby-glow); } }
+        @keyframes flame-glow { 0% { box-shadow: 0 0 12px #ff4500, inset 0 1px 2px rgba(255,255,255,0.6); } 100% { box-shadow: 0 0 24px #ff8c00, inset 0 1px 2px rgba(255,255,255,0.6); } }
 
+        /* Leaderboard */
         .leaderboard-table { width: 100%; border-collapse: separate; border-spacing: 0 4px; margin-top: 15px; }
         .leaderboard-table th { text-align: left; padding: 14px; font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; border-bottom: 2px solid #e2e8f0; font-weight: 800; }
-        
         .leaderboard-row { cursor: pointer; transition: transform 0.15s ease, box-shadow 0.15s ease; background: #f8fafc; border-radius: 8px; }
         .leaderboard-row:hover { transform: scale(1.01); box-shadow: 0 4px 12px rgba(0,0,0,0.05); z-index: 2; position: relative; }
         .leaderboard-row td { padding: 16px 14px; font-size: 0.95rem; color: var(--text-main); vertical-align: middle; }
@@ -232,86 +200,64 @@
 
         .tier-shining { background-size: 300% 100% !important; animation: glitter-shine-rtl 2.5s linear infinite !important; }
         .tier-shining td { background: transparent !important; } 
-
-        .tier-platinum {
-            background: linear-gradient(250deg, #dcdfe6 20%, #ffffff 40%, #ffffff 50%, #f0f4f8 60%, #b0b9c6 80%) !important;
-            box-shadow: inset 0 1px 2px rgba(255,255,255,0.8), 0 6px 16px rgba(176, 185, 198, 0.5); border: 1px solid #e2e8f0;
-        }
+        .tier-platinum { background: linear-gradient(250deg, #dcdfe6 20%, #ffffff 40%, #ffffff 50%, #f0f4f8 60%, #b0b9c6 80%) !important; box-shadow: inset 0 1px 2px rgba(255,255,255,0.8), 0 6px 16px rgba(176, 185, 198, 0.5); border: 1px solid #e2e8f0; }
         .tier-platinum td, .level-item.tier-platinum, .level-item.tier-platinum .level-rank { color: #111827 !important; font-weight: 900; }
-
-        .tier-gold {
-            background: linear-gradient(250deg, #e6c200 20%, #fff6cc 40%, #ffffff 50%, #fff6cc 60%, #cca300 80%) !important;
-            box-shadow: inset 0 1px 2px rgba(255,255,255,0.8), 0 6px 16px rgba(230, 194, 0, 0.5); border: 1px solid #fef08a;
-        }
+        .tier-gold { background: linear-gradient(250deg, #e6c200 20%, #fff6cc 40%, #ffffff 50%, #fff6cc 60%, #cca300 80%) !important; box-shadow: inset 0 1px 2px rgba(255,255,255,0.8), 0 6px 16px rgba(230, 194, 0, 0.5); border: 1px solid #fef08a; }
         .tier-gold td, .level-item.tier-gold, .level-item.tier-gold .level-rank { color: #3f2a00 !important; font-weight: 900; }
-
-        .tier-silver {
-            background: linear-gradient(250deg, #a8a8a8 20%, #e8e8e8 40%, #ffffff 50%, #e8e8e8 60%, #808080 80%) !important;
-            box-shadow: inset 0 1px 2px rgba(255,255,255,0.7), 0 4px 12px rgba(160, 160, 160, 0.4); border: 1px solid #cbd5e1;
-        }
+        .tier-silver { background: linear-gradient(250deg, #a8a8a8 20%, #e8e8e8 40%, #ffffff 50%, #e8e8e8 60%, #808080 80%) !important; box-shadow: inset 0 1px 2px rgba(255,255,255,0.7), 0 4px 12px rgba(160, 160, 160, 0.4); border: 1px solid #cbd5e1; }
         .tier-silver td, .level-item.tier-silver, .level-item.tier-silver .level-rank { color: #1f2937 !important; font-weight: 900; }
-
         .leaderboard-row.fiery-row { animation: glitter-shine-rtl 2.5s linear infinite, flame-glow 0.8s infinite alternate ease-in-out !important; }
 
         .top-right-medal { font-size: 1.25rem; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.25)); display: inline-block; vertical-align: middle; margin-left: 6px; }
-        
         .completion-badge-row { display: flex; justify-content: space-between; background: #ffffff; padding: 12px 16px; border-radius: var(--radius-md); margin-bottom: 10px; border: 2px solid #f1f5f9; font-size: 0.95rem; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
-
         .ruby-requirement-title { color: #e11d48 !important; font-weight: 900; text-transform: uppercase; letter-spacing: 0.8px; animation: ruby-glint 2s infinite ease-in-out; margin-bottom: 14px; }
+        
         .right-sidebar { width: 340px; border-left: 1px solid rgba(255,255,255,0.2); padding: 30px; overflow-y: auto; background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); font-size: 0.9rem; }
         .right-sidebar ul li { color: #be123c !important; font-weight: 700; animation: ruby-glint 3s infinite ease-in-out; margin-bottom: 12px; line-height: 1.6; }
 
-        /* --- Admin Control Panel Layouts (VIBRANT & DECORATED) --- */
-        .admin-dashboard { background: transparent; padding: 0; box-shadow: none; display: none; max-width: 950px; }
-        
+        /* --- Admin Control Panel (FRIEREN THEMED) --- */
+        .admin-dashboard { background: transparent; padding: 0; box-shadow: none; display: none; max-width: 950px; font-family: 'Times New Roman', serif; }
         .admin-title {
-            font-size: 2rem; font-weight: 900; margin-bottom: 25px; color: #ffffff; display: flex; justify-content: space-between; align-items: center;
-            background: linear-gradient(135deg, var(--dark-green), var(--nav-green)); padding: 25px 35px; border-radius: var(--radius-lg);
-            box-shadow: 0 10px 30px -5px rgba(0, 230, 118, 0.5);
-            position: relative; overflow: hidden;
-            border: 2px solid rgba(255,255,255,0.2);
+            font-size: 2.2rem; font-weight: 900; margin-bottom: 25px; color: #ffffff; display: flex; justify-content: space-between; align-items: center;
+            background: linear-gradient(135deg, var(--frieren-teal), var(--frieren-light-teal)); padding: 25px 35px; border-radius: var(--radius-lg);
+            border: 2px solid var(--frieren-gold); position: relative; overflow: hidden;
         }
-        .admin-title::after {
-            content: ''; position: absolute; right: -50px; top: -50px;
-            width: 150px; height: 150px; background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%); border-radius: 50%;
-        }
-        .admin-title .admin-eyebrow { display: block; font-size: 0.75rem; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; opacity: 0.85; margin-bottom: 4px; color: #f0fdfa; }
+        .admin-title .admin-eyebrow { display: block; font-size: 0.75rem; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; opacity: 0.85; margin-bottom: 4px; color: var(--frieren-bg); }
 
         .admin-stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 25px; }
         .admin-stat-pill {
-            background: linear-gradient(145deg, #ffffff, #f0fdfa); border: 2px solid rgba(0, 240, 255, 0.2); border-radius: var(--radius-lg); padding: 18px 20px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.06); text-align: center; position: relative; overflow: hidden;
+            background: linear-gradient(145deg, #ffffff, #fdfbf7); border: 1px solid rgba(212, 175, 55, 0.4); border-radius: var(--radius-lg); padding: 18px 20px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.04); text-align: center; position: relative; overflow: hidden;
         }
-        .admin-stat-pill::before {
-            content: ''; position: absolute; left: 0; top: 0; height: 100%; width: 4px; background: var(--neon-blue);
-        }
-        .admin-stat-pill h4 { font-size: 0.75rem; text-transform: uppercase; font-weight: 800; letter-spacing: 1px; color: #0369a1; margin-bottom: 8px; }
+        .admin-stat-pill::before { content: ''; position: absolute; left: 0; top: 0; height: 100%; width: 4px; background: var(--frieren-gold); }
+        .admin-stat-pill h4 { font-size: 0.75rem; text-transform: uppercase; font-weight: 800; letter-spacing: 1px; color: var(--frieren-text); margin-bottom: 8px; }
         .admin-stat-pill p { font-size: 2rem; font-weight: 900; color: #111827; }
 
         .queue-card, .admin-section-card { 
             background: rgba(255, 255, 255, 0.95); padding: 25px; border-radius: var(--radius-lg); 
-            border: 1px solid rgba(255,255,255,0.8); box-shadow: 0 10px 25px rgba(0,0,0,0.08); margin-bottom: 25px; 
-            border-top: 5px solid var(--nav-green);
+            border: 1px solid rgba(212, 175, 55, 0.3); box-shadow: 0 10px 25px rgba(0,0,0,0.08); margin-bottom: 25px; 
+            border-top: 5px solid var(--frieren-teal);
         }
         .queue-card > h3, .admin-section-card > h3 { display: flex; align-items: center; gap: 10px; color: #111827; font-weight: 900; }
-        .queue-card > h3 .badge-count { background: var(--normal-red); color: white; font-size: 0.8rem; font-weight: 900; padding: 2px 10px; border-radius: 999px; box-shadow: 0 2px 8px rgba(255, 59, 107, 0.4); }
+        .queue-card > h3 .badge-count { background: var(--frieren-gold); color: white; font-size: 0.8rem; font-weight: 900; padding: 2px 10px; border-radius: 999px; }
 
         .queue-item-card { background: #f8fafc; border: 2px solid #e2e8f0; border-radius: var(--radius-md); padding: 18px; margin-bottom: 16px; transition: transform 0.2s, box-shadow 0.2s; }
-        .queue-item-card:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(0,0,0,0.05); border-color: var(--neon-blue); }
+        .queue-item-card:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(0,0,0,0.05); border-color: var(--frieren-gold); }
 
         .queue-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; gap: 10px; font-size: 1.1rem; }
         
-        .method-chip { background: rgba(0, 240, 255, 0.15); color: #0284c7; border: 1px solid rgba(0, 240, 255, 0.4); padding: 4px 12px; border-radius: 999px; font-size: 0.8rem; font-weight: 800; }
-
         .queue-review-grid { margin-top: 14px; display: grid; grid-template-columns: 1fr 1fr; gap: 14px; background: white; padding: 16px; border-radius: var(--radius-md); border: 1px solid #e2e8f0; }
-        .queue-review-grid label { font-size: 0.7rem; font-weight: 800; color: var(--text-muted); margin-bottom: 4px; letter-spacing: 0.5px; text-transform: uppercase; display: block; }
-        .queue-review-grid select, .queue-review-grid input { width: 100%; padding: 10px 12px; font-size: 0.9rem; border: 2px solid #cbd5e1; border-radius: 6px; background: #f8fafc; font-weight: 600; }
-        .queue-review-grid input:focus, .queue-review-grid select:focus { border-color: var(--neon-blue); outline: none; }
+        .queue-review-grid label, .form-group label { font-size: 0.7rem; font-weight: 800; color: var(--text-muted); margin-bottom: 4px; letter-spacing: 0.5px; text-transform: uppercase; display: block; }
+        .queue-review-grid select, .queue-review-grid input, .form-group input, .form-group select, .form-group textarea { 
+            width: 100%; padding: 10px 12px; font-size: 0.9rem; border: 2px solid #cbd5e1; border-radius: 6px; background: #f8fafc; font-weight: 600; 
+        }
+        .queue-review-grid input:focus, .queue-review-grid select:focus, .form-group input:focus { border-color: var(--frieren-teal); outline: none; }
 
         .queue-actions { display: flex; gap: 12px; margin-top: 18px; border-top: 2px dashed #e2e8f0; padding-top: 18px; }
         .queue-actions button { flex: 1; padding: 12px 24px; font-size: 1rem; }
 
         .btn-approve { background: linear-gradient(90deg, var(--dark-green), var(--nav-green)); color: white; border: none; padding: 10px 24px; border-radius: var(--radius-md); font-weight: 800; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 10px rgba(0, 230, 118, 0.3); }
+        body.admin-active .btn-approve { background: linear-gradient(90deg, var(--frieren-teal), var(--frieren-light-teal)); box-shadow: 0 4px 10px rgba(120, 162, 165, 0.4); border: 1px solid rgba(212, 175, 55, 0.5); }
         .btn-reject { background: linear-gradient(90deg, #e11d48, var(--normal-red)); color: white; border: none; padding: 10px 24px; border-radius: var(--radius-md); font-weight: 800; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 10px rgba(255, 59, 107, 0.3); }
         .btn-approve:hover, .btn-reject:hover { transform: translateY(-2px); filter: brightness(1.1); }
 
@@ -326,38 +272,26 @@
             box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); transform: scale(0.9) translateY(20px); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             max-height: 90vh; overflow-y: auto; border-top: 6px solid var(--neon-blue);
         }
+        body.admin-active .modal-box { border-top-color: var(--frieren-teal); }
         .modal-overlay.open .modal-box { transform: scale(1) translateY(0); }
         .modal-box h2 { margin-bottom: 24px; font-size: 1.8rem; font-weight: 900; color: #111827; }
         
         .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
         .form-group { display: flex; flex-direction: column; }
         .form-group.full-width { grid-column: span 2; }
-        .form-group label { font-size: 0.8rem; font-weight: 800; margin-bottom: 6px; color: #475569; text-transform: uppercase; letter-spacing: 0.5px; }
-        .form-group input, .form-group select, .form-group textarea {
-            width: 100%; padding: 12px 14px; border: 2px solid #cbd5e1; border-radius: var(--radius-md); font-size: 0.95rem; background: #f8fafc; color: #111827; font-weight: 600; transition: border-color 0.2s;
-        }
-        .form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color: var(--neon-blue); outline: none; box-shadow: 0 0 0 4px rgba(0, 240, 255, 0.15); }
 
         .modal-buttons { display: flex; justify-content: flex-end; gap: 12px; margin-top: 30px; border-top: 2px dashed #e2e8f0; padding-top: 20px; }
         .btn-cancel { background: #e2e8f0; color: #475569; border: none; padding: 12px 20px; border-radius: var(--radius-md); cursor: pointer; font-weight: 800; transition: background 0.2s; }
         .btn-cancel:hover { background: #cbd5e1; }
-        .btn-submit { background: linear-gradient(90deg, var(--dark-green), var(--nav-green)); color: white; border: none; padding: 12px 24px; border-radius: var(--radius-md); cursor: pointer; font-weight: 800; box-shadow: 0 4px 10px rgba(0, 230, 118, 0.3); transition: transform 0.2s; }
-        .btn-submit:hover { transform: translateY(-2px); }
 
         /* Rating Stars Style */
         .rating-panel {
             background: #f8fafc; border: 2px dashed #e2e8f0; padding: 20px; border-radius: var(--radius-md);
             margin-top: 25px; text-align: center;
         }
-        .rating-stars-container {
-            display: flex; justify-content: center; gap: 6px; margin: 12px 0;
-        }
-        .star-option {
-            font-size: 1.8rem; cursor: pointer; color: #cbd5e1; transition: color 0.15s ease;
-        }
-        .star-option.selected {
-            color: #f59e0b;
-        }
+        .rating-stars-container { display: flex; justify-content: center; gap: 6px; margin: 12px 0; }
+        .star-option { font-size: 1.8rem; cursor: pointer; color: #cbd5e1; transition: color 0.15s ease; }
+        .star-option.selected { color: #f59e0b; }
 
         @media (max-width: 992px) {
             nav { flex-direction: column; gap: 12px; padding: 16px; text-align: center; }
@@ -380,9 +314,7 @@
     <div id="main-video-bg-container">
         <iframe id="main-video-bg"
             src="https://www.youtube.com/embed/nGwyvT4tlx8?autoplay=1&mute=1&controls=0&loop=1&playlist=nGwyvT4tlx8&playsinline=1&modestbranding=1"
-            frameborder="0"
-            allow="autoplay; encrypted-media"
-            allowfullscreen>
+            frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>
         </iframe>
     </div>
 
@@ -394,7 +326,7 @@
         <div class="nav-center">
             <a id="tabList" class="active" onclick="switchTab('list')">List</a>
             <a id="tabLeaderboard" onclick="switchTab('leaderboard')">Leaderboard</a>
-            <a id="tabAdmin" style="display:none;" onclick="switchTab('admin')">Admin Control Panel</a>
+            <a id="tabAdmin" style="display:none;" onclick="switchTab('admin')">Admin Grimoire</a>
         </div>
         <div class="nav-right">
             <button class="submit-btn" id="openModalBtn">Submit Level</button>
@@ -405,7 +337,7 @@
     <div class="container">
         <div class="left-sidebar">
             <div style="padding: 16px; border-bottom: 1px solid rgba(0,0,0,0.05); background: rgba(255,255,255,0.95); position: sticky; top: 0; z-index: 5;">
-                <input type="text" id="levelSearchInput" placeholder="🔍 Search levels..." style="width: 100%; padding: 10px 14px; border: 2px solid #cbd5e1; border-radius: var(--radius-md); font-size: 0.95rem; font-family: system-ui, sans-serif; font-weight: 600; outline: none; transition: border-color 0.2s;">
+                <input type="text" id="levelSearchInput" placeholder="🔍 Search levels..." style="width: 100%; padding: 10px 14px; border: 2px solid #cbd5e1; border-radius: var(--radius-md); font-size: 0.95rem; font-weight: 600; outline: none;">
             </div>
             <div id="levelList" style="flex: 1; overflow-y: auto; padding: 10px 0;"></div>
         </div>
@@ -433,7 +365,8 @@
 
             <div class="admin-dashboard" id="adminDashboardView">
                 <div class="admin-title">
-                    <div><span class="admin-eyebrow">Control Panel</span>3015 SCL Admin Dashboard</div>
+                    <div><span class="admin-eyebrow">Aureole Gateway</span>SCL Admin Grimoire</div>
+                    <span style="font-size: 3rem; opacity: 0.8;">🪄</span>
                 </div>
 
                 <div class="admin-stats-row">
@@ -459,7 +392,7 @@
                         <div class="form-group" style="justify-content: flex-end;">
                             <div style="display:flex; gap: 12px;">
                                 <button type="button" class="btn-reject" onclick="executeBanAction(true)" style="width:50%;">Ban Player</button>
-                                <button type="button" class="btn-approve" onclick="executeBanAction(false)" style="width:50%; background:#475569; box-shadow:none;">Unban Player</button>
+                                <button type="button" class="btn-approve" onclick="executeBanAction(false)" style="width:50%; background:#475569; border:none; box-shadow:none;">Unban Player</button>
                             </div>
                         </div>
                     </div>
@@ -561,7 +494,7 @@
                 </div>
                 <div class="modal-buttons">
                     <button type="button" class="btn-cancel" id="closeModalBtn">Cancel</button>
-                    <button type="submit" class="btn-submit" id="submitBtnText">Send Submission</button>
+                    <button type="submit" class="btn-approve">Send Submission</button>
                 </div>
             </form>
         </div>
@@ -587,7 +520,7 @@
                 <div class="form-group" style="margin-bottom:16px;"><label>Password</label><input type="password" id="authPass" required></div>
                 <div class="modal-buttons">
                     <button type="button" class="btn-cancel" onclick="toggleLoginModal(false)">Dismiss</button>
-                    <button type="submit" class="btn-submit">Sign In</button>
+                    <button type="submit" class="btn-approve">Sign In</button>
                 </div>
             </form>
         </div>
@@ -600,29 +533,8 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 
     <script>
-        /* 
-           ==========================================================================
-           SECURE BACKEND ARCHITECTURE CONFIGURATION
-           ==========================================================================
-           To make your discord webhook safe and comply with secure server operations, 
-           the app directs payload traffic to an environment-controlled backend API route 
-           instead of broadcasting your sensitive URL tokens directly inside public source script files.
-           
-           [SERVER-SIDE ARCHITECTURE REFERENCE]:
-           On your server terminal backend execution layer (e.g. Node.js with Express), 
-           you will create a matching script endpoint like this to parse frontend requests safely:
-
-           app.post('/api/scl-submission', async (req, res) => {
-               const targetWebhook = "https://discord.com/api/webhooks/1522560013162254458/BnLX6Oj-CTeCtAP0_9C5nM3SwUQaLCW1qaQI-hTdyFQNYhx1kuJM6X8TRsjnqW_250ok";
-               await fetch(targetWebhook, {
-                   method: 'POST',
-                   headers: { 'Content-Type': 'application/json' },
-                   body: JSON.stringify(req.body)
-               });
-               res.sendStatus(200);
-           });
-        */
-        const SECURE_BACKEND_ENDPOINT = "/api/scl-submission";
+        // LIVE RENDER WEBHOOK ENDPOINT
+        const SECURE_BACKEND_ENDPOINT = "https://scl-bot-backend-3015.onrender.com/api/scl-submission";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCOIBuKcKFmVWMRZelkeazIaCZyqgDSiBA",
@@ -640,6 +552,7 @@
         const auth = firebase.auth();
 
         const GD_DIFFICULTIES = ["Auto", "Easy", "Normal", "Hard", "Harder", "Insane", "Easy Demon", "Medium Demon", "Hard Demon", "Insane Demon", "Extreme Demon"];
+        const DIFFICULTY_WEIGHTS = { "Auto":1, "Easy":2, "Normal":3, "Hard":4, "Harder":5, "Insane":6, "Easy Demon":7, "Medium Demon":8, "Hard Demon":9, "Insane Demon":10, "Extreme Demon":11 };
 
         let levelsData = [];
         let pendingData = [];
@@ -647,7 +560,7 @@
         let bannedPlayers = [];
         let currentRole = "member";
         let currentSelectedRank = 1;
-        let selectedUserStars = 5; // Form helper tracking context
+        let selectedUserStars = 5;
 
         const listContainer = document.getElementById('levelList');
         const detailsContainer = document.getElementById('levelDetails');
@@ -678,6 +591,13 @@
         database.ref('approved_levels').on('value', (snapshot) => {
             const data = snapshot.val();
             levelsData = data ? Object.values(data) : [];
+            
+            // Integrated sorting by Points, then by Difficulty Weight
+            levelsData.sort((a, b) => {
+                if (b.points !== a.points) return b.points - a.points;
+                return (DIFFICULTY_WEIGHTS[b.difficulty] || 0) - (DIFFICULTY_WEIGHTS[a.difficulty] || 0);
+            });
+            
             levelsData.forEach((level, index) => { level.rank = index + 1; });
             
             const urlParams = new URLSearchParams(window.location.search);
@@ -791,7 +711,6 @@
             const data = levelsData.find(l => l.rank === rank);
             if (!data) return;
 
-            // Base public rendering for data sheet 
             detailsContainer.innerHTML = `
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; flex-wrap:wrap; gap:10px;">
                     <h1 class="level-title" style="margin-bottom:0;">${data.name}</h1>
@@ -803,7 +722,7 @@
                     <p><span>PUBLISHER</span> ${data.publisher}</p>
                 </div>
                 <div class="video-container">
-                    <iframe src="https://www.youtube.com/embed/${data.youtubeId}" allowfullscreen></iframe>
+                    <iframe src="https://www.youtube.com/embed/${data.youtubeId || extractYouTubeId(data.youtubeUrl || '')}" allowfullscreen></iframe>
                 </div>
                 <div style="margin-top: 10px; margin-bottom: 5px; text-align: left; background: #1e293b; padding: 10px 15px; border-radius: var(--radius-md);">
                     <a href="https://youtube.com/watch?v=${data.youtubeId}" target="_blank" style="color: var(--neon-blue); font-weight: 800; font-size: 0.95rem; text-decoration: none;">
@@ -819,10 +738,9 @@
                 <div class="stats-grid">
                     <div class="stat-box points-value"><h4>Points</h4><p>${data.points}</p></div>
                     <div class="stat-box rating-value"><h4>Official Rating</h4><p>${data.difficulty || 'Extreme Demon'}</p></div>
-                    <div class="stat-box"><h4>Method</h4><p>${data.method}${data.fps ? `<span class="fps-tag">${data.fps} FPS</span>` : ''}</p></div>
+                    <div class="stat-box"><h4>Method</h4><p>${data.method || 'Standard'}${data.fps ? `<span class="fps-tag">${data.fps} FPS</span>` : ''}</p></div>
                 </div>
 
-                <!-- Public Interactive 1-5 Star Level Rating Engine Component -->
                 <div class="rating-panel">
                     <h3 style="font-weight: 900; color: #111827;">Rate Target Track Challenge</h3>
                     <div id="publicCalculatedScore" style="margin: 8px 0; font-size: 1.1rem; font-weight: 800; color: #f59e0b;">
@@ -855,7 +773,7 @@
             `;
             streamComments(data.rank);
             streamPublicAggregatedRatings(data.rank);
-            selectedUserStars = 5; // Reset state container metric tracker
+            selectedUserStars = 5; 
         }
 
         window.assignFormStarValue = function(rating) {
@@ -875,8 +793,7 @@
             if(!handle) { alert("Please provide a handle name before submitting your rating."); return; }
 
             database.ref(`level_star_metrics/rank_${levelRank}`).push({
-                user: handle,
-                ratingScore: selectedUserStars
+                user: handle, ratingScore: selectedUserStars
             }).then(() => {
                 alert("Your score rating was transmitted successfully!");
                 nameInput.value = "";
@@ -985,9 +902,7 @@
 
         window.purgeCommentNode = function(levelRank, commentId) {
             if(confirm("Confirm admin removal of this message text from servers?")) {
-                database.ref(`level_comments/rank_${levelRank}/${commentId}`).remove().then(() => {
-                    alert("Comment successfully wiped out.");
-                });
+                database.ref(`level_comments/rank_${levelRank}/${commentId}`).remove().then(() => alert("Comment successfully wiped out."));
             }
         };
 
@@ -1003,20 +918,15 @@
             const allowedPlayers = leaderboardData.filter(p => !bannedPlayers.includes(p.name));
             allowedPlayers.sort((a, b) => b.points - a.points);
 
-            // Populating Right Sidebar Top Players Panel
             allowedPlayers.slice(0, 5).forEach((player, i) => {
                 if(!sidebarContenders) return;
                 const wrapperNode = document.createElement('div');
-                wrapperNode.style.display = "flex";
-                wrapperNode.style.justifyContent = "space-between";
-                wrapperNode.style.fontSize = "0.9rem";
-                wrapperNode.style.fontWeight = "700";
-                wrapperNode.style.color = "#1e293b";
+                wrapperNode.style.display = "flex"; wrapperNode.style.justifyContent = "space-between";
+                wrapperNode.style.fontSize = "0.9rem"; wrapperNode.style.fontWeight = "700"; wrapperNode.style.color = "#1e293b";
                 wrapperNode.innerHTML = `<span>#${i+1} ${player.name}</span><span style="color:var(--dark-green); font-weight:800;">${player.points} pts</span>`;
                 sidebarContenders.appendChild(wrapperNode);
             });
 
-            // Populating Top Leaderboard Cards
             const maxTopPlayers = Math.min(3, allowedPlayers.length);
             for (let i = 0; i < maxTopPlayers; i++) {
                 if(!topPanel) continue;
@@ -1028,7 +938,6 @@
                 topPanel.appendChild(card);
             }
 
-            // Populating Leaderboard Rows
             allowedPlayers.forEach((player, index) => {
                 if(!tableBody) return;
                 const rank = index + 1;
@@ -1050,13 +959,16 @@
             document.getElementById('modalProfilePoints').innerText = `Total Points: ${player.points}`;
             const recordsContainer = document.getElementById('modalProfileCompletionsList');
             recordsContainer.innerHTML = '';
-            player.items.forEach(line => {
-                if(!line.trim()) return;
-                const badge = document.createElement('div');
-                badge.className = 'completion-badge-row';
-                badge.innerHTML = `<span>🏆 <strong style="color:#111827;">${line}</strong></span>`;
-                recordsContainer.appendChild(badge);
-            });
+            
+            if(player.items) {
+                player.items.forEach(line => {
+                    if(!line.trim()) return;
+                    const badge = document.createElement('div');
+                    badge.className = 'completion-badge-row';
+                    badge.innerHTML = `<span>🏆 <strong style="color:#111827;">${line}</strong></span>`;
+                    recordsContainer.appendChild(badge);
+                });
+            }
             document.getElementById('playerProfileModal').classList.add('open');
         }
 
@@ -1100,7 +1012,7 @@
                 card.innerHTML = `
                     <div class="queue-header"><strong>${item.name}</strong></div>
                     <div class="queue-review-grid">
-                        <div class="form-group"><label>Rating</label><select id="adminRate-${idx}">${GD_DIFFICULTIES.map(d => `<option value="${d}">${d}</option>`).join('')}</select></div>
+                        <div class="form-group"><label>Rating</label><select id="adminRate-${idx}">${GD_DIFFICULTIES.map(d => `<option value="${d}" ${item.difficulty===d?'selected':''}>${d}</option>`).join('')}</select></div>
                         <div class="form-group"><label>Points</label><input type="number" id="adminPoints-${idx}" value="${item.points}"></div>
                     </div>
                     <div class="queue-actions"><button class="btn-approve" onclick="handleDecision(${idx}, true)">Approve</button><button class="btn-reject" onclick="handleDecision(${idx}, false)">Reject</button></div>
@@ -1158,10 +1070,12 @@
             const verifier = document.getElementById('lvlVerifier').value;
             const youTubeUrl = document.getElementById('lvlYoutube').value;
             const levelId = document.getElementById('lvlId').value;
+            const diff = document.getElementById('lvlDifficulty').value;
+            const points = parseInt(document.getElementById('lvlPoints').value);
 
             pendingData.push({
                 name: name, creators: creators, verifier: verifier, publisher: creators,
-                youtubeId: extractYouTubeId(youTubeUrl), points: parseInt(document.getElementById('lvlPoints').value), difficulty: document.getElementById('lvlDifficulty').value,
+                youtubeId: extractYouTubeId(youTubeUrl), points: points, difficulty: diff,
                 levelId: levelId, method: document.getElementById('lvlMethod').value, fps: parseInt(document.getElementById('lvlFps').value) || null
             });
 
@@ -1171,7 +1085,7 @@
                 this.reset(); 
             });
 
-            // SECURE SERVER-SIDE WEBHOOK RELAY POST AGENT CALL
+            // LIVE RENDER SERVER-SIDE WEBHOOK DISPATCH
             fetch(SECURE_BACKEND_ENDPOINT, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -1184,7 +1098,7 @@
                             { name: "Creator", value: creators, inline: true },
                             { name: "Verifier", value: verifier, inline: true },
                             { name: "Geometry Dash ID", value: levelId, inline: true },
-                            { name: "Video URL Link", value: youTubeUrl }
+                            { name: "Video URL Link", value: youTubeUrl, inline: false }
                         ],
                         timestamp: new Date().toISOString()
                     }]
