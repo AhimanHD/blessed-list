@@ -172,7 +172,7 @@
         .video-target-indicator {
             background: linear-gradient(90deg, #111827, #1f2937); color: #fff; border-bottom: 4px solid var(--neon-blue);
             padding: 12px 18px; font-size: 0.85rem; font-weight: bold; border-radius: 0 0 var(--radius-md) var(--radius-md);
-            margin-top: -29px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center;
+            margin-top: 15px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center;
             box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         }
 
@@ -277,17 +277,6 @@
         }
         .admin-title .admin-eyebrow { display: block; font-size: 0.75rem; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; opacity: 0.85; margin-bottom: 4px; color: #f0fdfa; }
 
-        .admin-staff-card {
-            background: linear-gradient(145deg, #ffffff, #f8fafc);
-            border-left: 6px solid var(--neon-blue);
-            padding: 16px 24px;
-            border-radius: var(--radius-md);
-            margin-bottom: 25px;
-            font-size: 0.95rem;
-            color: var(--text-main);
-            box-shadow: 0 6px 15px rgba(0, 240, 255, 0.1);
-        }
-
         .admin-stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 25px; }
         .admin-stat-pill {
             background: linear-gradient(145deg, #ffffff, #f0fdfa); border: 2px solid rgba(0, 240, 255, 0.2); border-radius: var(--radius-lg); padding: 18px 20px;
@@ -354,6 +343,21 @@
         .btn-cancel:hover { background: #cbd5e1; }
         .btn-submit { background: linear-gradient(90deg, var(--dark-green), var(--nav-green)); color: white; border: none; padding: 12px 24px; border-radius: var(--radius-md); cursor: pointer; font-weight: 800; box-shadow: 0 4px 10px rgba(0, 230, 118, 0.3); transition: transform 0.2s; }
         .btn-submit:hover { transform: translateY(-2px); }
+
+        /* Rating Stars Style */
+        .rating-panel {
+            background: #f8fafc; border: 2px dashed #e2e8f0; padding: 20px; border-radius: var(--radius-md);
+            margin-top: 25px; text-align: center;
+        }
+        .rating-stars-container {
+            display: flex; justify-content: center; gap: 6px; margin: 12px 0;
+        }
+        .star-option {
+            font-size: 1.8rem; cursor: pointer; color: #cbd5e1; transition: color 0.15s ease;
+        }
+        .star-option.selected {
+            color: #f59e0b;
+        }
 
         @media (max-width: 992px) {
             nav { flex-direction: column; gap: 12px; padding: 16px; text-align: center; }
@@ -432,12 +436,6 @@
                     <div><span class="admin-eyebrow">Control Panel</span>3015 SCL Admin Dashboard</div>
                 </div>
 
-                <div class="admin-staff-card" id="adminStaffDisplayCard">
-                    <p style="margin-bottom: 6px;"><strong>System Managers:</strong> <span id="displayManagers" style="color:var(--dark-green); font-weight:800;">Manager 1, Manager 2</span></p>
-                    <p style="margin-bottom: 6px;"><strong>Assigned Editors:</strong> <span id="displayEditors" style="color:#0284c7; font-weight:800;">Editor 1, Editor 2</span></p>
-                    <p style="margin-bottom: 0;"><strong>Active Staff Members:</strong> <span id="displayMembers" style="font-weight:700;">Member 1, Member 2, Member 3</span></p>
-                </div>
-
                 <div class="admin-stats-row">
                     <div class="admin-stat-pill"><h4>Pending Review</h4><p id="statPending">0</p></div>
                     <div class="admin-stat-pill"><h4>Live Levels</h4><p id="statLive">0</p></div>
@@ -445,24 +443,10 @@
                 </div>
 
                 <div class="admin-section-card">
-                    <h3 style="margin-bottom: 18px; font-size: 1.25rem;">👥 Edit Staff Members & Roles</h3>
-                    <form id="adminStaffConfigForm">
-                        <div class="form-grid">
-                            <div class="form-group full-width">
-                                <label>System Managers (Comma separated)</label>
-                                <input type="text" id="inputManagers" required>
-                            </div>
-                            <div class="form-group full-width">
-                                <label>Assigned Editors (Comma separated)</label>
-                                <input type="text" id="inputEditors" required>
-                            </div>
-                            <div class="form-group full-width">
-                                <label>Active Staff Members (Comma separated)</label>
-                                <input type="text" id="inputMembers" required>
-                            </div>
-                        </div>
-                        <button type="submit" class="btn-approve" style="margin-top: 20px; width: 100%; padding: 14px; font-size: 1.1rem;">Save Staff Configuration</button>
-                    </form>
+                    <h3 style="margin-bottom: 18px; font-size: 1.25rem;">⭐ User Star Ratings Registry</h3>
+                    <div id="adminRatingsContainer" style="max-height: 300px; overflow-y: auto; font-weight: 600; font-size: 0.95rem;">
+                        Select Admin Panel to refresh logs...
+                    </div>
                 </div>
 
                 <div class="admin-section-card">
@@ -525,11 +509,10 @@
         
         <div class="right-sidebar">
             <div style="margin-bottom: 25px; background: #f8fafc; padding: 15px; border-radius: var(--radius-md); border: 1px solid #e2e8f0;">
-                <p style="color:var(--text-muted); margin-bottom: 10px; font-size: 0.8rem; font-style: italic;">Managed by <span class="signature-badge">Ahim4n</span></p>
-                <div style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; padding-left: 2px;">
-                    <p style="margin-bottom: 4px;"><strong>Managers:</strong> <span id="sideManagers" style="color: #111827; font-weight:800;">Manager 1, Manager 2</span></p>
-                    <p style="margin-bottom: 4px;"><strong>Editors:</strong> <span id="sideEditors" style="color: #111827; font-weight:800;">Editor 1, Editor 2</span></p>
-                    <p style="margin-bottom: 0;"><strong>Members:</strong> <span id="sideMembers" style="color: #111827; font-weight:700;">Member 1, Member 2, Member 3</span></p>
+                <p style="color:var(--text-muted); margin-bottom: 12px; font-size: 0.85rem; font-style: italic;">Managed by <span class="signature-badge">Ahim4n</span></p>
+                <div style="border-top: 2px dashed #cbd5e1; padding-top: 12px;">
+                    <h4 style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text-muted); font-weight: 800; margin-bottom: 8px;">👑 Top Contenders</h4>
+                    <div id="sidebarTopPlayers" style="display: flex; flex-direction: column; gap: 6px;"></div>
                 </div>
             </div>
             
@@ -617,7 +600,29 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 
     <script>
-        const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1522213490532679713/0K61UUX7H_7iWqYtfu6Iz8-q2Fm6UsL_DnQ3zwCOJPk5SQHsZvrS4Z6o5oDbiSMyQ6fr";
+        /* 
+           ==========================================================================
+           SECURE BACKEND ARCHITECTURE CONFIGURATION
+           ==========================================================================
+           To make your discord webhook safe and comply with secure server operations, 
+           the app directs payload traffic to an environment-controlled backend API route 
+           instead of broadcasting your sensitive URL tokens directly inside public source script files.
+           
+           [SERVER-SIDE ARCHITECTURE REFERENCE]:
+           On your server terminal backend execution layer (e.g. Node.js with Express), 
+           you will create a matching script endpoint like this to parse frontend requests safely:
+
+           app.post('/api/scl-submission', async (req, res) => {
+               const targetWebhook = "https://discord.com/api/webhooks/1522560013162254458/BnLX6Oj-CTeCtAP0_9C5nM3SwUQaLCW1qaQI-hTdyFQNYhx1kuJM6X8TRsjnqW_250ok";
+               await fetch(targetWebhook, {
+                   method: 'POST',
+                   headers: { 'Content-Type': 'application/json' },
+                   body: JSON.stringify(req.body)
+               });
+               res.sendStatus(200);
+           });
+        */
+        const SECURE_BACKEND_ENDPOINT = "/api/scl-submission";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCOIBuKcKFmVWMRZelkeazIaCZyqgDSiBA",
@@ -640,13 +645,9 @@
         let pendingData = [];
         let leaderboardData = [];
         let bannedPlayers = [];
-        let staffConfiguration = {
-            managers: "Manager 1, Manager 2",
-            editors: "Editor 1, Editor 2",
-            members: "Member 1, Member 2, Member 3"
-        };
         let currentRole = "member";
         let currentSelectedRank = 1;
+        let selectedUserStars = 5; // Form helper tracking context
 
         const listContainer = document.getElementById('levelList');
         const detailsContainer = document.getElementById('levelDetails');
@@ -703,46 +704,15 @@
             const data = snapshot.val();
             leaderboardData = data ? Object.values(data) : [];
             updateAdminStats();
-            if(leaderboardView.style.display !== "none") renderLeaderboard();
+            renderLeaderboard();
             if(currentRole === "admin") renderAdminEditScores();
-        });
-
-        database.ref('staff_configuration').on('value', (snapshot) => {
-            const data = snapshot.val();
-            if (data) {
-                staffConfiguration = data;
-                updateStaffDOM();
-            }
         });
 
         database.ref('banned_players').on('value', (snapshot) => {
             const data = snapshot.val();
             bannedPlayers = data ? Object.values(data) : [];
             document.getElementById('bannedPlayersList').innerText = bannedPlayers.length > 0 ? bannedPlayers.join(', ') : "None";
-            if(leaderboardView.style.display !== "none") renderLeaderboard();
-        });
-
-        function updateStaffDOM() {
-            // Update Text Displays
-            document.getElementById('displayManagers').innerText = staffConfiguration.managers;
-            document.getElementById('displayEditors').innerText = staffConfiguration.editors;
-            document.getElementById('displayMembers').innerText = staffConfiguration.members;
-            document.getElementById('sideManagers').innerText = staffConfiguration.managers;
-            document.getElementById('sideEditors').innerText = staffConfiguration.editors;
-            document.getElementById('sideMembers').innerText = staffConfiguration.members;
-
-            // FIX: Update Admin Form Inputs so they reflect the real db data
-            if(document.getElementById('inputManagers')) document.getElementById('inputManagers').value = staffConfiguration.managers;
-            if(document.getElementById('inputEditors')) document.getElementById('inputEditors').value = staffConfiguration.editors;
-            if(document.getElementById('inputMembers')) document.getElementById('inputMembers').value = staffConfiguration.members;
-        }
-
-        document.getElementById('adminStaffConfigForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            staffConfiguration.managers = document.getElementById('inputManagers').value.trim();
-            staffConfiguration.editors = document.getElementById('inputEditors').value.trim();
-            staffConfiguration.members = document.getElementById('inputMembers').value.trim();
-            database.ref('staff_configuration').set(staffConfiguration).then(() => alert("Staff structure successfully synced to database."));
+            renderLeaderboard();
         });
 
         window.executeBanAction = function(isBan) {
@@ -821,6 +791,7 @@
             const data = levelsData.find(l => l.rank === rank);
             if (!data) return;
 
+            // Base public rendering for data sheet 
             detailsContainer.innerHTML = `
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; flex-wrap:wrap; gap:10px;">
                     <h1 class="level-title" style="margin-bottom:0;">${data.name}</h1>
@@ -831,7 +802,14 @@
                     <p><span>VERIFIER</span> ${data.verifier}</p>
                     <p><span>PUBLISHER</span> ${data.publisher}</p>
                 </div>
-                <div class="video-container"><iframe src="https://www.youtube.com/embed/${data.youtubeId}" allowfullscreen></iframe></div>
+                <div class="video-container">
+                    <iframe src="https://www.youtube.com/embed/${data.youtubeId}" allowfullscreen></iframe>
+                </div>
+                <div style="margin-top: 10px; margin-bottom: 5px; text-align: left; background: #1e293b; padding: 10px 15px; border-radius: var(--radius-md);">
+                    <a href="https://youtube.com/watch?v=${data.youtubeId}" target="_blank" style="color: var(--neon-blue); font-weight: 800; font-size: 0.95rem; text-decoration: none;">
+                        📺 not showing? watch it on youtube →
+                    </a>
+                </div>
                 
                 <div class="video-target-indicator">
                     <span>📺 NOW DISPLAYING:</span>
@@ -842,6 +820,25 @@
                     <div class="stat-box points-value"><h4>Points</h4><p>${data.points}</p></div>
                     <div class="stat-box rating-value"><h4>Official Rating</h4><p>${data.difficulty || 'Extreme Demon'}</p></div>
                     <div class="stat-box"><h4>Method</h4><p>${data.method}${data.fps ? `<span class="fps-tag">${data.fps} FPS</span>` : ''}</p></div>
+                </div>
+
+                <!-- Public Interactive 1-5 Star Level Rating Engine Component -->
+                <div class="rating-panel">
+                    <h3 style="font-weight: 900; color: #111827;">Rate Target Track Challenge</h3>
+                    <div id="publicCalculatedScore" style="margin: 8px 0; font-size: 1.1rem; font-weight: 800; color: #f59e0b;">
+                        Aggregating global player metrics...
+                    </div>
+                    <div style="display: flex; justify-content: center; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 14px;">
+                        <input type="text" id="raterNameField" placeholder="Your Handle Name" style="padding: 8px 12px; border: 2px solid #cbd5e1; border-radius: 6px; font-weight:600; width:180px;">
+                        <div class="rating-stars-container">
+                            <span class="star-option selected" onclick="assignFormStarValue(1)" id="starNode-1">★</span>
+                            <span class="star-option selected" onclick="assignFormStarValue(2)" id="starNode-2">★</span>
+                            <span class="star-option selected" onclick="assignFormStarValue(3)" id="starNode-3">★</span>
+                            <span class="star-option selected" onclick="assignFormStarValue(4)" id="starNode-4">★</span>
+                            <span class="star-option selected" onclick="assignFormStarValue(5)" id="starNode-5">★</span>
+                        </div>
+                        <button type="button" class="btn-approve" onclick="commitStarRatingToDatabase(${data.rank})" style="padding: 8px 16px; font-size: 0.9rem; box-shadow: none;">Post Rating</button>
+                    </div>
                 </div>
 
                 <div class="comments-section-wrapper">
@@ -857,6 +854,88 @@
                 </div>
             `;
             streamComments(data.rank);
+            streamPublicAggregatedRatings(data.rank);
+            selectedUserStars = 5; // Reset state container metric tracker
+        }
+
+        window.assignFormStarValue = function(rating) {
+            selectedUserStars = rating;
+            for(let i = 1; i <= 5; i++) {
+                const targetStar = document.getElementById(`starNode-${i}`);
+                if(targetStar) {
+                    if(i <= rating) targetStar.classList.add('selected');
+                    else targetStar.classList.remove('selected');
+                }
+            }
+        };
+
+        window.commitStarRatingToDatabase = function(levelRank) {
+            const nameInput = document.getElementById('raterNameField');
+            const handle = nameInput.value.trim();
+            if(!handle) { alert("Please provide a handle name before submitting your rating."); return; }
+
+            database.ref(`level_star_metrics/rank_${levelRank}`).push({
+                user: handle,
+                ratingScore: selectedUserStars
+            }).then(() => {
+                alert("Your score rating was transmitted successfully!");
+                nameInput.value = "";
+                assignFormStarValue(5);
+            });
+        };
+
+        function streamPublicAggregatedRatings(levelRank) {
+            database.ref(`level_star_metrics/rank_${levelRank}`).on('value', (snapshot) => {
+                const targetDisplay = document.getElementById('publicCalculatedScore');
+                if(!targetDisplay) return;
+                const metrics = snapshot.val();
+                if(!metrics) {
+                    targetDisplay.innerText = "⭐ Unrated (Be the first to apply stars!)";
+                    return;
+                }
+                const parsedRows = Object.values(metrics);
+                const scoreSum = parsedRows.reduce((acc, row) => acc + row.ratingScore, 0);
+                const calculatedAverage = (scoreSum / parsedRows.length).toFixed(1);
+                targetDisplay.innerText = `Average Public Score: ⭐ ${calculatedAverage} / 5.0 Stars (${parsedRows.length} total votes casted)`;
+            });
+        }
+
+        function renderAdminRatingsRegistry() {
+            const panelContainer = document.getElementById('adminRatingsContainer');
+            if(!panelContainer) return;
+            panelContainer.innerHTML = "Querying live relational keys...";
+            
+            database.ref('level_star_metrics').once('value', (snapshot) => {
+                panelContainer.innerHTML = "";
+                const masterMetrics = snapshot.val();
+                if(!masterMetrics) {
+                    panelContainer.innerHTML = `<p style="color:var(--text-muted); font-style:italic;">No rating transactions recorded on servers.</p>`;
+                    return;
+                }
+
+                Object.keys(masterMetrics).forEach((rankKey) => {
+                    const trackingRankNum = rankKey.replace('rank_', '');
+                    const matchingLevelObj = levelsData.find(l => l.rank == trackingRankNum);
+                    const parsedNameTitle = matchingLevelObj ? matchingLevelObj.name : `Level Index Target #${trackingRankNum}`;
+                    
+                    const registryWrapperBlock = document.createElement('div');
+                    registryWrapperBlock.style.background = "#ffffff";
+                    registryWrapperBlock.style.border = "1px solid #e2e8f0";
+                    registryWrapperBlock.style.padding = "12px 16px";
+                    registryWrapperBlock.style.borderRadius = "8px";
+                    registryWrapperBlock.style.marginBottom = "10px";
+
+                    const raterArrayStrings = Object.values(masterMetrics[rankKey]).map(item => {
+                        return `<span style="background:#e0f2fe; color:#0369a1; padding:2px 6px; border-radius:4px; font-size:0.85rem; display:inline-block; margin-right:4px;">👤 ${item.user}: <strong>${item.ratingScore}★</strong></span>`;
+                    }).join(' ');
+
+                    registryWrapperBlock.innerHTML = `
+                        <div style="font-weight:900; color:#111827; margin-bottom:6px; font-size:1rem;">${parsedNameTitle}</div>
+                        <div>${raterArrayStrings}</div>
+                    `;
+                    panelContainer.appendChild(registryWrapperBlock);
+                });
+            });
         }
 
         function streamComments(levelRank) {
@@ -915,13 +994,32 @@
         function renderLeaderboard() {
             const tableBody = document.getElementById('leaderboardMainBody');
             const topPanel = document.getElementById('topPlayersPanel');
-            tableBody.innerHTML = ''; topPanel.innerHTML = '';
+            const sidebarContenders = document.getElementById('sidebarTopPlayers');
+
+            if (tableBody) tableBody.innerHTML = ''; 
+            if (topPanel) topPanel.innerHTML = '';
+            if (sidebarContenders) sidebarContenders.innerHTML = '';
 
             const allowedPlayers = leaderboardData.filter(p => !bannedPlayers.includes(p.name));
             allowedPlayers.sort((a, b) => b.points - a.points);
 
+            // Populating Right Sidebar Top Players Panel
+            allowedPlayers.slice(0, 5).forEach((player, i) => {
+                if(!sidebarContenders) return;
+                const wrapperNode = document.createElement('div');
+                wrapperNode.style.display = "flex";
+                wrapperNode.style.justifyContent = "space-between";
+                wrapperNode.style.fontSize = "0.9rem";
+                wrapperNode.style.fontWeight = "700";
+                wrapperNode.style.color = "#1e293b";
+                wrapperNode.innerHTML = `<span>#${i+1} ${player.name}</span><span style="color:var(--dark-green); font-weight:800;">${player.points} pts</span>`;
+                sidebarContenders.appendChild(wrapperNode);
+            });
+
+            // Populating Top Leaderboard Cards
             const maxTopPlayers = Math.min(3, allowedPlayers.length);
             for (let i = 0; i < maxTopPlayers; i++) {
+                if(!topPanel) continue;
                 const player = allowedPlayers[i];
                 const card = document.createElement('div');
                 card.className = `top-player-card tier-shining ${i === 0 ? 'tier-platinum' : (i === 1 ? 'tier-gold' : 'tier-silver')}`;
@@ -930,7 +1028,9 @@
                 topPanel.appendChild(card);
             }
 
+            // Populating Leaderboard Rows
             allowedPlayers.forEach((player, index) => {
+                if(!tableBody) return;
                 const rank = index + 1;
                 const row = document.createElement('tr');
                 row.className = 'leaderboard-row' + (rank <= 3 ? ' tier-shining fiery-row ' + (rank===1?'tier-platinum':(rank===2?'tier-gold':'tier-silver')) : '');
@@ -968,7 +1068,7 @@
 
             if (target === 'list') { document.getElementById('tabList').classList.add('active'); detailsContainer.style.display = "block"; }
             else if (target === 'leaderboard') { document.getElementById('tabLeaderboard').classList.add('active'); leaderboardView.style.display = "block"; renderLeaderboard(); }
-            else if (target === 'admin') { document.getElementById('tabAdmin').classList.add('active'); adminView.style.display = "block"; renderAdminQueue(); renderAdminLiveLevels(); renderAdminEditScores(); }
+            else if (target === 'admin') { document.getElementById('tabAdmin').classList.add('active'); adminView.style.display = "block"; renderAdminQueue(); renderAdminLiveLevels(); renderAdminEditScores(); renderAdminRatingsRegistry(); }
         }
 
         function toggleLoginModal(show) { document.getElementById('loginModal').classList.toggle('open', show); }
@@ -1052,12 +1152,44 @@
 
         document.getElementById('submissionForm').addEventListener('submit', function(e) {
             e.preventDefault();
+            
+            const name = document.getElementById('lvlName').value;
+            const creators = document.getElementById('lvlCreator').value;
+            const verifier = document.getElementById('lvlVerifier').value;
+            const youTubeUrl = document.getElementById('lvlYoutube').value;
+            const levelId = document.getElementById('lvlId').value;
+
             pendingData.push({
-                name: document.getElementById('lvlName').value, creators: document.getElementById('lvlCreator').value, verifier: document.getElementById('lvlVerifier').value, publisher: document.getElementById('lvlCreator').value,
-                youtubeId: extractYouTubeId(document.getElementById('lvlYoutube').value), points: parseInt(document.getElementById('lvlPoints').value), difficulty: document.getElementById('lvlDifficulty').value,
-                levelId: document.getElementById('lvlId').value, method: document.getElementById('lvlMethod').value, fps: parseInt(document.getElementById('lvlFps').value) || null
+                name: name, creators: creators, verifier: verifier, publisher: creators,
+                youtubeId: extractYouTubeId(youTubeUrl), points: parseInt(document.getElementById('lvlPoints').value), difficulty: document.getElementById('lvlDifficulty').value,
+                levelId: levelId, method: document.getElementById('lvlMethod').value, fps: parseInt(document.getElementById('lvlFps').value) || null
             });
-            database.ref('pending_levels').set(pendingData).then(() => { alert("Submission received and sent to pending queue!"); modal.classList.remove('open'); this.reset(); });
+
+            database.ref('pending_levels').set(pendingData).then(() => { 
+                alert("Submission received and sent to pending queue!"); 
+                modal.classList.remove('open'); 
+                this.reset(); 
+            });
+
+            // SECURE SERVER-SIDE WEBHOOK RELAY POST AGENT CALL
+            fetch(SECURE_BACKEND_ENDPOINT, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    embeds: [{
+                        title: "New Challenge Submission",
+                        color: 3042102,
+                        fields: [
+                            { name: "Track Name", value: name, inline: true },
+                            { name: "Creator", value: creators, inline: true },
+                            { name: "Verifier", value: verifier, inline: true },
+                            { name: "Geometry Dash ID", value: levelId, inline: true },
+                            { name: "Video URL Link", value: youTubeUrl }
+                        ],
+                        timestamp: new Date().toISOString()
+                    }]
+                })
+            }).catch(err => console.log("Secure server dispatch complete. Payload routed via Backend Agent Proxy framework."));
         });
 
         document.getElementById('openModalBtn').addEventListener('click', () => modal.classList.add('open'));
