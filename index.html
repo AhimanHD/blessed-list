@@ -569,6 +569,22 @@
         const modal = document.getElementById('submissionModal');
         const searchInput = document.getElementById('levelSearchInput');
 
+        // --- NEW: REUSABLE DISCORD NOTIFICATION FUNCTION ---
+        function sendDiscordUpdate(title, color, fields) {
+            fetch(SECURE_BACKEND_ENDPOINT, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    embeds: [{
+                        title: title,
+                        color: color, 
+                        fields: fields,
+                        timestamp: new Date().toISOString()
+                    }]
+                })
+            }).catch(err => console.log("Discord notification failed to dispatch."));
+        }
+
         auth.onAuthStateChanged((user) => {
             if (user) {
                 currentRole = "admin";
@@ -999,8 +1015,29 @@
             const rawCompletions = document.getElementById('pFormCompletions').value.split('\n');
             const existingIdx = leaderboardData.findIndex(p => p.name.toLowerCase() === name.toLowerCase());
             const profileData = { name: name, points: points, items: rawCompletions.filter(l => l.trim() !== "") };
-            if(existingIdx !== -1) leaderboardData[existingIdx] = profileData; else leaderboardData.push(profileData);
-            saveStateToStorage(); alert("Saved profile."); this.reset();
+            
+            if(existingIdx !== -1) {
+                leaderboardData[existingIdx] = profileData; 
+            } else {
+                leaderboardData.push(profileData);
+            }
+            saveStateToStorage(); 
+            alert("Saved profile."); 
+            this.reset();
+
+            // --- NEW: DISCORD LEADERBOARD MILESTONE NOTIFICATION ---
+            const sorted = [...leaderboardData].sort((a,b) => b.points - a.points);
+            const newRank = sorted.findIndex(p => p.name.toLowerCase() === name.toLowerCase()) + 1;
+
+            sendDiscordUpdate(
+                "🏆 Leaderboard Update!",
+                16766720, // Gold hex color (0xFFD700)
+                [
+                    { name: "Player", value: name, inline: true },
+                    { name: "Rank Position", value: "#" + newRank, inline: true },
+                    { name: "Total Points", value: points.toString(), inline: true }
+                ]
+            );
         });
 
         function renderAdminQueue() {
@@ -1023,11 +1060,24 @@
 
         window.handleDecision = function(index, approved) {
             if (approved) {
-                pendingData[index].difficulty = document.getElementById(`adminRate-${index}`).value;
-                pendingData[index].points = parseInt(document.getElementById(`adminPoints-${index}`).value) || 0;
-                levelsData.push(pendingData[index]);
+                const lvl = pendingData[index];
+                lvl.difficulty = document.getElementById(`adminRate-${index}`).value;
+                lvl.points = parseInt(document.getElementById(`adminPoints-${index}`).value) || 0;
+                levelsData.push(lvl);
+
+                // --- NEW: DISCORD VERIFICATION NOTIFICATION ---
+                sendDiscordUpdate(
+                    "🎉 New Level Verified!",
+                    3066993, // Green hex color (0x2EC231)
+                    [
+                        { name: "Level Name", value: lvl.name, inline: true },
+                        { name: "Verifier", value: lvl.verifier, inline: true },
+                        { name: "Difficulty", value: lvl.difficulty, inline: true }
+                    ]
+                );
             }
-            pendingData.splice(index, 1); saveStateToStorage();
+            pendingData.splice(index, 1); 
+            saveStateToStorage();
         };
 
         function renderAdminLiveLevels() {
@@ -1085,25 +1135,18 @@
                 this.reset(); 
             });
 
-            // LIVE RENDER SERVER-SIDE WEBHOOK DISPATCH
-            fetch(SECURE_BACKEND_ENDPOINT, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    embeds: [{
-                        title: "New Challenge Submission",
-                        color: 3042102,
-                        fields: [
-                            { name: "Track Name", value: name, inline: true },
-                            { name: "Creator", value: creators, inline: true },
-                            { name: "Verifier", value: verifier, inline: true },
-                            { name: "Geometry Dash ID", value: levelId, inline: true },
-                            { name: "Video URL Link", value: youTubeUrl, inline: false }
-                        ],
-                        timestamp: new Date().toISOString()
-                    }]
-                })
-            }).catch(err => console.log("Secure server dispatch complete. Payload routed via Backend Agent Proxy framework."));
+            // --- EXISTING: DISCORD PUBLIC SUBMISSION NOTIFICATION ---
+            sendDiscordUpdate(
+                "New Challenge Submission",
+                3042102, // Default Discord embed color
+                [
+                    { name: "Track Name", value: name, inline: true },
+                    { name: "Creator", value: creators, inline: true },
+                    { name: "Verifier", value: verifier, inline: true },
+                    { name: "Geometry Dash ID", value: levelId, inline: true },
+                    { name: "Video URL Link", value: youTubeUrl, inline: false }
+                ]
+            );
         });
 
         document.getElementById('openModalBtn').addEventListener('click', () => modal.classList.add('open'));
